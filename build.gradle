@@ -1,0 +1,357 @@
+buildscript {
+  dependencies {
+    classpath 'org.kohsuke:github-api:1.135'
+  }
+}
+
+plugins {
+  id 'java-library'
+  id 'eclipse'
+  id 'idea'
+  id 'maven-publish'
+
+  id 'fabric-loom' version '1.0-SNAPSHOT' apply false
+  id 'org.ajoberstar.grgit' version '3.1.0'
+  id 'com.matthewprenger.cursegradle' version '1.4.0'
+  id 'com.modrinth.minotaur' version '2.4.3'
+}
+
+def ENV = System.getenv()
+
+version = project.version + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + getBranch()
+logger.lifecycle("Building MCCIC: " + version)
+
+/* Versioning & Dependencies */
+
+import org.apache.commons.codec.digest.DigestUtils
+
+def getSubprojectVersion(project) {
+  def version = project.properties["${project.name}-version"]
+
+  if (!version) {
+    throw new NullPointerException("Could not find version for " + project.name)
+  }
+
+  if (grgit == null) {
+    return version + "+nogit"
+  }
+
+  def latestCommits = grgit.log(paths: [project.name], maxCommits: 1)
+
+  if (latestCommits.isEmpty()) {
+    return version + "+uncommited"
+  }
+
+  var latestCommit = latestCommits.get(0)
+  return version + "+" + latestCommit.id.substring(0, 8) + DigestUtils.sha256Hex(project.rootProject.minecraft_version).substring(0, 2)
+}
+
+def getBranch() {
+  def ENV = System.getenv()
+  if (ENV.GITHUB_REF) {
+    def branch = ENV.GITHUB_REF
+    return branch.substring(branch.lastIndexOf("/") + 1)
+  }
+
+  if (grgit == null) {
+    return "unknown"
+  }
+
+  def branch = grgit.branch.current().name
+  return branch.substring(branch.lastIndexOf("/") + 1)
+}
+
+def moduleDependencies(project, List<String> depNames) {
+  def deps = depNames.iterator().collect { project.dependencies.project(path: ":$it", configuration: 'namedElements') }
+  def clientOutputs = depNames.iterator().collect { findProject(":$it").sourceSets.client.output }
+
+  project.dependencies {
+    deps.each {
+      api it
+    }
+
+    clientOutputs.each {
+      clientImplementation it
+    }
+  }
+
+  // As we manually handle the maven artifacts, we need to also manually specify the deps.
+  project.publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        pom.withXml {
+          def depsNode = asNode().appendNode("dependencies")
+          deps.each {
+            def depNode = depsNode.appendNode("dependency")
+            depNode.appendNode("groupId", it.group)
+            depNode.appendNode("artifactId", it.name)
+            depNode.appendNode("version", it.version)
+            depNode.appendNode("scope", "compile")
+          }
+        }
+      }
+    }
+  }
+}
+
+def testDependencies(project, List<String> depNames) {
+  def deps = depNames.iterator().collect { project.dependencies.project(path: ":$it", configuration: 'namedElements') }
+  def clientOutputs = depNames.iterator().collect { findProject(":$it").sourceSets.client.output }
+
+  project.dependencies {
+    deps.each {
+      testImplementation it
+    }
+
+    clientOutputs.each {
+      testImplementation it
+    }
+  }
+}
+
+/* Projects */
+
+allprojects {
+  group = rootProject.maven_group
+
+  apply plugin: 'maven-publish'
+
+  tasks.withType(GenerateModuleMetadata) {
+    enabled = false
+  }
+
+  publishing {
+    setupRepositories(repositories)
+  }
+
+  apply plugin: "java-library"
+  apply plugin: "fabric-loom"
+
+  tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+  }
+
+  java {
+    withSourcesJar()
+  }
+
+  sourceSets {
+    test {
+      compileClasspath += main.compileClasspath
+      runtimeClasspath += main.runtimeClasspath
+    }
+  }
+
+  loom {
+    runs {
+      testClient {
+        client()
+        ideConfigGenerated project.rootProject == project
+        name = "Minecraft Client - Test"
+        source sourceSets.test
+      }
+
+      server {
+        ideConfigGenerated = false
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      name = 'Terraformers'
+      url  = 'https://maven.terraformersmc.com/releases/'
+    }
+  }
+
+  dependencies {
+    minecraft "com.mojang:minecraft:$rootProject.minecraft_version"
+    mappings "net.fabricmc:yarn:${rootProject.minecraft_version}+build.${project.yarn_build}:v2"
+    modApi "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
+
+    testImplementation sourceSets.main.output
+  }
+
+  tasks.withType(ProcessResources).configureEach {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+      expand "version": project.version
+    }
+  }
+
+  tasks.withType(AbstractArchiveTask) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+  }
+}
+
+subprojects {
+  jar {
+    def iconLocation = "assets/mccic/textures/icon.png"
+    from("${rootProject.projectDir}/src/main/resources/${iconLocation}") { rename { iconLocation } }
+  }
+
+  dependencies {
+    testImplementation sourceSets.main.output
+  }
+
+  publishing {
+    publications {
+      mavenJava(MavenPublication) {
+        artifact(remapJar) {
+          builtBy(remapJar)
+        }
+
+        artifact(remapSourcesJar) {
+          builtBy remapSourcesJar
+        }
+      }
+    }
+  }
+
+  loom.disableDeprecatedPomGeneration(publishing.publications.mavenJava)
+
+  afterEvaluate {
+    genSourcesWithFernFlower.enabled = false
+    genSourcesWithCfr.enabled = false
+    unpickJar.enabled = false
+  }
+}
+
+task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
+  input = jar.archiveFile
+  archiveFileName = "${archivesBaseName}-${project.version}-maven.jar"
+  addNestedDependencies = false
+}
+build.dependsOn remapMavenJar
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      artifact(remapMavenJar) {
+        builtBy(remapMavenJar)
+      }
+
+      artifact(sourcesJar) {
+        builtBy remapSourcesJar
+      }
+
+      pom.withXml {
+        def depsNode = asNode().appendNode("dependencies")
+        subprojects.each {
+          def depNode = depsNode.appendNode("dependency")
+          depNode.appendNode("groupId", it.group)
+          depNode.appendNode("artifactId", it.name)
+          depNode.appendNode("version", it.version)
+          depNode.appendNode("scope", "compile")
+        }
+      }
+    }
+  }
+}
+
+loom.disableDeprecatedPomGeneration(publishing.publications.mavenJava)
+
+void setupRepositories(RepositoryHandler repositories) {
+  def ENV = System.getenv()
+  if (ENV.MAVEN_URL) {
+    repositories.maven {
+      url ENV.MAVEN_URL
+      if (ENV.MAVEN_USERNAME) {
+        credentials {
+          username ENV.MAVEN_USERNAME
+          password ENV.MAVEN_PASSWORD
+        }
+      }
+    }
+  }
+}
+
+subprojects.each {
+  remapJar.dependsOn("${it.path}:remapJar")
+}
+
+sourceSets {
+  test
+}
+
+dependencies {
+  afterEvaluate {
+    subprojects.each {
+      api project(path: "${it.path}", configuration: "namedElements")
+      testImplementation project("${it.path}:").sourceSets.test.output
+    }
+  }
+}
+
+remapJar {
+  afterEvaluate {
+    subprojects.each {
+      nestedJars.from project("${it.path}").tasks.getByName("remapJar")
+    }
+  }
+}
+
+/* Releasing */
+
+def VER_NAME = "[$project.major_version] $project.mod_name $project.version"
+def CHANGELOG = new File("./gradle", "CHANGELOG.md").text
+def SUPPORTED_VERSIONS = Arrays.asList(project.supported_versions.split(','))
+
+import org.kohsuke.github.*
+task github(dependsOn: build) {
+  onlyIf { ENV.GITHUB_TOKEN }
+  doLast {
+    def github = GitHub.connectUsingOAuth(ENV.GITHUB_TOKEN)
+    def repository = github.getRepository(project.github_repository)
+
+    def builder = new GHReleaseBuilder(repository, version)
+    builder.name(VER_NAME)
+    builder.body(CHANGELOG)
+    builder.commitish(project.github_branch)
+    builder.prerelease(project.release_type == 'beta')
+    builder.create().uploadAsset(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar"), "application/java-archive");
+  }
+}
+
+import com.modrinth.minotaur.dependencies.*
+if (ENV.MODRINTH_TOKEN) modrinth {
+  token = ENV.MODRINTH_TOKEN
+  projectId = project.modrinth_id
+  versionNumber = version
+  versionName = VER_NAME
+  versionType = project.release_type
+  changelog = CHANGELOG
+  uploadFile = remapJar
+  gameVersions = SUPPORTED_VERSIONS
+  dependencies = [ new ModDependency("P7dR8mSH", DependencyType.REQUIRED) ]
+}
+
+if (ENV.CURSEFORGE_API_KEY) curseforge {
+  apiKey = ENV.CURSEFORGE_API_KEY
+
+  project {
+    id = project.curseforge_id
+    addGameVersion 'Fabric'
+
+    for (final def cf_ver in SUPPORTED_VERSIONS) addGameVersion cf_ver
+
+    changelog = CHANGELOG
+    releaseType = project.release_type
+
+    mainArtifact(remapJar) {
+      displayName = VER_NAME
+      relations { requiredLibrary 'fabric-api' }
+    }
+
+    afterEvaluate { uploadTask.dependsOn(remapJar) }
+  }
+
+  options { forgeGradleIntegration = false }
+}
+
+task releaseVersion(dependsOn: [ build, 'github', 'modrinth', 'curseforge' ])

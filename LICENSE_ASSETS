@@ -1,0 +1,9 @@
+All Rights Reserved
+
+This license applies to any file in the following directories:
+- ./src/main/resources/assets/
+
+This license also applies to any file in a Java package entitled 'model'.
+
+This license however does not apply to any file in the following directories:
+- ./mcci-music/src/main/resources/assets/mccic/sounds/music/

@@ -1,0 +1,15 @@
+pluginManagement {
+  repositories {
+    gradlePluginPortal()
+    mavenLocal()
+
+    maven {
+      name = 'Fabric'
+      url  = 'https://maven.fabricmc.net/'
+    }
+  }
+}
+
+rootProject.name = 'mccic'
+
+include 'mccic-music'

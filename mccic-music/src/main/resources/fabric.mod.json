@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-music",
+  "name": "MCCI: Companion (Music)",
+  "version": "${version}",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  }
+}

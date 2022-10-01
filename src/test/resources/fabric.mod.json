@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-test",
+  "name": "MCCI: Companion (Test Mod)",
+  "version": "TEST",
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.test.client.MCCICClientTestImpl" ]
+  },
+  "mixins": [ "mccic-test.mixins.json" ]
+}
