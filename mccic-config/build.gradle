@@ -1,0 +1,6 @@
+archivesBaseName = 'mccic-config'
+version = getSubprojectVersion(project)
+
+moduleDependencies(project, [
+        'mccic-api'
+])

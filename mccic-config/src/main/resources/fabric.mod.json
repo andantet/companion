@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-config",
+  "name": "MCCI: Companion (Config)",
+  "version": "${version}",
+  "description": "Configuration API for MCCI:C.",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.config.client.MCCICConfigClientImpl" ]
+  }
+}
