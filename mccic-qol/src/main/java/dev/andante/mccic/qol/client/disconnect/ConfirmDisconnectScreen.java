@@ -39,16 +39,19 @@ public class ConfirmDisconnectScreen extends Screen {
 
     @Override
     protected void init() {
-        int center = this.width / 2;
-        int y = (this.height / 2) + 5;
-        this.addDrawableChild(new ButtonWidget(center - BOX_WIDTH - 6, y, BOX_WIDTH, BOX_HEIGHT, DISCONNECT_TEXT, pressAction));
-        this.addDrawableChild(new ButtonWidget(center + 6, y, BOX_WIDTH, BOX_HEIGHT, CANCEL_TEXT, button -> this.close()));
+        int x = (this.width / 2) - (BOX_WIDTH / 2);
+        int y = (this.height / 2) - BOX_HEIGHT;
+        this.addDrawableChild(new ButtonWidget(x, y, BOX_WIDTH, BOX_HEIGHT, DISCONNECT_TEXT, pressAction));
+        this.addDrawableChild(new ButtonWidget(x, y + BOX_HEIGHT + (BOX_HEIGHT / 4) + 5 + 6, BOX_WIDTH, BOX_HEIGHT, CANCEL_TEXT, button -> this.close()));
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, delta);
-        this.textRenderer.draw(matrices, CONFIRM_TEXT, (int) ((this.width / 2f) - (this.textRenderer.getWidth(CONFIRM_TEXT) / 2f)), (int) (this.height / 2f) - 20, 0xFFFFFFFF);
+
+        int x = (int) ((this.width / 2f) - (this.textRenderer.getWidth(CONFIRM_TEXT) / 2f));
+        int y = (int) ((this.height / 2f) - BOX_HEIGHT - (BOX_HEIGHT / 2f) - (BOX_HEIGHT / 4f));
+        this.textRenderer.draw(matrices, CONFIRM_TEXT, x, y, 0xFFFFFFFF);
     }
 }
