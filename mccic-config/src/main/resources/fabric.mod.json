@@ -10,6 +10,9 @@
       "parent": "mccic"
     }
   },
+  "depends": {
+    "mccic-api": "*"
+  },
   "entrypoints": {
     "client": [ "dev.andante.mccic.config.client.MCCICConfigClientImpl" ]
   }

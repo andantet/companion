@@ -10,5 +10,8 @@
       "parent": "mccic"
     }
   },
+  "depends": {
+    "mccic-api": "*"
+  },
   "mixins": [ "mccic-qol.mixins.json" ]
 }
