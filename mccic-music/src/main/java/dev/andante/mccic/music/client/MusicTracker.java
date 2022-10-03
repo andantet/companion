@@ -36,7 +36,7 @@ public class MusicTracker {
 
     protected void onStateUpdate(GameState state, GameState oldState) {
         switch (state) {
-            case ACTIVE -> this.playCurrentGameMusic(1.0F);
+            case ACTIVE -> this.playCurrentGameMusic(MCCICMusicClientImpl.getConfig().musicVolume());
             case POST_ROUND_SELF, POST_ROUND, POST_GAME -> {
                 SoundManager soundManager = this.client.getSoundManager();
 
@@ -57,7 +57,7 @@ public class MusicTracker {
     }
 
     protected void onRespawn(ClientPlayerEntity player) {
-        this.playCurrentGameMusic(0.2F);
+        this.playCurrentGameMusic(MCCICMusicClientImpl.getConfig().musicVolumeAfterDeath());
     }
 
     public void playCurrentGameMusic(float volume) {

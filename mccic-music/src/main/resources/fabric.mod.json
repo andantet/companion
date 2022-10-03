@@ -11,7 +11,8 @@
     }
   },
   "depends": {
-    "mccic-api": "*"
+    "mccic-api": "*",
+    "mccic-config": "*"
   },
   "entrypoints": {
     "client": [ "dev.andante.mccic.music.client.MCCICMusicClientImpl" ]
