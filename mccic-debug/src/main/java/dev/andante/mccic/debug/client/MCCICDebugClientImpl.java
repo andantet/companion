@@ -19,9 +19,12 @@ public final class MCCICDebugClientImpl implements MCCIC, ClientModInitializer {
     }
 
     private void onHudRender(MatrixStack matrices, float tickDelta) {
-        MinecraftClient client = MinecraftClient.getInstance();
         GameTracker tracker = GameTracker.INSTANCE;
+        if (!tracker.isOnServer()) {
+            return;
+        }
 
+        MinecraftClient client = MinecraftClient.getInstance();
         client.textRenderer.draw(matrices, Text.of("" + tracker.getGameState().name()), 4, 4, 0xFFFFFF);
 
         Game game = tracker.getGame();
