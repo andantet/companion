@@ -5,7 +5,8 @@
   "package": "dev.andante.mccic.api.mixin",
   "mixins": [],
   "client": [
-    "client.BossBarHudAccessor"
+    "client.ChatHudMixin",
+    "client.access.BossBarHudAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

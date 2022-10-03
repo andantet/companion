@@ -10,6 +10,9 @@
       "parent": "mccic"
     }
   },
+  "contact": {
+    "homepage": "https://github.com/andantet/mccic/wiki"
+  },
   "entrypoints": {
     "client": [ "dev.andante.mccic.api.client.MCCICApiClientImpl" ]
   },
