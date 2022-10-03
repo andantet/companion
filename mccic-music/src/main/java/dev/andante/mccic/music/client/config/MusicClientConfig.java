@@ -15,6 +15,6 @@ public record MusicClientConfig(float musicVolume, float musicVolumeAfterDeath) 
     );
 
     public static MusicClientConfig createDefaultConfig() {
-        return new MusicClientConfig(1.0F, 0.2F);
+        return new MusicClientConfig(1.0F, 0.3F);
     }
 }
