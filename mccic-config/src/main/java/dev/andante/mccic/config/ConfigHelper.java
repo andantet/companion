@@ -25,7 +25,7 @@ public interface ConfigHelper {
     MutableText RELOAD_DESCRIPTION_TEXT = Text.translatable("text.%s.config_reload_description".formatted(MCCIC.MOD_ID));
 
     static File resolveConfigFile(String module) {
-        return CONFIG_PATH.resolve(module + ".json").toFile();
+        return CONFIG_PATH.resolve("%s-%s.json".formatted(MCCIC.MOD_ID, module)).toFile();
     }
 
     static <T extends Record> Optional<T> load(String module, Codec<T> codec, T defaultConfig) {
