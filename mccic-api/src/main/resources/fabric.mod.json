@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-api",
+  "name": "MCCI: Companion (API)",
+  "version": "${version}",
+  "description": "The exposed MCCI:C API.",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.api.client.MCCICApiClientImpl" ]
+  },
+  "mixins": [ "mccic-api.mixins.json" ]
+}

@@ -1,6 +1,6 @@
 package dev.andante.mccic.test.client;
 
-import dev.andante.mccic.MCCIC;
+import dev.andante.mccic.api.MCCIC;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

@@ -1,0 +1,6 @@
+archivesBaseName = 'mccic-qol'
+version = getSubprojectVersion(project)
+
+moduleDependencies(project, [
+        'mccic-api'
+])

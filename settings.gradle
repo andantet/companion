@@ -12,4 +12,7 @@ pluginManagement {
 
 rootProject.name = 'mccic'
 
+include 'mccic-api'
+include 'mccic-debug'
 include 'mccic-music'
+include 'mccic-qol'

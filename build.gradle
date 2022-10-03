@@ -63,15 +63,10 @@ def getBranch() {
 
 def moduleDependencies(project, List<String> depNames) {
   def deps = depNames.iterator().collect { project.dependencies.project(path: ":$it", configuration: 'namedElements') }
-  def clientOutputs = depNames.iterator().collect { findProject(":$it").sourceSets.client.output }
 
   project.dependencies {
     deps.each {
       api it
-    }
-
-    clientOutputs.each {
-      clientImplementation it
     }
   }
 
@@ -96,14 +91,9 @@ def moduleDependencies(project, List<String> depNames) {
 
 def testDependencies(project, List<String> depNames) {
   def deps = depNames.iterator().collect { project.dependencies.project(path: ":$it", configuration: 'namedElements') }
-  def clientOutputs = depNames.iterator().collect { findProject(":$it").sourceSets.client.output }
 
   project.dependencies {
     deps.each {
-      testImplementation it
-    }
-
-    clientOutputs.each {
       testImplementation it
     }
   }

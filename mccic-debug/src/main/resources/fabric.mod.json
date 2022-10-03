@@ -1,13 +1,15 @@
 {
   "schemaVersion": 1,
-  "id": "mccic-music",
-  "name": "MCCI: Companion (Music)",
+  "id": "mccic-debug",
+  "name": "MCCI: Companion (Debug)",
   "version": "${version}",
-  "description": "Implements event music for MCC: Island games and lobbies.",
   "icon": "assets/mccic/textures/icon.png",
   "custom": {
     "modmenu": {
       "parent": "mccic"
     }
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.debug.client.MCCICDebugClientImpl" ]
   }
 }

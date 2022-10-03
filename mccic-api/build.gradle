@@ -1,0 +1,2 @@
+archivesBaseName = 'mccic-api'
+version = getSubprojectVersion(project)

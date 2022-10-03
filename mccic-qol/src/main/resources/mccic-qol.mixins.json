@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "package": "dev.andante.mccic.qol.mixin",
+  "mixins": [],
+  "client": [
+    "client.GameMenuScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

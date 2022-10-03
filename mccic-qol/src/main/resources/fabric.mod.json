@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-qol",
+  "name": "MCCI: Companion (QoL)",
+  "version": "${version}",
+  "description": "Quality of life changes and fixes for MCC: Island.",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "mixins": [ "mccic-qol.mixins.json" ]
+}
