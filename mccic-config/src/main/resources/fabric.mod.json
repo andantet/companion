@@ -14,6 +14,7 @@
     "mccic-api": "*"
   },
   "entrypoints": {
-    "client": [ "dev.andante.mccic.config.client.MCCICConfigClientImpl" ]
+    "client": [ "dev.andante.mccic.config.client.MCCICConfigClientImpl" ],
+    "modmenu": [ "dev.andante.mccic.config.client.MCCICConfigModMenuImpl" ]
   }
 }

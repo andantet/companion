@@ -19,6 +19,10 @@ public final class ConfigHolder<T extends Record> {
         return this.config;
     }
 
+    public void set(T config) {
+        this.config = config;
+    }
+
     public String getModule() {
         return this.module;
     }

@@ -1,3 +1,6 @@
 {
-  "text.mccic.configReloaded": "[MCCIC] Config reloaded!"
+  "ui.mccic.config": "MCC Island: Companion - Config",
+  "ui.mccic.config.reload.tooltip": "Reload from Disk",
+  "text.mccic.config_reload_title": "Reloaded configuration for MCCI: Companion!",
+  "text.mccic.config_reload_description": "Successfully reloaded config from disk"
 }
