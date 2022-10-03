@@ -9,5 +9,11 @@
     "modmenu": {
       "parent": "mccic"
     }
+  },
+  "depends": {
+    "mccic-api": "*"
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.music.client.MCCICMusicClientImpl" ]
   }
 }

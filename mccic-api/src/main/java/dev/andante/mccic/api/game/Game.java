@@ -26,7 +26,7 @@ public enum Game implements StringIdentifiable {
     Game(String displayName, String scoreboardName) {
         this.displayName = displayName;
         this.scoreboardName = scoreboardName + " ";
-        this.soundId = new Identifier(MCCIC.MOD_ID, "state_music.%s".formatted(this.getId()));
+        this.soundId = new Identifier("%s-music".formatted(MCCIC.MOD_ID), "game.%s".formatted(this.getId()));
     }
 
     @Nullable

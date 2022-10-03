@@ -1,2 +1,6 @@
 archivesBaseName = 'mccic-music'
 version = getSubprojectVersion(project)
+
+moduleDependencies(project, [
+        'mccic-api'
+])

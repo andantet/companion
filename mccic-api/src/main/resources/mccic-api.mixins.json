@@ -6,6 +6,8 @@
   "mixins": [],
   "client": [
     "client.ChatHudMixin",
+    "client.ClientPlayerEntityMixin",
+    "client.DeathScreenMixin",
     "client.access.BossBarHudAccessor"
   ],
   "injectors": {

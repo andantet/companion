@@ -1,0 +1,40 @@
+{
+  "early_elimination": {
+    "sounds": [
+      "mcc:games.global.early_elimination"
+    ]
+  },
+
+  "game.hole_in_the_wall": {
+    "sounds": [
+      {
+        "name": "mccic-music:game/hole_in_the_wall",
+        "stream": true
+      }
+    ]
+  },
+  "game.tgttos": {
+    "sounds": [
+      {
+        "name": "mccic-music:game/tgttos",
+        "stream": true
+      }
+    ]
+  },
+  "game.battle_box": {
+    "sounds": [
+      {
+        "name": "mccic-music:game/battle_box",
+        "stream": true
+      }
+    ]
+  },
+  "game.sky_battle": {
+    "sounds": [
+      {
+        "name": "mccic-music:game/sky_battle",
+        "stream": true
+      }
+    ]
+  }
+}
