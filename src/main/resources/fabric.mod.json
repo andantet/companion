@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "mccic",
   "name": "MCCI: Companion",
-  "version": "4.0.0",
+  "version": "${version}",
 
   "depends": {
     "minecraft": ">=1.19.1",
