@@ -7,6 +7,7 @@ import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.music.MCCICSounds;
+import dev.andante.mccic.music.client.config.MusicClientConfig;
 import dev.andante.mccic.music.client.sound.MCCIGameMusicInstance;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -46,7 +47,7 @@ public class MusicTracker {
 
     protected void onStateUpdate(GameState state, GameState oldState) {
         switch (state) {
-            case ACTIVE -> this.playCurrentGameMusic(MCCICMusicClientImpl.getConfig().musicVolume());
+            case ACTIVE -> this.playCurrentGameMusic(MusicClientConfig.getConfig().musicVolume());
             case POST_ROUND_SELF, POST_ROUND, POST_GAME -> {
                 SoundManager soundManager = this.client.getSoundManager();
 
@@ -67,7 +68,7 @@ public class MusicTracker {
     }
 
     protected void onRespawn(ClientPlayerEntity player) {
-        this.playCurrentGameMusic(MCCICMusicClientImpl.getConfig().musicVolumeAfterDeath());
+        this.playCurrentGameMusic(MusicClientConfig.getConfig().musicVolumeAfterDeath());
     }
 
     public void playCurrentGameMusic(float volume) {
