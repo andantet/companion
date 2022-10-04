@@ -11,7 +11,11 @@
     }
   },
   "depends": {
-    "mccic-api": "*"
+    "mccic-api": "*",
+    "mccic-config": "*"
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.qol.client.MCCICQolClientImpl" ]
   },
   "mixins": [ "mccic-qol.mixins.json" ]
 }

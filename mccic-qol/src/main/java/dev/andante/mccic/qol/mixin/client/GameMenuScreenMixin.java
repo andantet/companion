@@ -1,6 +1,8 @@
 package dev.andante.mccic.qol.mixin.client;
 
 import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.qol.client.config.ConfirmDisconnectMode;
+import dev.andante.mccic.qol.client.config.QolClientConfig;
 import dev.andante.mccic.qol.client.disconnect.ConfirmDisconnectScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -32,11 +34,12 @@ public abstract class GameMenuScreenMixin extends Screen {
         index = 5
     )
     private PressAction onDisconnectButtonPressAction(PressAction pressAction) {
-        GameTracker tracker = GameTracker.INSTANCE;
-        if (tracker.isOnServer() && tracker.isInGame()) {
-            return button -> {
-                this.client.setScreen(new ConfirmDisconnectScreen(this, pressAction));
-            };
+        ConfirmDisconnectMode mode = QolClientConfig.getConfig().confirmDisconnectMode();
+        if (mode != ConfirmDisconnectMode.OFF) {
+            GameTracker tracker = GameTracker.INSTANCE;
+            if (tracker.isOnServer() && (mode != ConfirmDisconnectMode.IN_GAME || tracker.isInGame())) {
+                return button -> this.client.setScreen(new ConfirmDisconnectScreen(this, pressAction));
+            }
         }
 
         return pressAction;
