@@ -1,4 +1,5 @@
-CHANGELOG FOR 4.0.0-beta.2:
+CHANGELOG FOR 4.0.0-beta.3:
 
-* Added configuration for QoL module
-  * Confirm disconnect mode: `OFF`, `IN_GAME`, `ON_SERVER`
++ Discord Rich Presence (RPC)
+* Fixed version declaration
+* Moved where the death screen event is invoked, it doesn't really matter
