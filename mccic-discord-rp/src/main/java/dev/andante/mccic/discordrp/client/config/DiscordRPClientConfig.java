@@ -1,0 +1,27 @@
+package dev.andante.mccic.discordrp.client.config;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import dev.andante.mccic.config.ConfigHolder;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+@Environment(EnvType.CLIENT)
+public record DiscordRPClientConfig(boolean enabled, long clientId) {
+    public static final Codec<DiscordRPClientConfig> CODEC = RecordCodecBuilder.create(
+        instance -> instance.group(
+            Codec.BOOL.fieldOf("enabled").forGetter(DiscordRPClientConfig::enabled),
+            Codec.LONG.fieldOf("client_id").forGetter(DiscordRPClientConfig::clientId)
+        ).apply(instance, DiscordRPClientConfig::new)
+    );
+
+    public static final ConfigHolder<DiscordRPClientConfig> CONFIG_HOLDER = new ConfigHolder<>("discord-rp", CODEC, createDefaultConfig());
+
+    public static DiscordRPClientConfig getConfig() {
+        return CONFIG_HOLDER.get();
+    }
+
+    public static DiscordRPClientConfig createDefaultConfig() {
+        return new DiscordRPClientConfig(false, 1026937264309284935L);
+    }
+}

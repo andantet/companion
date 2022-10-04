@@ -152,6 +152,11 @@ allprojects {
       name = 'Terraformers'
       url  = 'https://maven.terraformersmc.com/releases/'
     }
+
+    maven {
+      name = 'Jitpack'
+      url  = 'https://jitpack.io/'
+    }
   }
 
   dependencies {

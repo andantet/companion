@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-discord-rp",
+  "name": "MCCI: Companion (Discord RP)",
+  "version": "${version}",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "depends": {
+    "mccic-api": "*",
+    "mccic-config": "*"
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.discordrp.client.MCCICDiscordRPClientImpl" ]
+  }
+}

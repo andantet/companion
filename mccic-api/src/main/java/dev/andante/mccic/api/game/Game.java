@@ -34,7 +34,7 @@ public enum Game implements StringIdentifiable {
         return GAMES_FOR_SCOREBOARD.getOrDefault(scoreboardName, null);
     }
 
-    private String getId() {
+    public String getId() {
         return this.name().toLowerCase(Locale.ROOT);
     }
 
@@ -44,6 +44,10 @@ public enum Game implements StringIdentifiable {
 
     public Identifier getSoundId() {
         return this.soundId;
+    }
+
+    public String getDisplayName() {
+        return this.displayName;
     }
 
     @Override

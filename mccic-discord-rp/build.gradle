@@ -1,0 +1,12 @@
+archivesBaseName = 'mccic-discord-rp'
+version = getSubprojectVersion(project)
+
+moduleDependencies(project, [
+        'mccic-api',
+        'mccic-config'
+])
+
+dependencies {
+  include api("com.github.cbyrneee:DiscordIPC:e18542f600ee48b1eb8cbb255380bba0128dc87e")
+  include api("org.json:json:20171018")
+}
