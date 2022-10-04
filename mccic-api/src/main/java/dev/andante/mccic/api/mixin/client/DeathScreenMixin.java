@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Environment(EnvType.CLIENT)
 @Mixin(DeathScreen.class)
 public abstract class DeathScreenMixin {
-    @Inject(method = "init", at = @At("TAIL"))
+    @Inject(method = "<init>", at = @At("TAIL"))
     private void onRequestRespawn(CallbackInfo ci) {
         if (GameTracker.INSTANCE.isOnServer()) {
             MCCIClientDeathScreenEvent.EVENT.invoker().onDeathScreen((DeathScreen) (Object) this);
