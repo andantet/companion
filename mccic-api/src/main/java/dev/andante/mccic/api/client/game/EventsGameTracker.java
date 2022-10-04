@@ -64,8 +64,12 @@ public class EventsGameTracker implements GameTracker {
                 this.state = GameState.POST_ROUND_SELF;
             } else if (raw.contains("you didn't finish the round!")) {
                 this.state = GameState.POST_ROUND_SELF;
+            } else if (raw.contains("Team, you won Round")) {
+                this.state = GameState.POST_ROUND;
             } else if (raw.contains("you won Round")) {
                 this.state = GameState.POST_ROUND_SELF;
+            } else if (raw.contains("Team, you lost Round")) {
+                this.state = GameState.POST_ROUND;
             } else if (raw.contains("you lost Round")) {
                 this.state = GameState.POST_ROUND_SELF;
             }
