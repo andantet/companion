@@ -1,3 +1,10 @@
 {
-  "text.mccic-discord-rp.large_image": "Logo"
+  "text.mccic-discord-rp.large_image": "Logo",
+  "text.mccic-discord-rp.state.active": "Round in progress",
+  "text.mccic-discord-rp.state.waiting_for_game": "Game starting",
+  "text.mccic-discord-rp.state.post_round_self": "Waiting for other players",
+  "text.mccic-discord-rp.state.post_round": "Round Over!",
+  "text.mccic-discord-rp.state.post_game": "Game Over!",
+  "text.mccic-discord-rp.state.queue": "Queueing",
+  "text.mccic-discord-rp.state.none": "Loading"
 }

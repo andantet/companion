@@ -13,9 +13,11 @@ import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.resource.language.I18n;
 import org.slf4j.Logger;
 
 import java.time.OffsetDateTime;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -73,7 +75,7 @@ public class MCCIDiscordRichPresence {
             return;
         }
 
-        RichPresence.Builder builder = new RichPresence.Builder().setLargeImage("logo", "MCCI: Companion");
+        RichPresence.Builder builder = new RichPresence.Builder().setLargeImage("logo-mcci", "MCCI: Companion");
 
         GameTracker tracker = GameTracker.INSTANCE;
         Game game = tracker.getGame();
@@ -81,14 +83,7 @@ public class MCCIDiscordRichPresence {
             String displayName = game.getDisplayName();
             builder.setDetails(displayName);
             GameState state = tracker.getGameState();
-            builder.setState(switch (state) {
-                case ACTIVE -> "Playing";
-                case WAITING_FOR_GAME -> "Waiting to begin...";
-                case POST_ROUND_SELF -> "Waiting for other players...";
-                case POST_ROUND -> "Waiting for the next round...";
-                case POST_GAME -> "Finished!";
-                default -> "Waiting...";
-            });
+            builder.setState(I18n.translate("text.%s-discord-rp.state.%s".formatted(MCCIC.MOD_ID, state.name().toLowerCase(Locale.ROOT))));
             builder.setSmallImage("logo_game-%s".formatted(game.getId()), displayName);
             tracker.getTime().ifPresent(time -> builder.setEndTimestamp(OffsetDateTime.now().plusSeconds(time)));
         } else {
