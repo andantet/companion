@@ -29,9 +29,19 @@ public class MusicTracker {
         this.gameTracker = gameTracker;
         this.client = MinecraftClient.getInstance();
 
+        MCCIGameEvents.TIMER_UPDATE.register(this::onTimerUpdate);
         MCCIGameEvents.STATE_UPDATE.register(this::onStateUpdate);
         MCCIClientRespawnEvent.EVENT.register(this::onRespawn);
         MCCIClientDeathScreenEvent.EVENT.register(this::onDeathScreen);
+    }
+
+    protected void onTimerUpdate(int time, int lastTime) {
+        if (this.gameTracker.getGameState() == GameState.ACTIVE) {
+            if (time == 10) {
+                SoundManager soundManager = this.client.getSoundManager();
+                soundManager.stop(this.lastSound);
+            }
+        }
     }
 
     protected void onStateUpdate(GameState state, GameState oldState) {
