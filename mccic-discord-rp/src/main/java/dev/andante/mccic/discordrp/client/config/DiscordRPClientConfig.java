@@ -22,6 +22,6 @@ public record DiscordRPClientConfig(boolean enabled, long clientId) {
     }
 
     public static DiscordRPClientConfig createDefaultConfig() {
-        return new DiscordRPClientConfig(false, 1026937264309284935L);
+        return new DiscordRPClientConfig(true, 1026937264309284935L);
     }
 }
