@@ -11,6 +11,8 @@ import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import org.slf4j.Logger;
 
 import java.time.OffsetDateTime;
@@ -18,6 +20,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Environment(EnvType.CLIENT)
 public class MCCIDiscordRichPresence {
     private static final Logger LOGGER = LogUtils.getLogger();
     private final ScheduledExecutorService executorService;

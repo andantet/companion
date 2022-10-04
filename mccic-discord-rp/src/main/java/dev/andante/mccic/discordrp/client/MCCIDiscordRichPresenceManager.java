@@ -2,11 +2,14 @@ package dev.andante.mccic.discordrp.client;
 
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.discordrp.client.config.DiscordRPClientConfig;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 /**
  * Holds and manages an instance of {@link MCCIDiscordRichPresence}.
  */
+@Environment(EnvType.CLIENT)
 public class MCCIDiscordRichPresenceManager {
     private MCCIDiscordRichPresence client;
 
