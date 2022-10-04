@@ -321,7 +321,7 @@ if (ENV.MODRINTH_TOKEN) modrinth {
   dependencies = [ new ModDependency("P7dR8mSH", DependencyType.REQUIRED) ]
 }
 
-if (ENV.CURSEFORGE_API_KEY) curseforge {
+/*if (ENV.CURSEFORGE_API_KEY) curseforge {
   apiKey = ENV.CURSEFORGE_API_KEY
 
   project {
@@ -342,6 +342,6 @@ if (ENV.CURSEFORGE_API_KEY) curseforge {
   }
 
   options { forgeGradleIntegration = false }
-}
+}*/
 
-task releaseVersion(dependsOn: [ build, 'github', 'modrinth', 'curseforge' ])
+task releaseVersion(dependsOn: [ build, 'github', 'modrinth'/*, 'curseforge'*/ ])
