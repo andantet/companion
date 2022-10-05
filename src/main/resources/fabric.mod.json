@@ -4,6 +4,8 @@
   "name": "MCCI: Companion",
   "version": "${version}",
 
+  "environment": "client",
+
   "depends": {
     "minecraft": ">=1.19.1",
     "fabric-api": "*"
