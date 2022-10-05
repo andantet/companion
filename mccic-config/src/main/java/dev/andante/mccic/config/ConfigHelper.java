@@ -53,7 +53,7 @@ public interface ConfigHelper {
         Optional<JsonElement> result = codec.encodeStart(JsonOps.INSTANCE, config).result();
         if (result.isPresent()) {
             try {
-                Gson gson = new GsonBuilder().create();
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 File file = resolveConfigFile(module);
                 File parent = file.getParentFile();
                 if (!parent.exists()) {
