@@ -5,7 +5,8 @@
   "package": "dev.andante.mccic.qol.mixin",
   "mixins": [],
   "client": [
-    "client.GameMenuScreenMixin"
+    "client.GameMenuScreenMixin",
+    "client.HandledScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
