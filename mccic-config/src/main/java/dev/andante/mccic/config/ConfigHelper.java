@@ -28,7 +28,7 @@ public interface ConfigHelper {
         return CONFIG_PATH.resolve("%s-%s.json".formatted(MCCIC.MOD_ID, module)).toFile();
     }
 
-    static <T extends Record> Optional<T> load(String module, Codec<T> codec, T defaultConfig) {
+    static <T extends Record> Optional<T> load(String module, Codec<T> codec) {
         File file = resolveConfigFile(module);
         if (file.exists()) {
             try {

@@ -47,7 +47,7 @@ public final class ConfigHolder<T extends Record> {
     }
 
     public void load() {
-        ConfigHelper.load(this.module, this.codec, this.defaultConfig).ifPresent(config -> this.config = config);
+        ConfigHelper.load(this.module, this.codec).ifPresent(config -> this.config = config);
         ConfigHelper.save(this.module, this.codec, this.config);
         this.listeners.forEach(action -> action.accept(this));
     }
