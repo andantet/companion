@@ -9,10 +9,17 @@ import net.fabricmc.api.Environment;
 @Environment(EnvType.CLIENT)
 public record MusicClientConfig(float musicVolume, float musicVolumeAfterDeath) {
     public static final Codec<MusicClientConfig> CODEC = RecordCodecBuilder.create(
-        instance -> instance.group(
-            Codec.FLOAT.fieldOf("music_volume").forGetter(MusicClientConfig::musicVolume),
-            Codec.FLOAT.fieldOf("music_volume_after_death").forGetter(MusicClientConfig::musicVolumeAfterDeath)
-        ).apply(instance, MusicClientConfig::new)
+        instance -> {
+            MusicClientConfig defaultConfig = createDefaultConfig();
+            return instance.group(
+                Codec.FLOAT.fieldOf("music_volume")
+                           .orElse(defaultConfig.musicVolume())
+                           .forGetter(MusicClientConfig::musicVolume),
+                Codec.FLOAT.fieldOf("music_volume_after_death")
+                           .orElse(defaultConfig.musicVolumeAfterDeath())
+                           .forGetter(MusicClientConfig::musicVolumeAfterDeath)
+            ).apply(instance, MusicClientConfig::new);
+        }
     );
 
     public static final ConfigHolder<MusicClientConfig> CONFIG_HOLDER = new ConfigHolder<>("music", CODEC, createDefaultConfig());

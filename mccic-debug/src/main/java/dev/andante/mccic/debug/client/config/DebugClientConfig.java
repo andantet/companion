@@ -9,9 +9,14 @@ import net.fabricmc.api.Environment;
 @Environment(EnvType.CLIENT)
 public record DebugClientConfig(boolean debugHud) {
     public static final Codec<DebugClientConfig> CODEC = RecordCodecBuilder.create(
-        instance -> instance.group(
-            Codec.BOOL.fieldOf("debug_hud").forGetter(DebugClientConfig::debugHud)
-        ).apply(instance, DebugClientConfig::new)
+        instance -> {
+            DebugClientConfig defaultConfig = createDefaultConfig();
+            return instance.group(
+                Codec.BOOL.fieldOf("debug_hud")
+                          .orElse(defaultConfig.debugHud())
+                          .forGetter(DebugClientConfig::debugHud)
+            ).apply(instance, DebugClientConfig::new);
+        }
     );
 
     public static final ConfigHolder<DebugClientConfig> CONFIG_HOLDER = new ConfigHolder<>("debug", CODEC, createDefaultConfig());
