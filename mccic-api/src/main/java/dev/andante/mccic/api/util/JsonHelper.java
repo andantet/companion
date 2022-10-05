@@ -1,4 +1,4 @@
-package dev.andante.mccic.config;
+package dev.andante.mccic.api.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

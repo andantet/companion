@@ -7,8 +7,8 @@ import com.google.gson.stream.JsonReader;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import dev.andante.mccic.api.MCCIC;
+import dev.andante.mccic.api.util.JsonHelper;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 
 import java.io.File;
@@ -21,8 +21,8 @@ import java.util.Optional;
 public interface ConfigHelper {
     Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve(MCCIC.MOD_ID);
 
-    MutableText RELOAD_TITLE_TEXT = Text.translatable("text.%s.config_reload_title".formatted(MCCIC.MOD_ID));
-    MutableText RELOAD_DESCRIPTION_TEXT = Text.translatable("text.%s.config_reload_description".formatted(MCCIC.MOD_ID));
+    Text RELOAD_TITLE_TEXT = Text.translatable("text.%s.config_reload_title".formatted(MCCIC.MOD_ID));
+    Text RELOAD_DESCRIPTION_TEXT = Text.translatable("text.%s.config_reload_description".formatted(MCCIC.MOD_ID));
 
     static File resolveConfigFile(String module) {
         return CONFIG_PATH.resolve("%s-%s.json".formatted(MCCIC.MOD_ID, module)).toFile();
@@ -44,8 +44,6 @@ public interface ConfigHelper {
                 MCCIC.LOGGER.error("Failed to load: {}", module);
                 exception.printStackTrace();
             }
-        } else {
-            save(module, codec, defaultConfig);
         }
 
         return Optional.empty();

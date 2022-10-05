@@ -1,3 +1,6 @@
 {
-  "menu.mccic.confirmDisconnect": "Are you sure you want to disconnect?"
+  "menu.mccic.confirmDisconnect": "Are you sure you want to disconnect?",
+
+  "text.mccic-qol.mcc_soon_popup.title": "MCC %s is soon!",
+  "text.mccic-qol.mcc_soon_popup.description": "The next event is on %s/%s @ %s%s %s!"
 }

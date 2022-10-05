@@ -8,6 +8,7 @@
     "client.ChatHudMixin",
     "client.ClientPlayerEntityMixin",
     "client.DeathScreenMixin",
+    "client.SystemToastMixin",
     "client.access.BossBarHudAccessor"
   ],
   "injectors": {
