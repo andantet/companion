@@ -13,6 +13,6 @@ public final class MCCICApiClientImpl implements MCCIC, ClientModInitializer {
     @Override
     public void onInitializeClient() {
         LOGGER.info("Initializing {}", MOD_NAME);
-        Reflection.initialize(GameTracker.class);
+        Reflection.initialize(GameTracker.class, MCCICUpdateTracker.class);
     }
 }
