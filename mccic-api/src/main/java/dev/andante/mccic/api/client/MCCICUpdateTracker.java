@@ -25,7 +25,6 @@ import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -71,8 +70,7 @@ public class MCCICUpdateTracker {
      */
     public void retrieve() {
         try {
-            BufferedReader buffer = new BufferedReader(new InputStreamReader(url.openStream()));
-            JsonReader reader = new JsonReader(buffer);
+            JsonReader reader = new JsonReader(new InputStreamReader(url.openStream()));
             Optional<Data> maybeData = Data.CODEC.parse(JsonOps.INSTANCE, JsonHelper.parseJsonReader(reader)).result();
             this.data = maybeData.orElseThrow(() -> new IOException("Codec could not parse data from update tracker source file"));
         } catch (IOException | JsonSyntaxException | IllegalStateException exception) {

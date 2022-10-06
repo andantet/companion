@@ -13,7 +13,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.slf4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -48,8 +47,7 @@ public class EventApiHook {
      */
     public void retrieve() {
         try {
-            BufferedReader buffer = new BufferedReader(new InputStreamReader(url.openStream()));
-            JsonReader reader = new JsonReader(buffer);
+            JsonReader reader = new JsonReader(new InputStreamReader(url.openStream()));
             JsonObject root = JsonHelper.parseJsonReader(reader).getAsJsonObject();
             Optional<Data> maybeData = Data.CODEC.parse(JsonOps.INSTANCE, root.getAsJsonObject("data")).result();
             this.data = maybeData.orElseThrow(() -> new IOException("Codec could not parse data from Event API"));
