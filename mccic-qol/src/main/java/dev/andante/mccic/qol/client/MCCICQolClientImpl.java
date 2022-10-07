@@ -1,6 +1,7 @@
 package dev.andante.mccic.qol.client;
 
 import dev.andante.mccic.api.MCCIC;
+import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.client.mccapi.EventApiHook;
 import dev.andante.mccic.api.client.toast.MCCICToast;
@@ -9,16 +10,17 @@ import dev.andante.mccic.qol.client.config.QolClientConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.network.ServerAddress;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -37,10 +39,10 @@ public final class MCCICQolClientImpl implements MCCIC, ClientModInitializer {
             ResourceManagerHelper.registerBuiltinResourcePack(id, container, "MCCIC: American Date Format", ResourcePackActivationType.NORMAL);
         });
 
-        ClientPlayConnectionEvents.JOIN.register(this::onServerJoin);
+        MCCIClientScreenServerJoinEvent.EVENT.register(this::onServerJoin);
     }
 
-    private void onServerJoin(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
+    private void onServerJoin(Screen screen, MinecraftClient client, ServerAddress address, @Nullable ServerInfo info) {
         if (GameTracker.INSTANCE.isOnServer()) {
             if (QolClientConfig.getConfig().eventAnnouncementToast()) {
                 EventApiHook api = EventApiHook.INSTANCE;

@@ -7,22 +7,24 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
+import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.client.toast.MCCICToast;
 import dev.andante.mccic.api.util.JsonHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.network.ServerAddress;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -49,10 +51,10 @@ public class MCCICUpdateTracker {
             throw new RuntimeException(exception);
         }
 
-        ClientPlayConnectionEvents.JOIN.register(this::onServerJoin);
+        MCCIClientScreenServerJoinEvent.EVENT.register(this::onServerJoin);
     }
 
-    protected void onServerJoin(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
+    protected void onServerJoin(Screen screen, MinecraftClient client, ServerAddress address, @Nullable ServerInfo info) {
         if (GameTracker.INSTANCE.isOnServer()) {
             MCCICUpdateTracker updateTracker = MCCICUpdateTracker.INSTANCE;
             updateTracker.retrieve();

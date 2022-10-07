@@ -7,6 +7,7 @@
   "client": [
     "client.ChatHudMixin",
     "client.ClientPlayerEntityMixin",
+    "client.ConnectScreenMixin",
     "client.DeathScreenMixin",
     "client.SystemToastMixin",
     "client.access.BossBarHudAccessor"
