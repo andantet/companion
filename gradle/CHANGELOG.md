@@ -1,3 +1,3 @@
-CHANGELOG FOR 4.0.0-beta.5:
+CHANGELOG FOR 4.0.0-beta.6:
 
-+ Implemented update tracker ![](https://media.discordapp.net/attachments/680748717644578880/1027479940523884594/unknown.png)
+* Fixed [#1 - Server join toasts appear when switching servers](https://github.com/andantet/mccic/issues/1)
