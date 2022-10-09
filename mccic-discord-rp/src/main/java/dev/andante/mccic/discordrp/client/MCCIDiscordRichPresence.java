@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 @Environment(EnvType.CLIENT)
 public class MCCIDiscordRichPresence {
     private static final Logger LOGGER = LogUtils.getLogger();
+    private static final OffsetDateTime INITIAL_TIME = OffsetDateTime.now();
     private final ScheduledExecutorService executorService;
     private final long clientId;
 
@@ -87,7 +88,7 @@ public class MCCIDiscordRichPresence {
             builder.setSmallImage("logo_game-%s".formatted(game.getId()), displayName);
             tracker.getTime().ifPresent(time -> builder.setEndTimestamp(OffsetDateTime.now().plusSeconds(time)));
         } else {
-            builder.setState("Chilling on the island");
+            builder.setState("Chilling on the island").setStartTimestamp(INITIAL_TIME);
         }
 
         this.discord.sendRichPresence(builder.build());
