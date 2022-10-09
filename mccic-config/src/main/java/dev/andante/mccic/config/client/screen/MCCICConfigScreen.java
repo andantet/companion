@@ -1,6 +1,7 @@
 package dev.andante.mccic.config.client.screen;
 
 import dev.andante.mccic.api.MCCIC;
+import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.client.toast.MCCICToast;
 import dev.andante.mccic.config.ConfigHelper;
 import dev.andante.mccic.config.ConfigHolder;
@@ -17,6 +18,7 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class MCCICConfigScreen extends Screen {
     public static final Identifier RELOAD_ICONS_TEXTURE = new Identifier("%s-config".formatted(MCCIC.MOD_ID), "textures/gui/reload_icons.png");
+    public static final Identifier RELOAD_ICONS_TEXTURE_MCCI = new Identifier("mcci", RELOAD_ICONS_TEXTURE.getPath());
 
     public static final Text TITLE_TEXT = Text.translatable("ui.%s.config".formatted(MCCIC.MOD_ID));
     public static final Text RELOAD_TOOLTIP_TEXT = Text.translatable("ui.%s.config.reload.tooltip".formatted(MCCIC.MOD_ID));
@@ -30,7 +32,8 @@ public class MCCICConfigScreen extends Screen {
 
     @Override
     protected void init() {
-        this.addDrawableChild(new TexturedButtonWidget(10, this.height - 10 - 20, 20, 20, 0, 0, 20, RELOAD_ICONS_TEXTURE, 32, 64, this::onReloadPress, this::renderReloadTooltip, RELOAD_TOOLTIP_TEXT));
+        GameTracker gameTracker = GameTracker.INSTANCE;
+        this.addDrawableChild(new TexturedButtonWidget(10, this.height - 10 - 20, 20, 20, 0, 0, 20, gameTracker.isOnServer() ? RELOAD_ICONS_TEXTURE_MCCI : RELOAD_ICONS_TEXTURE, 32, 64, this::onReloadPress, this::renderReloadTooltip, RELOAD_TOOLTIP_TEXT));
 
         int width = 102;
         this.addDrawableChild(new ButtonWidget((int) ((this.width / 2f) - (width / 2f)), this.height - 60, width, 20, Text.translatable("gui.back"), button -> this.close()));
