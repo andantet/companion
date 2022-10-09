@@ -5,7 +5,6 @@ import com.jagrosh.discordipc.IPCListener;
 import com.jagrosh.discordipc.entities.RichPresence;
 import com.jagrosh.discordipc.entities.User;
 import com.jagrosh.discordipc.entities.pipe.PipeStatus;
-import com.jagrosh.discordipc.exceptions.NoDiscordClientException;
 import com.mojang.logging.LogUtils;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.game.GameTracker;
@@ -55,7 +54,7 @@ public class MCCIDiscordRichPresence {
 
         try {
             this.discord.connect();
-        } catch (NoDiscordClientException exception) {
+        } catch (Exception exception) {
             LOGGER.error("Unable to connect to the Discord client", exception);
         }
     }
@@ -67,7 +66,10 @@ public class MCCIDiscordRichPresence {
 
         if (this.discord != null) {
             LOGGER.info("{}: Closing Discord client", MCCIC.MOD_NAME);
-            this.discord.close();
+            try {
+                this.discord.close();
+            } catch (Exception ignored) {
+            }
         }
     }
 
