@@ -326,27 +326,4 @@ if (ENV.MODRINTH_TOKEN) modrinth {
   dependencies = [ new ModDependency("P7dR8mSH", DependencyType.REQUIRED) ]
 }
 
-/*if (ENV.CURSEFORGE_API_KEY) curseforge {
-  apiKey = ENV.CURSEFORGE_API_KEY
-
-  project {
-    id = project.curseforge_id
-    addGameVersion 'Fabric'
-
-    for (final def cf_ver in SUPPORTED_VERSIONS) addGameVersion cf_ver
-
-    changelog = CHANGELOG
-    releaseType = project.release_type
-
-    mainArtifact(remapJar) {
-      displayName = VER_NAME
-      relations { requiredLibrary 'fabric-api' }
-    }
-
-    afterEvaluate { uploadTask.dependsOn(remapJar) }
-  }
-
-  options { forgeGradleIntegration = false }
-}*/
-
-task releaseVersion(dependsOn: [ build, 'github', 'modrinth'/*, 'curseforge'*/ ])
+task releaseVersion(dependsOn: [ build, 'github', 'modrinth' ])

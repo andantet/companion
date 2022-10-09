@@ -1,3 +1,4 @@
-CHANGELOG FOR 4.0.0-beta.6:
+CHANGELOG FOR 4.0.0-beta.7:
 
-* Fixed [#1 - Server join toasts appear when switching servers](https://github.com/andantet/mccic/issues/1)
+* The config screen (still not finished) now adapts the reload icon texture when you are on MCCI
+* `mccic-discord-rp` now bundles in the dependencies of `DiscordIPC`
