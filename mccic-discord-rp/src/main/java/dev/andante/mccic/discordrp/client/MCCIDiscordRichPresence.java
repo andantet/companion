@@ -88,7 +88,7 @@ public class MCCIDiscordRichPresence {
             builder.setSmallImage("logo_game-%s".formatted(game.getId()), displayName);
             tracker.getTime().ifPresent(time -> builder.setEndTimestamp(OffsetDateTime.now().plusSeconds(time)));
         } else {
-            builder.setState("Chilling on the island").setStartTimestamp(INITIAL_TIME);
+            builder.setState(I18n.translate("text.%s-discord-rp.idle".formatted(MCCIC.MOD_ID))).setStartTimestamp(INITIAL_TIME);
         }
 
         this.discord.sendRichPresence(builder.build());
