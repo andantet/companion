@@ -1,6 +1,13 @@
 {
-  "menu.mccic.confirmDisconnect": "Are you sure you want to disconnect?",
-
+  "menu.mccic-qol.confirmDisconnect": "Are you sure you want to disconnect?",
   "text.mccic-qol.mcc_soon_popup.title": "MCC %s is soon!",
-  "text.mccic-qol.mcc_soon_popup.description": "The next event is on %s/%s @ %s%s %s!"
+  "text.mccic-qol.mcc_soon_popup.description": "The next event is on %s/%s @ %s%s %s!",
+
+  "ui.mccic-qol.config": "MCCI: Companion Config - Quality of Life",
+  "config.mccic-qol.confirm_disconnect_mode": "Confirm Disconnect Mode",
+  "config.mccic-qol.confirm_disconnect_mode.off": "Off",
+  "config.mccic-qol.confirm_disconnect_mode.in_game": "In Game",
+  "config.mccic-qol.confirm_disconnect_mode.on_server": "On Server",
+  "config.mccic-qol.empty_slot_highlights_fix": "Empty Slot Highlights Fix",
+  "config.mccic-qol.event_announcement_toast": "Event Announcement Toast"
 }

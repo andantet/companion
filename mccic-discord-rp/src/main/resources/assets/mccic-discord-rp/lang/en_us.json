@@ -1,4 +1,5 @@
 {
+  "ui.mccic-discord-rp.config": "MCCI: Companion Config - Discord Rich Presence",
   "text.mccic-discord-rp.large_image": "Logo",
   "text.mccic-discord-rp.idle": "Chilling on the island",
   "text.mccic-discord-rp.state.active": "Round in progress",
@@ -7,5 +8,7 @@
   "text.mccic-discord-rp.state.post_round": "Round Over!",
   "text.mccic-discord-rp.state.post_game": "Game Over!",
   "text.mccic-discord-rp.state.queue": "Queueing",
-  "text.mccic-discord-rp.state.none": "Loading"
+  "text.mccic-discord-rp.state.none": "Loading",
+
+  "config.mccic-discord-rp.enabled": "Enabled"
 }

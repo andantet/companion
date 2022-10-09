@@ -3,6 +3,7 @@ package dev.andante.mccic.discordrp.client.config;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.config.ConfigHolder;
+import dev.andante.mccic.discordrp.MCCICDiscordRP;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -22,7 +23,7 @@ public record DiscordRPClientConfig(boolean enabled, long clientId) {
         }
     );
 
-    public static final ConfigHolder<DiscordRPClientConfig> CONFIG_HOLDER = new ConfigHolder<>("discord-rp", CODEC, createDefaultConfig());
+    public static final ConfigHolder<DiscordRPClientConfig> CONFIG_HOLDER = new ConfigHolder<>(MCCICDiscordRP.ID, CODEC, createDefaultConfig());
 
     public static DiscordRPClientConfig getConfig() {
         return CONFIG_HOLDER.get();

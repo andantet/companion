@@ -24,6 +24,10 @@ public record MusicClientConfig(float musicVolume, float musicVolumeAfterDeath) 
 
     public static final ConfigHolder<MusicClientConfig> CONFIG_HOLDER = new ConfigHolder<>("music", CODEC, createDefaultConfig());
 
+    public MusicClientConfig(double musicVolume, double musicVolumeAfterDeath) {
+        this((float) musicVolume, (float) musicVolumeAfterDeath);
+    }
+
     public static MusicClientConfig getConfig() {
         return CONFIG_HOLDER.get();
     }

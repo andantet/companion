@@ -3,6 +3,7 @@
   "id": "mccic-debug",
   "name": "MCCI: Companion (Debug)",
   "version": "${version}",
+  "description": "Debug module for MCCI: Companion.",
   "icon": "assets/mccic/textures/icon.png",
   "custom": {
     "modmenu": {
@@ -14,6 +15,7 @@
     "mccic-config": "*"
   },
   "entrypoints": {
-    "client": [ "dev.andante.mccic.debug.client.MCCICDebugClientImpl" ]
+    "client": [ "dev.andante.mccic.debug.client.MCCICDebugClientImpl" ],
+    "modmenu": [ "dev.andante.mccic.debug.client.config.MCCICDebugModMenuImpl" ]
   }
 }

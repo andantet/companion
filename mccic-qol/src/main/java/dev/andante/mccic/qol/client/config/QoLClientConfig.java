@@ -3,37 +3,38 @@ package dev.andante.mccic.qol.client.config;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.config.ConfigHolder;
+import dev.andante.mccic.qol.MCCICQoL;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.StringIdentifiable;
 
 @Environment(EnvType.CLIENT)
-public record QolClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boolean emptySlotHighlightsFix, boolean eventAnnouncementToast) {
-    public static final Codec<QolClientConfig> CODEC = RecordCodecBuilder.create(
+public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boolean emptySlotHighlightsFix, boolean eventAnnouncementToast) {
+    public static final Codec<QoLClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
-            QolClientConfig defaultConfig = createDefaultConfig();
+            QoLClientConfig defaultConfig = createDefaultConfig();
             return instance.group(
                 StringIdentifiable.createCodec(ConfirmDisconnectMode::values)
                                   .fieldOf("confirm_disconnect_mode")
                                   .orElse(defaultConfig.confirmDisconnectMode())
-                                  .forGetter(QolClientConfig::confirmDisconnectMode),
+                                  .forGetter(QoLClientConfig::confirmDisconnectMode),
                 Codec.BOOL.fieldOf("empty_slot_highlights_fix")
                           .orElse(defaultConfig.emptySlotHighlightsFix())
-                          .forGetter(QolClientConfig::emptySlotHighlightsFix),
+                          .forGetter(QoLClientConfig::emptySlotHighlightsFix),
                 Codec.BOOL.fieldOf("event_announcement_toast")
                           .orElse(defaultConfig.eventAnnouncementToast())
-                          .forGetter(QolClientConfig::eventAnnouncementToast)
-            ).apply(instance, QolClientConfig::new);
+                          .forGetter(QoLClientConfig::eventAnnouncementToast)
+            ).apply(instance, QoLClientConfig::new);
         }
     );
 
-    public static final ConfigHolder<QolClientConfig> CONFIG_HOLDER = new ConfigHolder<>("qol", CODEC, createDefaultConfig());
+    public static final ConfigHolder<QoLClientConfig> CONFIG_HOLDER = new ConfigHolder<>(MCCICQoL.ID, CODEC, createDefaultConfig());
 
-    public static QolClientConfig getConfig() {
+    public static QoLClientConfig getConfig() {
         return CONFIG_HOLDER.get();
     }
 
-    public static QolClientConfig createDefaultConfig() {
-        return new QolClientConfig(ConfirmDisconnectMode.IN_GAME, true, true);
+    public static QoLClientConfig createDefaultConfig() {
+        return new QoLClientConfig(ConfirmDisconnectMode.IN_GAME, true, true);
     }
 }

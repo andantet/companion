@@ -16,5 +16,6 @@
   "entrypoints": {
     "client": [ "dev.andante.mccic.config.client.MCCICConfigClientImpl" ],
     "modmenu": [ "dev.andante.mccic.config.client.MCCICConfigModMenuImpl" ]
-  }
+  },
+  "mixins": [ "mccic-config.mixins.json" ]
 }

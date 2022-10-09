@@ -15,6 +15,7 @@
     "mccic-config": "*"
   },
   "entrypoints": {
-    "client": [ "dev.andante.mccic.music.client.MCCICMusicClientImpl" ]
+    "client": [ "dev.andante.mccic.music.client.MCCICMusicClientImpl" ],
+    "modmenu": [ "dev.andante.mccic.music.client.config.MCCICMusicModMenuImpl" ]
   }
 }

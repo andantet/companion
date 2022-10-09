@@ -10,6 +10,7 @@ import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
+import dev.andante.mccic.discordrp.MCCICDiscordRP;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.language.I18n;
@@ -86,11 +87,11 @@ public class MCCIDiscordRichPresence {
             String displayName = game.getDisplayName();
             builder.setDetails(displayName);
             GameState state = tracker.getGameState();
-            builder.setState(I18n.translate("text.%s-discord-rp.state.%s".formatted(MCCIC.MOD_ID, state.name().toLowerCase(Locale.ROOT))));
+            builder.setState(I18n.translate("text.%s.state.%s".formatted(MCCICDiscordRP.MOD_ID, state.name().toLowerCase(Locale.ROOT))));
             builder.setSmallImage("logo_game-%s".formatted(game.getId()), displayName);
             tracker.getTime().ifPresent(time -> builder.setEndTimestamp(OffsetDateTime.now().plusSeconds(time)));
         } else {
-            builder.setState(I18n.translate("text.%s-discord-rp.idle".formatted(MCCIC.MOD_ID))).setStartTimestamp(INITIAL_TIME);
+            builder.setState(I18n.translate("text.%s.idle".formatted(MCCICDiscordRP.MOD_ID))).setStartTimestamp(INITIAL_TIME);
         }
 
         this.discord.sendRichPresence(builder.build());

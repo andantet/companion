@@ -3,6 +3,7 @@
   "id": "mccic-discord-rp",
   "name": "MCCI: Companion (Discord RP)",
   "version": "${version}",
+  "description": "Discord Rich Presence integration for MCC: Island.",
   "icon": "assets/mccic/textures/icon.png",
   "custom": {
     "modmenu": {
@@ -14,6 +15,7 @@
     "mccic-config": "*"
   },
   "entrypoints": {
-    "client": [ "dev.andante.mccic.discordrp.client.MCCICDiscordRPClientImpl" ]
+    "client": [ "dev.andante.mccic.discordrp.client.MCCICDiscordRPClientImpl" ],
+    "modmenu": [ "dev.andante.mccic.discordrp.client.config.MCCICDiscordRPModMenuImpl" ]
   }
 }

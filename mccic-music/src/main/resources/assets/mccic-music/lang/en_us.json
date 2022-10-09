@@ -1,0 +1,5 @@
+{
+  "ui.mccic-music.config": "MCCI: Companion Config - Music",
+  "config.mccic-music.music_volume": "Base Music Volume",
+  "config.mccic-music.music_volume_after_death": "Base Music Volume (After Death)"
+}

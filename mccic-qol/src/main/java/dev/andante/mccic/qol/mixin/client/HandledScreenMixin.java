@@ -2,7 +2,7 @@ package dev.andante.mccic.qol.mixin.client;
 
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.game.GameState;
-import dev.andante.mccic.qol.client.config.QolClientConfig;
+import dev.andante.mccic.qol.client.config.QoLClientConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -46,7 +46,7 @@ public class HandledScreenMixin {
         GameTracker tracker = GameTracker.INSTANCE;
         if (tracker.isOnServer() && tracker.getGameState() != GameState.ACTIVE) {
             if (staticFocusedSlot != null) {
-                if (QolClientConfig.getConfig().emptySlotHighlightsFix() && !staticFocusedSlot.hasStack()) {
+                if (QoLClientConfig.getConfig().emptySlotHighlightsFix() && !staticFocusedSlot.hasStack()) {
                     ci.cancel();
                 }
             }

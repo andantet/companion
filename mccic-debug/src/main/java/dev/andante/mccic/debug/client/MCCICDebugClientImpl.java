@@ -1,10 +1,12 @@
 package dev.andante.mccic.debug.client;
 
-import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
+import dev.andante.mccic.config.client.command.MCCICConfigCommand;
+import dev.andante.mccic.debug.MCCICDebug;
 import dev.andante.mccic.debug.client.config.DebugClientConfig;
+import dev.andante.mccic.debug.client.config.MCCICDebugConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,10 +16,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
-public final class MCCICDebugClientImpl implements MCCIC, ClientModInitializer {
+public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientConfigRegistry.INSTANCE.registerAndLoad(DebugClientConfig.CONFIG_HOLDER);
+        MCCICConfigCommand.registerNewConfig(ID, MCCICDebugConfigScreen::new);
         HudRenderCallback.EVENT.register(this::onHudRender);
     }
 

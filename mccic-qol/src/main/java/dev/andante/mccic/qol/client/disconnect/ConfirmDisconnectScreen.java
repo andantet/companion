@@ -1,6 +1,6 @@
 package dev.andante.mccic.qol.client.disconnect;
 
-import dev.andante.mccic.api.MCCIC;
+import dev.andante.mccic.qol.MCCICQoL;
 import dev.andante.mccic.qol.mixin.client.GameMenuScreenMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,7 +18,7 @@ import net.minecraft.text.Text;
 public class ConfirmDisconnectScreen extends Screen {
     public static final Text DISCONNECT_TEXT = Text.translatable("menu.disconnect");
     public static final Text CANCEL_TEXT = Text.translatable("gui.cancel");
-    public static final Text CONFIRM_TEXT = Text.translatable("menu.%s.confirmDisconnect".formatted(MCCIC.MOD_ID));
+    public static final Text CONFIRM_TEXT = Text.translatable("menu.%s.confirmDisconnect".formatted(MCCICQoL.MOD_ID));
 
     public static final int BOX_WIDTH = 120;
     public static final int BOX_HEIGHT = 20;

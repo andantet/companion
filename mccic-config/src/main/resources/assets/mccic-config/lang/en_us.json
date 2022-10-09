@@ -1,6 +1,9 @@
 {
   "ui.mccic.config": "MCC Island: Companion - Config",
-  "ui.mccic.config.reload.tooltip": "Reload from Disk",
+  "ui.mccic.config.other_config_location.line0": "Other configurations can currently",
+  "ui.mccic.config.other_config_location.line1": "be found through commands or Mod Menu.",
+  "ui.mccic.config.reload": "Reloaded %s!",
+  "ui.mccic.config.reload.tooltip": "Reload from Disk (All)",
   "text.mccic.config_reload_title": "Reloaded configuration for MCCI: Companion!",
   "text.mccic.config_reload_description": "Successfully reloaded config from disk"
 }
