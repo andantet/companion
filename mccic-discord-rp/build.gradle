@@ -7,6 +7,9 @@ moduleDependencies(project, [
 ])
 
 dependencies {
+  // package discordipc and its dependencies
   include api("com.github.cbyrneee:DiscordIPC:e18542f600ee48b1eb8cbb255380bba0128dc87e")
   include api("org.json:json:20171018")
+  include api("com.kohlschutter.junixsocket:junixsocket-common:2.3.4")
+  include api("com.kohlschutter.junixsocket:junixsocket-native-common:2.3.4")
 }
