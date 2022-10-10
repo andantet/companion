@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-social",
+  "name": "MCCI: Companion (Social)",
+  "version": "${version}",
+  "description": "Social interactions functionality for MCCI: Companion!",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "depends": {
+    "mccic-api": "*",
+    "mccic-config": "*"
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.social.client.MCCICSocialClientImpl" ],
+    "modmenu": [ "dev.andante.mccic.social.client.config.MCCICSocialModMenuImpl" ]
+  }
+}

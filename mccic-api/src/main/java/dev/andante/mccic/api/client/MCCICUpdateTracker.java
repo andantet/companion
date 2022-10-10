@@ -7,6 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
+import dev.andante.mccic.api.MCCICApi;
 import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.client.toast.MCCICToast;
@@ -38,8 +39,8 @@ public class MCCICUpdateTracker {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final MCCICUpdateTracker INSTANCE = new MCCICUpdateTracker("https://gist.githubusercontent.com/andantet/9da23e1fa711912449e9342da238b248/raw/mccic.json");
 
-    public static final String UPDATE_POPUP_TITLE = "text.%s-api.update_available.title".formatted(MCCIC.MOD_ID);
-    public static final String UPDATE_POPUP_DESCRIPTION = "text.%s-api.update_available.description".formatted(MCCIC.MOD_ID);
+    public static final String UPDATE_POPUP_TITLE = "text.%s.update_available.title".formatted(MCCICApi.MOD_ID);
+    public static final String UPDATE_POPUP_DESCRIPTION = "text.%s.update_available.description".formatted(MCCICApi.MOD_ID);
 
     private final URL url;
     private Data data;

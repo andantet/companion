@@ -1,7 +1,7 @@
 package dev.andante.mccic.api.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.andante.mccic.api.client.toast.MCCICToast;
+import dev.andante.mccic.api.client.toast.CustomToastTexture;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.toast.SystemToast;
@@ -29,8 +29,8 @@ public class SystemToastMixin {
     )
     private void onDrawSetTexture(MatrixStack matrices, ToastManager manager, long startTime, CallbackInfoReturnable<Toast.Visibility> cir) {
         SystemToast that = (SystemToast) (Object) this;
-        if (that instanceof MCCICToast) {
-            RenderSystem.setShaderTexture(0, MCCICToast.TEXTURE);
+        if (that instanceof CustomToastTexture customToast) {
+            RenderSystem.setShaderTexture(0, customToast.getTexture());
         }
     }
 }

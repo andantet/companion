@@ -15,6 +15,7 @@ public final class EventResult {
     private static final EventResult STOP = new EventResult(true, null);
     private static final EventResult PASS = new EventResult(false, null);
     private static final EventResult FALSE = new EventResult(true, false);
+    private static final EventResult CANCEL = new EventResult(false, false);
 
     /**
      * Passes the event to other listeners, and does not set an outcome of the event.
@@ -22,6 +23,14 @@ public final class EventResult {
      */
     public static EventResult pass() {
         return PASS;
+    }
+
+    /**
+     * Passes the event to other listeners, but cancels whatever process the event is running on.
+     * @return an event that passes the event to other listeners
+     */
+    public static EventResult cancel() {
+        return CANCEL;
     }
 
     /**

@@ -18,14 +18,17 @@ public interface MCCIChatEvent {
      * Invoked before a chat message is added to chat.
      */
     Event<MCCIChatEvent> EVENT = EventFactory.createArrayBacked(MCCIChatEvent.class, callbacks -> (chatHud, message, raw, signature, ticks, indicator, refresh) -> {
+        boolean cancels = false;
+
         for (MCCIChatEvent callback : callbacks) {
             EventResult result = callback.onChatEvent(chatHud, message, raw, signature, ticks, indicator, refresh);
+            cancels = result.isFalse();
             if (result.interruptsFurtherEvaluation()) {
                 return result;
             }
         }
 
-        return EventResult.pass();
+        return cancels ? EventResult.cancel() : EventResult.pass();
     });
 
     /**

@@ -1,0 +1,8 @@
+{
+  "toast.mccic-social.type.friend_join": "Friend joined",
+  "toast.mccic-social.type.friend_leave": "Friend left",
+  "toast.mccic-social.type.party_invite": "Party invite",
+  "toast.mccic-social.type.party_join": "Party join",
+  "toast.mccic-social.type.party_leave": "Party leave",
+  "toast.mccic-social.type.party_disband": "The party you were in was disbanded"
+}
