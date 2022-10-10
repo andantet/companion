@@ -1,3 +1,9 @@
-CHANGELOG FOR 4.0.0-beta.9:
+CHANGELOG FOR 4.0.0-beta.10:
 
-+ Config menus! ![Root Config Screen](https://media.discordapp.net/attachments/680748717644578880/1028734541659127920/unknown.png) ![QoL Config Screen](https://media.discordapp.net/attachments/680748717644578880/1028734624467259433/unknown.png)
++ Party & Friend Notifications
+
+![Friend join](https://cdn.discordapp.com/attachments/680748717644578880/1029163639678181376/unknown.png)
+![Friend leave](https://cdn.discordapp.com/attachments/680748717644578880/1029163675648540742/unknown.png)
+![Party invite](https://cdn.discordapp.com/attachments/680748717644578880/1029163604546695178/unknown.png)
+![Party leave](https://cdn.discordapp.com/attachments/680748717644578880/1029163949297500160/unknown.png)
+![Party disband](https://cdn.discordapp.com/attachments/680748717644578880/1029164134480220331/unknown.png)
