@@ -26,7 +26,8 @@ public class MCCICDiscordRPConfigScreen extends MCCICAbstractConfigScreen<Discor
     }
 
     static {
+        DiscordRPClientConfig config = DiscordRPClientConfig.getConfig();
         DiscordRPClientConfig defaultConfig = DiscordRPClientConfig.createDefaultConfig();
-        ENABLED_OPTION = SimpleOption.ofBoolean("config.%s.enabled".formatted(MCCICDiscordRP.MOD_ID), SimpleOption.emptyTooltip(), defaultConfig.enabled());
+        ENABLED_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "enabled", config.enabled(), defaultConfig.enabled());
     }
 }

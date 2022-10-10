@@ -25,7 +25,8 @@ public class MCCICSocialConfigScreen extends MCCICAbstractConfigScreen<SocialCli
     }
 
     static {
+        SocialClientConfig config = SocialClientConfig.getConfig();
         SocialClientConfig defaultConfig = SocialClientConfig.createDefaultConfig();
-        ALL_TOASTS_OPTION = ofBoolean(MCCICSocial.MOD_ID, "all_toasts", defaultConfig.allToasts());
+        ALL_TOASTS_OPTION = ofBoolean(MCCICSocial.MOD_ID, "all_toasts", config.allToasts(), defaultConfig.allToasts());
     }
 }

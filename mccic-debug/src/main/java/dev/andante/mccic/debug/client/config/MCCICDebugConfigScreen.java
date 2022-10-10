@@ -25,7 +25,8 @@ public class MCCICDebugConfigScreen extends MCCICAbstractConfigScreen<DebugClien
     }
 
     static {
+        DebugClientConfig config = DebugClientConfig.getConfig();
         DebugClientConfig defaultConfig = DebugClientConfig.createDefaultConfig();
-        DEBUG_HUD_OPTION = ofBoolean(MCCICDebug.MOD_ID, "debug_hud", defaultConfig.debugHud());
+        DEBUG_HUD_OPTION = ofBoolean(MCCICDebug.MOD_ID, "debug_hud", config.debugHud(), defaultConfig.debugHud());
     }
 }

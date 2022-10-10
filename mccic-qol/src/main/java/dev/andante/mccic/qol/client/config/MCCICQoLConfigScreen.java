@@ -29,9 +29,10 @@ public class MCCICQoLConfigScreen extends MCCICAbstractConfigScreen<QoLClientCon
     }
 
     static {
+        QoLClientConfig config = QoLClientConfig.getConfig();
         QoLClientConfig defaultConfig = QoLClientConfig.createDefaultConfig();
-        CONFIRM_DISCONNECT_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "confirm_disconnect_mode", ConfirmDisconnectMode::byId, ConfirmDisconnectMode.values(), defaultConfig.confirmDisconnectMode());
-        EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION = ofBoolean(MCCICQoL.MOD_ID, "empty_slot_highlights_fix", defaultConfig.emptySlotHighlightsFix());
-        EVENT_ANNOUNCEMENT_TOAST_OPTION = ofBoolean(MCCICQoL.MOD_ID, "event_announcement_toast", defaultConfig.eventAnnouncementToast());
+        CONFIRM_DISCONNECT_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "confirm_disconnect_mode", ConfirmDisconnectMode::byId, ConfirmDisconnectMode.values(), config.confirmDisconnectMode(), defaultConfig.confirmDisconnectMode());
+        EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION = ofBoolean(MCCICQoL.MOD_ID, "empty_slot_highlights_fix", config.emptySlotHighlightsFix(), defaultConfig.emptySlotHighlightsFix());
+        EVENT_ANNOUNCEMENT_TOAST_OPTION = ofBoolean(MCCICQoL.MOD_ID, "event_announcement_toast", config.eventAnnouncementToast(), defaultConfig.eventAnnouncementToast());
     }
 }

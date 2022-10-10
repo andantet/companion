@@ -165,25 +165,31 @@ public abstract class MCCICAbstractConfigScreen<T extends Record> extends Screen
         return false;
     }
 
-    public static <T extends Enum<T> & TranslatableOption> SimpleOption<T> ofEnum(String modId, String id, Function<Integer, T> fromId, T[] values, T defaultValue) {
-        return new SimpleOption<>(
+    public static <T extends Enum<T> & TranslatableOption> SimpleOption<T> ofEnum(String modId, String id, Function<Integer, T> fromId, T[] values, T value, T defaultValue) {
+        SimpleOption<T> option = new SimpleOption<>(
             createConfigTranslationKey(modId, id),
             SimpleOption.emptyTooltip(), SimpleOption.enumValueText(),
             new SimpleOption.PotentialValuesBasedCallbacks<>(
                 Arrays.asList(values),
                 Codec.INT.xmap(fromId, T::ordinal)
-            ), defaultValue, value -> {}
+            ), defaultValue, val -> {}
         );
+        option.setValue(value);
+        return option;
     }
 
-    public static SimpleOption<Boolean> ofBoolean(String modId, String id, boolean defaultValue) {
-        return SimpleOption.ofBoolean(createConfigTranslationKey(modId, id), SimpleOption.emptyTooltip(), defaultValue);
+    public static SimpleOption<Boolean> ofBoolean(String modId, String id, boolean value, boolean defaultValue) {
+        SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(modId, id), SimpleOption.emptyTooltip(), defaultValue);
+        option.setValue(value);
+        return option;
     }
 
-    public static SimpleOption<Double> ofDouble(String modId, String id, double defaultValue) {
-        return new SimpleOption<>(createConfigTranslationKey(modId, id), SimpleOption.emptyTooltip(), (text, value) -> {
-            return value == 0.0 ? GameOptions.getGenericValueText(text, ScreenTexts.OFF) : GameOptionsInvoker.invokeGetPercentValueText(text, value);
-        }, SimpleOption.DoubleSliderCallbacks.INSTANCE, defaultValue, value -> {});
+    public static SimpleOption<Double> ofDouble(String modId, String id, double value, double defaultValue) {
+        SimpleOption<Double> option = new SimpleOption<>(createConfigTranslationKey(modId, id), SimpleOption.emptyTooltip(), (text, val) -> {
+            return val == 0.0 ? GameOptions.getGenericValueText(text, ScreenTexts.OFF) : GameOptionsInvoker.invokeGetPercentValueText(text, val);
+        }, SimpleOption.DoubleSliderCallbacks.INSTANCE, defaultValue, val -> {});
+        option.setValue(value);
+        return option;
     }
 
     public static String createConfigTranslationKey(String modId, String id) {

@@ -27,8 +27,9 @@ public class MCCICMusicConfigScreen extends MCCICAbstractConfigScreen<MusicClien
     }
 
     static {
+        MusicClientConfig config = MusicClientConfig.getConfig();
         MusicClientConfig defaultConfig = MusicClientConfig.createDefaultConfig();
-        MUSIC_VOLUME_OPTION = ofDouble(MCCICMusic.MOD_ID, "music_volume", defaultConfig.musicVolume());
-        MUSIC_VOLUME_AFTER_DEATH_OPTION = ofDouble(MCCICMusic.MOD_ID, "music_volume_after_death", defaultConfig.musicVolumeAfterDeath());
+        MUSIC_VOLUME_OPTION = ofDouble(MCCICMusic.MOD_ID, "music_volume", config.musicVolume(), defaultConfig.musicVolume());
+        MUSIC_VOLUME_AFTER_DEATH_OPTION = ofDouble(MCCICMusic.MOD_ID, "music_volume_after_death", config.musicVolumeAfterDeath(), defaultConfig.musicVolumeAfterDeath());
     }
 }
