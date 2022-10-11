@@ -68,7 +68,9 @@ public class MusicTracker {
     }
 
     protected void onRespawn(ClientPlayerEntity player) {
-        this.playCurrentGameMusic(MusicClientConfig.getConfig().musicVolumeAfterDeath());
+        if (this.gameTracker.getGame() != Game.HOLE_IN_THE_WALL || this.gameTracker.getGameState() == GameState.POST_ROUND_SELF) {
+            this.playCurrentGameMusic(MusicClientConfig.getConfig().musicVolumeAfterDeath());
+        }
     }
 
     public void playCurrentGameMusic(float volume) {
