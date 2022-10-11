@@ -9,7 +9,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.util.StringIdentifiable;
 
 @Environment(EnvType.CLIENT)
-public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boolean emptySlotHighlightsFix, boolean eventAnnouncementToast) {
+public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boolean emptySlotHighlightsFix, boolean eventAnnouncementToast, boolean extendedFrustums) {
     public static final Codec<QoLClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             QoLClientConfig defaultConfig = createDefaultConfig();
@@ -23,7 +23,10 @@ public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boole
                           .forGetter(QoLClientConfig::emptySlotHighlightsFix),
                 Codec.BOOL.fieldOf("event_announcement_toast")
                           .orElse(defaultConfig.eventAnnouncementToast())
-                          .forGetter(QoLClientConfig::eventAnnouncementToast)
+                          .forGetter(QoLClientConfig::eventAnnouncementToast),
+                Codec.BOOL.fieldOf("extended_frustums")
+                          .orElse(defaultConfig.extendedFrustums())
+                          .forGetter(QoLClientConfig::extendedFrustums)
             ).apply(instance, QoLClientConfig::new);
         }
     );
@@ -35,6 +38,6 @@ public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boole
     }
 
     public static QoLClientConfig createDefaultConfig() {
-        return new QoLClientConfig(ConfirmDisconnectMode.IN_GAME, true, true);
+        return new QoLClientConfig(ConfirmDisconnectMode.IN_GAME, true, true, true);
     }
 }

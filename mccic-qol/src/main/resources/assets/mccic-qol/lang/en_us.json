@@ -9,5 +9,6 @@
   "config.mccic-qol.confirm_disconnect_mode.in_game": "In Game",
   "config.mccic-qol.confirm_disconnect_mode.on_server": "On Server",
   "config.mccic-qol.empty_slot_highlights_fix": "Empty Slot Highlights Fix",
-  "config.mccic-qol.event_announcement_toast": "Event Announcement Toast"
+  "config.mccic-qol.event_announcement_toast": "Event Announcement Toast",
+  "config.mccic-qol.extended_frustums": "Extended Frustums"
 }

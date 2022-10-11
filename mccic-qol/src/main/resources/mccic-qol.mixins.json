@@ -5,6 +5,7 @@
   "package": "dev.andante.mccic.qol.mixin",
   "mixins": [],
   "client": [
+    "client.EntityRendererMixin",
     "client.GameMenuScreenMixin",
     "client.HandledScreenMixin"
   ],
