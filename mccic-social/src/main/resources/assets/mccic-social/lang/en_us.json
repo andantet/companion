@@ -7,5 +7,6 @@
   "toast.mccic-social.type.party_disband": "The party you were in was disbanded",
 
   "ui.mccic-social.config": "MCCI: Companion Config - Social",
-  "config.mccic-social.all_toasts": "All Toasts"
+  "config.mccic-social.friend_toasts": "Friend Toasts",
+  "config.mccic-social.party_toasts": "Party Toasts"
 }

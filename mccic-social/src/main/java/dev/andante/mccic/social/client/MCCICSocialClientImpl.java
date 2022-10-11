@@ -38,68 +38,70 @@ public final class MCCICSocialClientImpl implements MCCICSocial, ClientModInitia
     }
 
     public EventResult onChatEvent(ChatHud chatHud, Text message, String raw, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh) {
-        if (!SocialClientConfig.getConfig().allToasts()) {
-            return EventResult.pass();
+        SocialClientConfig config = SocialClientConfig.getConfig();
+
+        if (config.friendToasts()) {
+            if (raw.contains(FRIEND_JOIN_TEXT)) {
+                int l = raw.length();
+                String username = raw.substring(0, l - FRIEND_JOIN_TEXT.length());
+                if (this.isUsernameValid(username)) {
+                    SocialToast.add(EventType.FRIEND_JOIN, username);
+                    return EventResult.cancel();
+                }
+            }
+
+            if (raw.contains(FRIEND_LEAVE_TEXT)) {
+                int l = raw.length();
+                String username = raw.substring(0, l - FRIEND_LEAVE_TEXT.length());
+                if (this.isUsernameValid(username)) {
+                    SocialToast.add(EventType.FRIEND_LEAVE, username);
+                    return EventResult.cancel();
+                }
+            }
         }
 
-        if (raw.equals(PARTY_DISBAND_TEXT)) {
-            SocialToast.add(EventType.PARTY_DISBAND, "");
-            return EventResult.cancel();
-        }
-
-        if (raw.contains(FRIEND_JOIN_TEXT)) {
-            int l = raw.length();
-            String username = raw.substring(0, l - FRIEND_JOIN_TEXT.length());
-            if (this.isUsernameValid(username)) {
-                SocialToast.add(EventType.FRIEND_JOIN, username);
+        if (config.partyToasts()) {
+            if (raw.equals(PARTY_DISBAND_TEXT)) {
+                SocialToast.add(EventType.PARTY_DISBAND, "");
                 return EventResult.cancel();
             }
-        }
 
-        if (raw.contains(FRIEND_LEAVE_TEXT)) {
-            int l = raw.length();
-            String username = raw.substring(0, l - FRIEND_LEAVE_TEXT.length());
-            if (this.isUsernameValid(username)) {
-                SocialToast.add(EventType.FRIEND_LEAVE, username);
+            if (raw.contains(PARTY_INVITE_TEXT)) {
+                int l = raw.length();
+                String username = raw.substring(0, l - PARTY_INVITE_TEXT.length() - 6);
+                if (this.isUsernameValid(username)) {
+                    SocialToast.add(EventType.PARTY_INVITE, username);
+                    return EventResult.pass();
+                }
+            }
+
+            if (raw.contains(PARTY_JOIN_TEXT)) {
+                int l = raw.length();
+                String username = raw.substring(0, l - PARTY_JOIN_TEXT.length());
+                if (this.isUsernameValid(username)) {
+                    SocialToast.add(EventType.PARTY_JOIN, username);
+                    return EventResult.cancel();
+                }
+            }
+
+            if (raw.contains(PARTY_LEAVE_TEXT)) {
+                int l = raw.length();
+                String username = raw.substring(0, l - PARTY_LEAVE_TEXT.length());
+                if (this.isUsernameValid(username)) {
+                    SocialToast.add(EventType.PARTY_LEAVE, username);
+                    return EventResult.cancel();
+                }
+            }
+
+            if (raw.equals(PARTY_JOIN_YOU_TEXT)) {
+                SocialToast.add(EventType.PARTY_JOIN, MinecraftClient.getInstance().getSession().getProfile().getName());
                 return EventResult.cancel();
             }
-        }
 
-        if (raw.contains(PARTY_INVITE_TEXT)) {
-            int l = raw.length();
-            String username = raw.substring(0, l - PARTY_INVITE_TEXT.length() - 6);
-            if (this.isUsernameValid(username)) {
-                SocialToast.add(EventType.PARTY_INVITE, username);
-                return EventResult.pass();
-            }
-        }
-
-        if (raw.contains(PARTY_JOIN_TEXT)) {
-            int l = raw.length();
-            String username = raw.substring(0, l - PARTY_JOIN_TEXT.length());
-            if (this.isUsernameValid(username)) {
-                SocialToast.add(EventType.PARTY_JOIN, username);
+            if (raw.equals(PARTY_LEAVE_YOU_TEXT)) {
+                SocialToast.add(EventType.PARTY_LEAVE, MinecraftClient.getInstance().getSession().getProfile().getName());
                 return EventResult.cancel();
             }
-        }
-
-        if (raw.contains(PARTY_LEAVE_TEXT)) {
-            int l = raw.length();
-            String username = raw.substring(0, l - PARTY_LEAVE_TEXT.length());
-            if (this.isUsernameValid(username)) {
-                SocialToast.add(EventType.PARTY_LEAVE, username);
-                return EventResult.cancel();
-            }
-        }
-
-        if (raw.equals(PARTY_JOIN_YOU_TEXT)) {
-            SocialToast.add(EventType.PARTY_JOIN, MinecraftClient.getInstance().getSession().getProfile().getName());
-            return EventResult.cancel();
-        }
-
-        if (raw.equals(PARTY_LEAVE_YOU_TEXT)) {
-            SocialToast.add(EventType.PARTY_LEAVE, MinecraftClient.getInstance().getSession().getProfile().getName());
-            return EventResult.cancel();
         }
 
         return EventResult.pass();
