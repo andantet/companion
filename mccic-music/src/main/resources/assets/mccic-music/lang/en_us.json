@@ -1,5 +1,12 @@
 {
   "ui.mccic-music.config": "MCCI: Companion Config - Music",
   "config.mccic-music.music_volume": "Base Music Volume",
-  "config.mccic-music.music_volume_after_death": "Base Music Volume (After Death)"
+  "config.mccic-music.music_volume_after_death": "Base Music Volume (After Death)",
+  "config.mccic-music.hitw_sound_on_other_death": "Other Player Death Sound (HITW)",
+  "config.mccic-music.hitw_sound_on_other_death.off": "Off",
+  "config.mccic-music.hitw_sound_on_other_death.team_eliminated": "Team Eliminated",
+  "config.mccic-music.hitw_sound_on_other_death.early_elimination": "Early Elimination",
+  "config.mccic-music.hitw_sound_on_other_death.score": "Score",
+  "config.mccic-music.hitw_sound_on_other_death.score_acquired": "Score - Acquired",
+  "config.mccic-music.hitw_sound_on_other_death.score_big_coins": "Score - Big Coins"
 }

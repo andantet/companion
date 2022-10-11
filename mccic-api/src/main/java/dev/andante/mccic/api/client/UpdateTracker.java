@@ -9,7 +9,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.MCCICApi;
 import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
-import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.api.util.JsonHelper;
 import net.fabricmc.api.EnvType;
@@ -56,15 +55,13 @@ public class UpdateTracker {
     }
 
     protected void onServerJoin(Screen screen, MinecraftClient client, ServerAddress address, @Nullable ServerInfo info) {
-        if (GameTracker.INSTANCE.isOnServer()) {
-            UpdateTracker updateTracker = UpdateTracker.INSTANCE;
-            updateTracker.retrieve();
-            Optional<UpdateTracker.Data> maybeData = updateTracker.getData();
-            if (maybeData.isPresent() && updateTracker.isUpdateAvailable()) {
-                UpdateTracker.Data data = maybeData.get();
-                ToastManager toastManager = client.getToastManager();
-                toastManager.add(new CustomToast(Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)));
-            }
+        this.retrieve();
+
+        Optional<UpdateTracker.Data> maybeData = this.getData();
+        if (maybeData.isPresent() && this.isUpdateAvailable()) {
+            UpdateTracker.Data data = maybeData.get();
+            ToastManager toastManager = client.getToastManager();
+            toastManager.add(new CustomToast(Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)));
         }
     }
 

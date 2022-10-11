@@ -8,14 +8,17 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record DebugClientConfig(boolean debugHud) {
+public record DebugClientConfig(boolean debugHud, boolean chatAllSounds) {
     public static final Codec<DebugClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             DebugClientConfig defaultConfig = createDefaultConfig();
             return instance.group(
                 Codec.BOOL.fieldOf("debug_hud")
                           .orElse(defaultConfig.debugHud())
-                          .forGetter(DebugClientConfig::debugHud)
+                          .forGetter(DebugClientConfig::debugHud),
+                Codec.BOOL.fieldOf("chat_all_sounds")
+                          .orElse(defaultConfig.chatAllSounds())
+                          .forGetter(DebugClientConfig::chatAllSounds)
             ).apply(instance, DebugClientConfig::new);
         }
     );
@@ -27,6 +30,6 @@ public record DebugClientConfig(boolean debugHud) {
     }
 
     public static DebugClientConfig createDefaultConfig() {
-        return new DebugClientConfig(false);
+        return new DebugClientConfig(false, false);
     }
 }

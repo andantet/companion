@@ -1,14 +1,13 @@
 package dev.andante.mccic.qol.client;
 
 import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
-import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.client.mccapi.EventApiHook;
 import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
 import dev.andante.mccic.qol.MCCICQoL;
-import dev.andante.mccic.qol.client.config.QoLConfigScreen;
 import dev.andante.mccic.qol.client.config.QoLClientConfig;
+import dev.andante.mccic.qol.client.config.QoLConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -46,30 +45,28 @@ public final class MCCICQolClientImpl implements MCCICQoL, ClientModInitializer 
     }
 
     private void onServerJoin(Screen screen, MinecraftClient client, ServerAddress address, @Nullable ServerInfo info) {
-        if (GameTracker.INSTANCE.isOnServer()) {
-            if (QoLClientConfig.getConfig().eventAnnouncementToast()) {
-                EventApiHook api = EventApiHook.INSTANCE;
-                api.retrieve();
-                if (api.isEventDateInFuture()) {
-                    api.getData().ifPresent(data -> {
-                        data.createDate().ifPresent(date -> {
-                            Calendar calendar = Calendar.getInstance();
-                            TimeZone timeZone = calendar.getTimeZone();
-                            calendar.setTime(date);
-                            ToastManager toastManager = client.getToastManager();
-                            toastManager.add(new CustomToast(
-                                Text.translatable(MCC_SOON_POPUP_TITLE, data.getEventNumber()),
-                                Text.translatable(MCC_SOON_POPUP_DESCRIPTION,
-                                    "%02d".formatted(calendar.get(Calendar.DAY_OF_MONTH)),
-                                    "%02d".formatted(calendar.get(Calendar.MONTH) + 1),
-                                    calendar.get(Calendar.HOUR),
-                                    calendar.get(Calendar.AM_PM) == Calendar.PM ? "pm": "am",
-                                    timeZone.getDisplayName(timeZone.inDaylightTime(date), TimeZone.SHORT)
-                                )
-                            ));
-                        });
+        if (QoLClientConfig.getConfig().eventAnnouncementToast()) {
+            EventApiHook api = EventApiHook.INSTANCE;
+            api.retrieve();
+            if (api.isEventDateInFuture()) {
+                api.getData().ifPresent(data -> {
+                    data.createDate().ifPresent(date -> {
+                        Calendar calendar = Calendar.getInstance();
+                        TimeZone timeZone = calendar.getTimeZone();
+                        calendar.setTime(date);
+                        ToastManager toastManager = client.getToastManager();
+                        toastManager.add(new CustomToast(
+                            Text.translatable(MCC_SOON_POPUP_TITLE, data.getEventNumber()),
+                            Text.translatable(MCC_SOON_POPUP_DESCRIPTION,
+                                "%02d".formatted(calendar.get(Calendar.DAY_OF_MONTH)),
+                                "%02d".formatted(calendar.get(Calendar.MONTH) + 1),
+                                calendar.get(Calendar.HOUR),
+                                calendar.get(Calendar.AM_PM) == Calendar.PM ? "pm": "am",
+                                timeZone.getDisplayName(timeZone.inDaylightTime(date), TimeZone.SHORT)
+                            )
+                        ));
                     });
-                }
+                });
             }
         }
     }

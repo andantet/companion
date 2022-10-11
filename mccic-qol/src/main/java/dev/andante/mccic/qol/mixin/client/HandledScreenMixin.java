@@ -44,10 +44,13 @@ public class HandledScreenMixin {
     @Inject(method = "drawSlotHighlight", at = @At("HEAD"), cancellable = true)
     private static void onRenderDrawSlotHighlight(MatrixStack matrices, int x, int y, int z, CallbackInfo ci) {
         GameTracker tracker = GameTracker.INSTANCE;
-        if (tracker.isOnServer() && tracker.getGameState() != GameState.ACTIVE) {
-            if (staticFocusedSlot != null) {
-                if (QoLClientConfig.getConfig().emptySlotHighlightsFix() && !staticFocusedSlot.hasStack()) {
-                    ci.cancel();
+        if (tracker.isOnServer()) {
+            GameState state = tracker.getGameState();
+            if (state != GameState.ACTIVE && state != GameState.WAITING_FOR_GAME) {
+                if (staticFocusedSlot != null) {
+                    if (QoLClientConfig.getConfig().emptySlotHighlightsFix() && !staticFocusedSlot.hasStack()) {
+                        ci.cancel();
+                    }
                 }
             }
         }
