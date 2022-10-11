@@ -10,6 +10,6 @@ import net.fabricmc.api.Environment;
 public final class MCCICQoLModMenuImpl implements MCCICQoL, ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return MCCICQoLConfigScreen::new;
+        return QoLConfigScreen::new;
     }
 }

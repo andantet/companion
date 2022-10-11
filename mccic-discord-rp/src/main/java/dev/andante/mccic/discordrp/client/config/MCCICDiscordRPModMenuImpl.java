@@ -10,6 +10,6 @@ import net.fabricmc.api.Environment;
 public final class MCCICDiscordRPModMenuImpl implements MCCICDiscordRP, ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return MCCICDiscordRPConfigScreen::new;
+        return DiscordRPConfigScreen::new;
     }
 }

@@ -3,7 +3,7 @@ package dev.andante.mccic.social.client;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
-import dev.andante.mccic.social.client.config.MCCICSocialConfigScreen;
+import dev.andante.mccic.social.client.config.SocialConfigScreen;
 import dev.andante.mccic.social.client.config.SocialClientConfig;
 import dev.andante.mccic.social.client.toast.SocialToast;
 import dev.andante.mccic.social.client.toast.SocialToast.EventType;
@@ -33,7 +33,7 @@ public final class MCCICSocialClientImpl implements MCCICSocial, ClientModInitia
     @Override
     public void onInitializeClient() {
         ClientConfigRegistry.INSTANCE.registerAndLoad(SocialClientConfig.CONFIG_HOLDER);
-        MCCICConfigCommand.registerNewConfig(ID, MCCICSocialConfigScreen::new);
+        MCCICConfigCommand.registerNewConfig(ID, SocialConfigScreen::new);
         MCCIChatEvent.EVENT.register(this::onChatEvent);
     }
 

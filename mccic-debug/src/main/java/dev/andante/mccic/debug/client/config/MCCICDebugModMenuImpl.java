@@ -10,6 +10,6 @@ import net.fabricmc.api.Environment;
 public final class MCCICDebugModMenuImpl implements MCCICDebug, ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return MCCICDebugConfigScreen::new;
+        return DebugConfigScreen::new;
     }
 }

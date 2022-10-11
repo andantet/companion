@@ -3,11 +3,11 @@ package dev.andante.mccic.qol.client;
 import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.client.mccapi.EventApiHook;
-import dev.andante.mccic.api.client.toast.MCCICToast;
+import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
 import dev.andante.mccic.qol.MCCICQoL;
-import dev.andante.mccic.qol.client.config.MCCICQoLConfigScreen;
+import dev.andante.mccic.qol.client.config.QoLConfigScreen;
 import dev.andante.mccic.qol.client.config.QoLClientConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -35,7 +35,7 @@ public final class MCCICQolClientImpl implements MCCICQoL, ClientModInitializer 
     @Override
     public void onInitializeClient() {
         ClientConfigRegistry.INSTANCE.registerAndLoad(QoLClientConfig.CONFIG_HOLDER);
-        MCCICConfigCommand.registerNewConfig(ID, MCCICQoLConfigScreen::new);
+        MCCICConfigCommand.registerNewConfig(ID, QoLConfigScreen::new);
 
         FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(container -> {
             Identifier id = new Identifier(container.getMetadata().getId(), "american_date_format");
@@ -57,7 +57,7 @@ public final class MCCICQolClientImpl implements MCCICQoL, ClientModInitializer 
                             TimeZone timeZone = calendar.getTimeZone();
                             calendar.setTime(date);
                             ToastManager toastManager = client.getToastManager();
-                            toastManager.add(new MCCICToast(
+                            toastManager.add(new CustomToast(
                                 Text.translatable(MCC_SOON_POPUP_TITLE, data.getEventNumber()),
                                 Text.translatable(MCC_SOON_POPUP_DESCRIPTION,
                                     "%02d".formatted(calendar.get(Calendar.DAY_OF_MONTH)),

@@ -1,14 +1,14 @@
 package dev.andante.mccic.discordrp.client.config;
 
-import dev.andante.mccic.config.client.screen.MCCICAbstractConfigScreen;
+import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.discordrp.MCCICDiscordRP;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
-public class MCCICDiscordRPConfigScreen extends MCCICAbstractConfigScreen<DiscordRPClientConfig> {
+public class DiscordRPConfigScreen extends AbstractConfigScreen<DiscordRPClientConfig> {
     public static final SimpleOption<Boolean> ENABLED_OPTION;
 
-    public MCCICDiscordRPConfigScreen(Screen parent) {
+    public DiscordRPConfigScreen(Screen parent) {
         super(MCCICDiscordRP.MOD_ID, parent, DiscordRPClientConfig.CONFIG_HOLDER);
     }
 

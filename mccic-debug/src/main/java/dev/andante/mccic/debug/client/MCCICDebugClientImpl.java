@@ -6,7 +6,7 @@ import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
 import dev.andante.mccic.debug.MCCICDebug;
 import dev.andante.mccic.debug.client.config.DebugClientConfig;
-import dev.andante.mccic.debug.client.config.MCCICDebugConfigScreen;
+import dev.andante.mccic.debug.client.config.DebugConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,7 +20,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
     @Override
     public void onInitializeClient() {
         ClientConfigRegistry.INSTANCE.registerAndLoad(DebugClientConfig.CONFIG_HOLDER);
-        MCCICConfigCommand.registerNewConfig(ID, MCCICDebugConfigScreen::new);
+        MCCICConfigCommand.registerNewConfig(ID, DebugConfigScreen::new);
         HudRenderCallback.EVENT.register(this::onHudRender);
     }
 

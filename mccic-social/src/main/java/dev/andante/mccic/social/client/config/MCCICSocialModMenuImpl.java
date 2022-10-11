@@ -10,6 +10,6 @@ import net.fabricmc.api.Environment;
 public final class MCCICSocialModMenuImpl implements MCCICSocial, ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return MCCICSocialConfigScreen::new;
+        return SocialConfigScreen::new;
     }
 }

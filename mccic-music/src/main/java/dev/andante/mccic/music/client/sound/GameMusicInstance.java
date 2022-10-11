@@ -5,8 +5,8 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 
-public class MCCIGameMusicInstance extends PositionedSoundInstance {
-    public MCCIGameMusicInstance(Game game, float volume) {
+public class GameMusicInstance extends PositionedSoundInstance {
+    public GameMusicInstance(Game game, float volume) {
         super(game.getSoundId(), SoundCategory.VOICE, volume, 1.0F, SoundInstance.createRandom(), true, 0, SoundInstance.AttenuationType.NONE, 0.0, 0.0, 0.0, true);
     }
 

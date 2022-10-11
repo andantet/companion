@@ -1,15 +1,15 @@
 package dev.andante.mccic.social.client.config;
 
-import dev.andante.mccic.config.client.screen.MCCICAbstractConfigScreen;
+import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.social.MCCICSocial;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
-public class MCCICSocialConfigScreen extends MCCICAbstractConfigScreen<SocialClientConfig> {
+public class SocialConfigScreen extends AbstractConfigScreen<SocialClientConfig> {
     public static final SimpleOption<Boolean> FRIEND_TOASTS_OPTION;
     public static final SimpleOption<Boolean> PARTY_TOASTS_OPTION;
 
-    public MCCICSocialConfigScreen(Screen parent) {
+    public SocialConfigScreen(Screen parent) {
         super(MCCICSocial.MOD_ID, parent, SocialClientConfig.CONFIG_HOLDER);
     }
 

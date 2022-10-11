@@ -6,7 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.serialization.Codec;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.game.GameTracker;
-import dev.andante.mccic.api.client.toast.MCCICToast;
+import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.config.ConfigHelper;
 import dev.andante.mccic.config.ConfigHolder;
 import dev.andante.mccic.config.mixin.client.GameOptionsInvoker;
@@ -33,7 +33,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
-public abstract class MCCICAbstractConfigScreen<T extends Record> extends Screen {
+public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     public static final Identifier RELOAD_ICONS_TEXTURE = new Identifier("%s-config".formatted(MCCIC.MOD_ID), "textures/gui/reload_icons.png");
     public static final Identifier RELOAD_ICONS_TEXTURE_MCCI = new Identifier("mcci", RELOAD_ICONS_TEXTURE.getPath());
 
@@ -51,14 +51,14 @@ public abstract class MCCICAbstractConfigScreen<T extends Record> extends Screen
 
     protected ButtonListWidget list;
 
-    public MCCICAbstractConfigScreen(Text title, Screen parent) {
+    public AbstractConfigScreen(Text title, Screen parent) {
         super(title);
         this.parent = parent;
         this.hasConfiguration = false;
         this.configHolder = null;
     }
 
-    public MCCICAbstractConfigScreen(String modId, Screen parent, ConfigHolder<T> configHolder) {
+    public AbstractConfigScreen(String modId, Screen parent, ConfigHolder<T> configHolder) {
         super(Text.translatable("ui.%s.config".formatted(modId)));
         this.parent = parent;
         this.hasConfiguration = true;
@@ -95,7 +95,7 @@ public abstract class MCCICAbstractConfigScreen<T extends Record> extends Screen
 
     protected void onReloadButton(ButtonWidget button) {
         this.reloadConfig();
-        this.client.getToastManager().add(new MCCICToast(this.getConfigReloadTitleText(), ConfigHelper.RELOAD_DESCRIPTION_TEXT));
+        this.client.getToastManager().add(new CustomToast(this.getConfigReloadTitleText(), ConfigHelper.RELOAD_DESCRIPTION_TEXT));
     }
 
     protected Text getConfigReloadTitleText() {

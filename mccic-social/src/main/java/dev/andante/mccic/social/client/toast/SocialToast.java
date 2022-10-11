@@ -1,6 +1,6 @@
 package dev.andante.mccic.social.client.toast;
 
-import dev.andante.mccic.api.client.toast.MCCICToast;
+import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.social.MCCICSocial;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
-public class SocialToast extends MCCICToast {
+public class SocialToast extends CustomToast {
     public static final Identifier FRIEND_TEXTURE = new Identifier(MCCICSocial.MOD_ID, "textures/gui/toasts/social_friend.png");
     public static final Identifier PARTY_TEXTURE = new Identifier(MCCICSocial.MOD_ID, "textures/gui/toasts/social_party.png");
 

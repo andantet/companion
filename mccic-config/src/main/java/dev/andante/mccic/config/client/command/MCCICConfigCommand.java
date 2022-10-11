@@ -7,7 +7,7 @@ import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.config.ConfigHelper;
 import dev.andante.mccic.config.ConfigHolder;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
-import dev.andante.mccic.config.client.screen.MCCICConfigScreen;
+import dev.andante.mccic.config.client.screen.ConfigScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -57,7 +57,7 @@ public interface MCCICConfigCommand {
     }
 
     static int execute(CommandContext<FabricClientCommandSource> context) {
-        return openConfigScreen(context, MCCICConfigScreen::new);
+        return openConfigScreen(context, ConfigScreen::new);
     }
 
     static int executeReload(CommandContext<FabricClientCommandSource> context) {

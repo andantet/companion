@@ -1,17 +1,17 @@
 package dev.andante.mccic.qol.client.config;
 
-import dev.andante.mccic.config.client.screen.MCCICAbstractConfigScreen;
+import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.qol.MCCICQoL;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
-public class MCCICQoLConfigScreen extends MCCICAbstractConfigScreen<QoLClientConfig> {
+public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
     public static final SimpleOption<ConfirmDisconnectMode> CONFIRM_DISCONNECT_MODE_OPTION;
     public static final SimpleOption<Boolean> EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION;
     public static final SimpleOption<Boolean> EVENT_ANNOUNCEMENT_TOAST_OPTION;
     public static final SimpleOption<Boolean> EXTENDED_FRUSTUMS_OPTION;
 
-    public MCCICQoLConfigScreen(Screen parent) {
+    public QoLConfigScreen(Screen parent) {
         super(MCCICQoL.MOD_ID, parent, QoLClientConfig.CONFIG_HOLDER);
     }
 

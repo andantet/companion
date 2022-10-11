@@ -1,15 +1,15 @@
 package dev.andante.mccic.music.client.config;
 
-import dev.andante.mccic.config.client.screen.MCCICAbstractConfigScreen;
+import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.music.MCCICMusic;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
-public class MCCICMusicConfigScreen extends MCCICAbstractConfigScreen<MusicClientConfig> {
+public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
     public static final SimpleOption<Double> MUSIC_VOLUME_OPTION;
     public static final SimpleOption<Double> MUSIC_VOLUME_AFTER_DEATH_OPTION;
 
-    public MCCICMusicConfigScreen(Screen parent) {
+    public MusicConfigScreen(Screen parent) {
         super(MCCICMusic.MOD_ID, parent, MusicClientConfig.CONFIG_HOLDER);
     }
 

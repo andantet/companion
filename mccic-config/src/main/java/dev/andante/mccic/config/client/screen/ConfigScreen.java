@@ -12,17 +12,17 @@ import net.minecraft.text.Text;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class MCCICConfigScreen extends MCCICAbstractConfigScreen<Record> {
+public class ConfigScreen extends AbstractConfigScreen<Record> {
     public static final String OTHER_CONFIG_LOCATION_TEXT_KEY = "ui.%s.config.other_config_location.line".formatted(MCCIC.MOD_ID);
     public static final Text OTHER_CONFIG_LOCATION_TEXT_LINE0 = Text.translatable(OTHER_CONFIG_LOCATION_TEXT_KEY + "0");
     public static final Text OTHER_CONFIG_LOCATION_TEXT_LINE1 = Text.translatable(OTHER_CONFIG_LOCATION_TEXT_KEY + "1");
     public static final List<Text> OTHER_CONFIG_LOCATION_TEXTS = List.of(OTHER_CONFIG_LOCATION_TEXT_LINE0, OTHER_CONFIG_LOCATION_TEXT_LINE1);
 
-    public MCCICConfigScreen(Screen parent) {
+    public ConfigScreen(Screen parent) {
         super(Text.translatable("ui.%s.config".formatted(MCCIC.MOD_ID)), parent);
     }
 
-    public MCCICConfigScreen() {
+    public ConfigScreen() {
         this(null);
     }
 

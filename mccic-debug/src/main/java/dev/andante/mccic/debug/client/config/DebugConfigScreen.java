@@ -1,14 +1,14 @@
 package dev.andante.mccic.debug.client.config;
 
-import dev.andante.mccic.config.client.screen.MCCICAbstractConfigScreen;
+import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.debug.MCCICDebug;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
-public class MCCICDebugConfigScreen extends MCCICAbstractConfigScreen<DebugClientConfig> {
+public class DebugConfigScreen extends AbstractConfigScreen<DebugClientConfig> {
     public static final SimpleOption<Boolean> DEBUG_HUD_OPTION;
 
-    public MCCICDebugConfigScreen(Screen parent) {
+    public DebugConfigScreen(Screen parent) {
         super(MCCICDebug.MOD_ID, parent, DebugClientConfig.CONFIG_HOLDER);
     }
 

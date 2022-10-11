@@ -10,6 +10,6 @@ import net.fabricmc.api.Environment;
 public final class MCCICMusicModMenuImpl implements MCCICMusic, ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return MCCICMusicConfigScreen::new;
+        return MusicConfigScreen::new;
     }
 }

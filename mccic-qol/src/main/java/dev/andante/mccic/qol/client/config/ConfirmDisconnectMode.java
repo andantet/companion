@@ -1,6 +1,6 @@
 package dev.andante.mccic.qol.client.config;
 
-import dev.andante.mccic.config.client.screen.MCCICAbstractConfigScreen;
+import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.qol.MCCICQoL;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -29,7 +29,7 @@ public enum ConfirmDisconnectMode implements StringIdentifiable, TranslatableOpt
 
     @Override
     public String getTranslationKey() {
-        return MCCICAbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "confirm_disconnect_mode.%s".formatted(this.asString()));
+        return AbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "confirm_disconnect_mode.%s".formatted(this.asString()));
     }
 
     public static ConfirmDisconnectMode byId(int ordinal) {

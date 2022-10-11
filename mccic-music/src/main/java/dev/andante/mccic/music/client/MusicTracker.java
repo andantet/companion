@@ -8,7 +8,7 @@ import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.music.MCCICSounds;
 import dev.andante.mccic.music.client.config.MusicClientConfig;
-import dev.andante.mccic.music.client.sound.MCCIGameMusicInstance;
+import dev.andante.mccic.music.client.sound.GameMusicInstance;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -76,7 +76,7 @@ public class MusicTracker {
         soundManager.stop(this.lastSound);
 
         Game game = this.gameTracker.getGame();
-        SoundInstance sound = this.lastSound = new MCCIGameMusicInstance(game, volume);
+        SoundInstance sound = this.lastSound = new GameMusicInstance(game, volume);
         soundManager.play(sound);
     }
 }

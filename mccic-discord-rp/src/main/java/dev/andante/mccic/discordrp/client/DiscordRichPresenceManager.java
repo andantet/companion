@@ -7,20 +7,20 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 /**
- * Holds and manages an instance of {@link MCCIDiscordRichPresence}.
+ * Holds and manages an instance of {@link DiscordRichPresence}.
  */
 @Environment(EnvType.CLIENT)
-public class MCCIDiscordRichPresenceManager {
-    private MCCIDiscordRichPresence client;
+public class DiscordRichPresenceManager {
+    private DiscordRichPresence client;
 
-    public MCCIDiscordRichPresenceManager() {
+    public DiscordRichPresenceManager() {
         ClientTickEvents.END_CLIENT_TICK.register(clientx -> this.update());
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
     }
 
     protected void tryConnect() {
         if (this.client == null) {
-            this.client = new MCCIDiscordRichPresence(DiscordRPClientConfig.getConfig().clientId());
+            this.client = new DiscordRichPresence(DiscordRPClientConfig.getConfig().clientId());
             this.client.tryConnect();
         }
     }

@@ -23,7 +23,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Environment(EnvType.CLIENT)
-public class MCCIDiscordRichPresence {
+public class DiscordRichPresence {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final OffsetDateTime INITIAL_TIME = OffsetDateTime.now();
     private final ScheduledExecutorService executorService;
@@ -31,7 +31,7 @@ public class MCCIDiscordRichPresence {
 
     private IPCClient discord;
 
-    public MCCIDiscordRichPresence(long clientId) {
+    public DiscordRichPresence(long clientId) {
         this.clientId = clientId;
         this.executorService = Executors.newSingleThreadScheduledExecutor();
     }

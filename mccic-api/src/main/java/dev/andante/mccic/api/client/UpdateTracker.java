@@ -10,7 +10,7 @@ import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.MCCICApi;
 import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
 import dev.andante.mccic.api.client.game.GameTracker;
-import dev.andante.mccic.api.client.toast.MCCICToast;
+import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.api.util.JsonHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -35,9 +35,9 @@ import java.net.URL;
 import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
-public class MCCICUpdateTracker {
+public class UpdateTracker {
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static final MCCICUpdateTracker INSTANCE = new MCCICUpdateTracker("https://gist.githubusercontent.com/andantet/9da23e1fa711912449e9342da238b248/raw/mccic.json");
+    public static final UpdateTracker INSTANCE = new UpdateTracker("https://gist.githubusercontent.com/andantet/9da23e1fa711912449e9342da238b248/raw/mccic.json");
 
     public static final String UPDATE_POPUP_TITLE = "text.%s.update_available.title".formatted(MCCICApi.MOD_ID);
     public static final String UPDATE_POPUP_DESCRIPTION = "text.%s.update_available.description".formatted(MCCICApi.MOD_ID);
@@ -45,7 +45,7 @@ public class MCCICUpdateTracker {
     private final URL url;
     private Data data;
 
-    public MCCICUpdateTracker(String url) {
+    public UpdateTracker(String url) {
         try {
             this.url = new URL(url);
         } catch (MalformedURLException exception) {
@@ -57,13 +57,13 @@ public class MCCICUpdateTracker {
 
     protected void onServerJoin(Screen screen, MinecraftClient client, ServerAddress address, @Nullable ServerInfo info) {
         if (GameTracker.INSTANCE.isOnServer()) {
-            MCCICUpdateTracker updateTracker = MCCICUpdateTracker.INSTANCE;
+            UpdateTracker updateTracker = UpdateTracker.INSTANCE;
             updateTracker.retrieve();
-            Optional<MCCICUpdateTracker.Data> maybeData = updateTracker.getData();
+            Optional<UpdateTracker.Data> maybeData = updateTracker.getData();
             if (maybeData.isPresent() && updateTracker.isUpdateAvailable()) {
-                MCCICUpdateTracker.Data data = maybeData.get();
+                UpdateTracker.Data data = maybeData.get();
                 ToastManager toastManager = client.getToastManager();
-                toastManager.add(new MCCICToast(Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)));
+                toastManager.add(new CustomToast(Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)));
             }
         }
     }
