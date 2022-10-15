@@ -1,6 +1,6 @@
 package dev.andante.mccic.qol.client;
 
-import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
+import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
 import dev.andante.mccic.api.client.mccapi.EventApiHook;
 import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
@@ -15,13 +15,11 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.ServerAddress;
-import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.client.toast.ToastManager;
+import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -41,10 +39,10 @@ public final class MCCICQolClientImpl implements MCCICQoL, ClientModInitializer 
             ResourceManagerHelper.registerBuiltinResourcePack(id, container, "MCCIC: American Date Format", ResourcePackActivationType.NORMAL);
         });
 
-        MCCIClientScreenServerJoinEvent.EVENT.register(this::onServerJoin);
+        MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
     }
 
-    private void onServerJoin(Screen screen, MinecraftClient client, ServerAddress address, @Nullable ServerInfo info) {
+    private void onClientLoginHello(ClientLoginNetworkHandler handler, LoginHelloS2CPacket packet) {
         if (QoLClientConfig.getConfig().eventAnnouncementToast()) {
             EventApiHook api = EventApiHook.INSTANCE;
             api.retrieve();
@@ -54,6 +52,7 @@ public final class MCCICQolClientImpl implements MCCICQoL, ClientModInitializer 
                         Calendar calendar = Calendar.getInstance();
                         TimeZone timeZone = calendar.getTimeZone();
                         calendar.setTime(date);
+                        MinecraftClient client = MinecraftClient.getInstance();
                         ToastManager toastManager = client.getToastManager();
                         toastManager.add(new CustomToast(
                             Text.translatable(MCC_SOON_POPUP_TITLE, data.getEventNumber()),

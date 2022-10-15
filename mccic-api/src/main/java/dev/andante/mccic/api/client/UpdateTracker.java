@@ -8,7 +8,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.MCCICApi;
-import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
+import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
 import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.api.util.JsonHelper;
 import net.fabricmc.api.EnvType;
@@ -19,12 +19,10 @@ import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.ServerAddress;
-import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.client.toast.ToastManager;
+import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
 import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -51,16 +49,17 @@ public class UpdateTracker {
             throw new RuntimeException(exception);
         }
 
-        MCCIClientScreenServerJoinEvent.EVENT.register(this::onServerJoin);
+        MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
     }
 
-    protected void onServerJoin(Screen screen, MinecraftClient client, ServerAddress address, @Nullable ServerInfo info) {
+    protected void onClientLoginHello(ClientLoginNetworkHandler handler, LoginHelloS2CPacket packet) {
         this.retrieve();
 
         Optional<UpdateTracker.Data> maybeData = this.getData();
         if (maybeData.isPresent() && this.isUpdateAvailable()) {
-            UpdateTracker.Data data = maybeData.get();
+            MinecraftClient client = MinecraftClient.getInstance();
             ToastManager toastManager = client.getToastManager();
+            UpdateTracker.Data data = maybeData.get();
             toastManager.add(new CustomToast(Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)));
         }
     }

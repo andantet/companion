@@ -8,15 +8,12 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.ListCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
-import dev.andante.mccic.api.client.event.MCCIClientScreenServerJoinEvent;
+import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
 import dev.andante.mccic.api.util.JsonHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.ServerAddress;
-import net.minecraft.client.network.ServerInfo;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.client.network.ClientLoginNetworkHandler;
+import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -42,10 +39,10 @@ public class UnicodeIconsStore {
             throw new RuntimeException(exception);
         }
 
-        MCCIClientScreenServerJoinEvent.EVENT.register(this::onServerJoin);
+        MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
     }
 
-    protected void onServerJoin(Screen screen, MinecraftClient client, ServerAddress address, @Nullable ServerInfo info) {
+    protected void onClientLoginHello(ClientLoginNetworkHandler handler, LoginHelloS2CPacket packet) {
         this.retrieve();
     }
 

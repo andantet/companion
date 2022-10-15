@@ -6,8 +6,8 @@
   "mixins": [],
   "client": [
     "client.ChatHudMixin",
+    "client.ClientLoginNetworkHandlerMixin",
     "client.ClientPlayerEntityMixin",
-    "client.ConnectScreenMixin",
     "client.DeathScreenMixin",
     "client.SystemToastMixin",
     "client.access.BossBarHudAccessor"
