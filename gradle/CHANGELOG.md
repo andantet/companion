@@ -1,6 +1,4 @@
-CHANGELOG FOR 4.0.0-beta.12:
+CHANGELOG FOR 4.0.0-beta.13:
 
-+ Hole in the Wall other player death sounds! (configurable, off by default)
-+ Extended frustums! (Custom models will now cull less)
-* Split 'All Toasts' config for mccic-social into 'Friend Toasts' and 'Party Toasts'
-* Refactored a bunch of classes to remove the `MCCI`/`MCCIC` prefix
+* Fixed music sometimes playing after a game has finished
+* Fixed the event api hook when `updateVideo` is `null`
