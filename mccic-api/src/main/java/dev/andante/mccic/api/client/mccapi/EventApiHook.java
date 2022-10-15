@@ -84,6 +84,7 @@ public class EventApiHook {
                 Codec.STRING.fieldOf("event")
                     .forGetter(Data::event),
                 Codec.STRING.fieldOf("updateVideo")
+                    .orElse("")
                     .forGetter(Data::updateVideo)
             ).apply(instance, Data::new)
         );
