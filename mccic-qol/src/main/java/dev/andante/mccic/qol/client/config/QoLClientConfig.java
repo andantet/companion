@@ -9,7 +9,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.util.StringIdentifiable;
 
 @Environment(EnvType.CLIENT)
-public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boolean emptySlotHighlightsFix, boolean eventAnnouncementToast, boolean extendedFrustums) {
+public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boolean emptySlotHighlightsFix, boolean eventAnnouncementToast, boolean extendedFrustums, boolean autoHitboxSkyBattle, boolean autoHitboxBattleBox) {
     public static final Codec<QoLClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             QoLClientConfig defaultConfig = createDefaultConfig();
@@ -26,7 +26,13 @@ public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boole
                           .forGetter(QoLClientConfig::eventAnnouncementToast),
                 Codec.BOOL.fieldOf("extended_frustums")
                           .orElse(defaultConfig.extendedFrustums())
-                          .forGetter(QoLClientConfig::extendedFrustums)
+                          .forGetter(QoLClientConfig::extendedFrustums),
+                Codec.BOOL.fieldOf("auto_hitbox_sky_battle")
+                          .orElse(defaultConfig.autoHitboxSkyBattle())
+                          .forGetter(QoLClientConfig::autoHitboxSkyBattle),
+                Codec.BOOL.fieldOf("auto_hitbox_battle_box")
+                          .orElse(defaultConfig.autoHitboxBattleBox())
+                          .forGetter(QoLClientConfig::autoHitboxBattleBox)
             ).apply(instance, QoLClientConfig::new);
         }
     );
@@ -38,6 +44,6 @@ public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boole
     }
 
     public static QoLClientConfig createDefaultConfig() {
-        return new QoLClientConfig(ConfirmDisconnectMode.IN_GAME, true, true, true);
+        return new QoLClientConfig(ConfirmDisconnectMode.IN_GAME, true, true, true, false, false);
     }
 }

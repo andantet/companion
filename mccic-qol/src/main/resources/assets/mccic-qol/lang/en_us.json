@@ -10,5 +10,7 @@
   "config.mccic-qol.confirm_disconnect_mode.on_server": "On Server",
   "config.mccic-qol.empty_slot_highlights_fix": "Empty Slot Highlights Fix",
   "config.mccic-qol.event_announcement_toast": "Event Announcement Toast",
-  "config.mccic-qol.extended_frustums": "Extended Frustums"
+  "config.mccic-qol.extended_frustums": "Extended Frustums",
+  "config.mccic-qol.auto_hitbox_sky_battle": "Auto-Hitbox (Sky Battle)",
+  "config.mccic-qol.auto_hitbox_battle_box": "Auto-Hitbox (Battle Box)"
 }
