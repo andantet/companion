@@ -8,5 +8,9 @@
 
   "ui.mccic-social.config": "MCCI: Companion Config - Social",
   "config.mccic-social.friend_toasts": "Friend Toasts",
-  "config.mccic-social.party_toasts": "Party Toasts"
+  "config.mccic-social.party_toasts": "Party Toasts",
+  "config.mccic-social.hub_player_render_mode": "Hub Player Render Mode",
+  "config.mccic-social.hub_player_render_mode.default": "Default",
+  "config.mccic-social.hub_player_render_mode.invisible": "Invisible",
+  "config.mccic-social.hub_player_render_mode.small": "Small"
 }

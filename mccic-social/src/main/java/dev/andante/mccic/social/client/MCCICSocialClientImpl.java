@@ -1,5 +1,6 @@
 package dev.andante.mccic.social.client;
 
+import com.mojang.authlib.GameProfile;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
@@ -15,9 +16,13 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.MessageIndicator;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 @Environment(EnvType.CLIENT)
 public final class MCCICSocialClientImpl implements MCCICSocial, ClientModInitializer {
@@ -109,5 +114,11 @@ public final class MCCICSocialClientImpl implements MCCICSocial, ClientModInitia
 
     public boolean isUsernameValid(String username) {
         return username.indexOf(' ') == -1;
+    }
+
+    public static boolean isPlayerInPlayerList(MinecraftClient client, PlayerEntity player) {
+        GameProfile profile = player.getGameProfile();
+        Collection<PlayerListEntry> playerList = client.getNetworkHandler().getPlayerList();
+        return playerList.stream().anyMatch(entry -> entry.getProfile().equals(profile));
     }
 }

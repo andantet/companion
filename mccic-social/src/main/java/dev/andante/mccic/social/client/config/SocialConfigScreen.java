@@ -5,25 +5,25 @@ import dev.andante.mccic.social.MCCICSocial;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
+import java.util.List;
+
 public class SocialConfigScreen extends AbstractConfigScreen<SocialClientConfig> {
     public static final SimpleOption<Boolean> FRIEND_TOASTS_OPTION;
     public static final SimpleOption<Boolean> PARTY_TOASTS_OPTION;
+    public static final SimpleOption<HubPlayerRenderMode> HUB_PLAYER_RENDER_MODE_OPTION;
 
     public SocialConfigScreen(Screen parent) {
         super(MCCICSocial.MOD_ID, parent, SocialClientConfig.CONFIG_HOLDER);
     }
 
     @Override
-    protected void init() {
-        super.init();
-        this.list.addSingleOptionEntry(FRIEND_TOASTS_OPTION);
-        this.list.addSingleOptionEntry(PARTY_TOASTS_OPTION);
+    protected List<SimpleOption<?>> getOptions() {
+        return List.of(FRIEND_TOASTS_OPTION, PARTY_TOASTS_OPTION/*, HUB_PLAYER_RENDER_MODE_OPTION*/);
     }
 
     @Override
-    protected void saveConfig() {
-        SocialClientConfig.CONFIG_HOLDER.set(new SocialClientConfig(FRIEND_TOASTS_OPTION.getValue(), PARTY_TOASTS_OPTION.getValue()));
-        super.saveConfig();
+    public SocialClientConfig createConfig() {
+        return new SocialClientConfig(FRIEND_TOASTS_OPTION.getValue(), PARTY_TOASTS_OPTION.getValue(), HUB_PLAYER_RENDER_MODE_OPTION.getValue());
     }
 
     static {
@@ -31,5 +31,6 @@ public class SocialConfigScreen extends AbstractConfigScreen<SocialClientConfig>
         SocialClientConfig defaultConfig = SocialClientConfig.createDefaultConfig();
         FRIEND_TOASTS_OPTION = ofBoolean(MCCICSocial.MOD_ID, "friend_toasts", config.friendToasts(), defaultConfig.friendToasts());
         PARTY_TOASTS_OPTION = ofBoolean(MCCICSocial.MOD_ID, "party_toasts", config.partyToasts(), defaultConfig.partyToasts());
+        HUB_PLAYER_RENDER_MODE_OPTION = ofEnum(MCCICSocial.MOD_ID, "hub_player_render_mode", HubPlayerRenderMode::byId, HubPlayerRenderMode.values(), config.hubPlayerRenderMode(), defaultConfig.hubPlayerRenderMode());
     }
 }

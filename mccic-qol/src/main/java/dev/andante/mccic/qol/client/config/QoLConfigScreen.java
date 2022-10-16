@@ -5,6 +5,8 @@ import dev.andante.mccic.qol.MCCICQoL;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
+import java.util.List;
+
 public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
     public static final SimpleOption<ConfirmDisconnectMode> CONFIRM_DISCONNECT_MODE_OPTION;
     public static final SimpleOption<Boolean> EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION;
@@ -16,18 +18,13 @@ public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
     }
 
     @Override
-    protected void init() {
-        super.init();
-        this.list.addSingleOptionEntry(CONFIRM_DISCONNECT_MODE_OPTION);
-        this.list.addSingleOptionEntry(EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION);
-        this.list.addSingleOptionEntry(EVENT_ANNOUNCEMENT_TOAST_OPTION);
-        this.list.addSingleOptionEntry(EXTENDED_FRUSTUMS_OPTION);
+    protected List<SimpleOption<?>> getOptions() {
+        return List.of(CONFIRM_DISCONNECT_MODE_OPTION, EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION, EVENT_ANNOUNCEMENT_TOAST_OPTION, EXTENDED_FRUSTUMS_OPTION);
     }
 
     @Override
-    protected void saveConfig() {
-        QoLClientConfig.CONFIG_HOLDER.set(new QoLClientConfig(CONFIRM_DISCONNECT_MODE_OPTION.getValue(), EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION.getValue(), EVENT_ANNOUNCEMENT_TOAST_OPTION.getValue(), EXTENDED_FRUSTUMS_OPTION.getValue()));
-        super.saveConfig();
+    public QoLClientConfig createConfig() {
+        return new QoLClientConfig(CONFIRM_DISCONNECT_MODE_OPTION.getValue(), EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION.getValue(), EVENT_ANNOUNCEMENT_TOAST_OPTION.getValue(), EXTENDED_FRUSTUMS_OPTION.getValue());
     }
 
     static {

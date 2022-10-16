@@ -5,6 +5,8 @@ import dev.andante.mccic.music.MCCICMusic;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
+import java.util.List;
+
 public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
     public static final SimpleOption<Double> MUSIC_VOLUME_OPTION;
     public static final SimpleOption<Double> MUSIC_VOLUME_AFTER_DEATH_OPTION;
@@ -15,17 +17,13 @@ public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
     }
 
     @Override
-    protected void init() {
-        super.init();
-        this.list.addSingleOptionEntry(MUSIC_VOLUME_OPTION);
-        this.list.addSingleOptionEntry(MUSIC_VOLUME_AFTER_DEATH_OPTION);
-        this.list.addSingleOptionEntry(HITW_SOUND_ON_OTHER_DEATH);
+    protected List<SimpleOption<?>> getOptions() {
+        return List.of(MUSIC_VOLUME_OPTION, MUSIC_VOLUME_AFTER_DEATH_OPTION, HITW_SOUND_ON_OTHER_DEATH);
     }
 
     @Override
-    protected void saveConfig() {
-        MusicClientConfig.CONFIG_HOLDER.set(new MusicClientConfig(MUSIC_VOLUME_OPTION.getValue(), MUSIC_VOLUME_AFTER_DEATH_OPTION.getValue(), HITW_SOUND_ON_OTHER_DEATH.getValue()));
-        super.saveConfig();
+    public MusicClientConfig createConfig() {
+        return new MusicClientConfig(MUSIC_VOLUME_OPTION.getValue(), MUSIC_VOLUME_AFTER_DEATH_OPTION.getValue(), HITW_SOUND_ON_OTHER_DEATH.getValue());
     }
 
     static {

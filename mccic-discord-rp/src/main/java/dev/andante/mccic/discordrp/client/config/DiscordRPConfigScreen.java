@@ -5,6 +5,8 @@ import dev.andante.mccic.discordrp.MCCICDiscordRP;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
+import java.util.List;
+
 public class DiscordRPConfigScreen extends AbstractConfigScreen<DiscordRPClientConfig> {
     public static final SimpleOption<Boolean> ENABLED_OPTION;
 
@@ -13,16 +15,14 @@ public class DiscordRPConfigScreen extends AbstractConfigScreen<DiscordRPClientC
     }
 
     @Override
-    protected void init() {
-        super.init();
-        this.list.addSingleOptionEntry(ENABLED_OPTION);
+    protected List<SimpleOption<?>> getOptions() {
+        return List.of(ENABLED_OPTION);
     }
 
     @Override
-    protected void saveConfig() {
+    public DiscordRPClientConfig createConfig() {
         DiscordRPClientConfig defaultConfig = DiscordRPClientConfig.createDefaultConfig();
-        DiscordRPClientConfig.CONFIG_HOLDER.set(new DiscordRPClientConfig(ENABLED_OPTION.getValue(), defaultConfig.clientId()));
-        super.saveConfig();
+        return new DiscordRPClientConfig(ENABLED_OPTION.getValue(), defaultConfig.clientId());
     }
 
     static {

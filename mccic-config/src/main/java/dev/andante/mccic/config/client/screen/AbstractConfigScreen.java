@@ -30,6 +30,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.TranslatableOption;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
@@ -86,7 +88,12 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         this.list = new ButtonListWidget(this.client, this.width, this.height, 93, this.height - 94, 25);
         this.list.setRenderBackground(false);
         this.list.setRenderHorizontalShadows(false);
+        this.getOptions().forEach(this.list::addSingleOptionEntry);
         this.addSelectableChild(this.list);
+    }
+
+    protected List<SimpleOption<?>> getOptions() {
+        return Collections.emptyList();
     }
 
     protected void onBackButton(ButtonWidget widget) {
@@ -157,8 +164,11 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     }
 
     protected void saveConfig() {
+        this.configHolder.set(this.createConfig());
         this.configHolder.save();
     }
+
+    public abstract T createConfig();
 
     @Override
     public boolean shouldPause() {

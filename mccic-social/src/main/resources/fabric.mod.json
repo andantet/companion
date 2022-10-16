@@ -17,5 +17,6 @@
   "entrypoints": {
     "client": [ "dev.andante.mccic.social.client.MCCICSocialClientImpl" ],
     "modmenu": [ "dev.andante.mccic.social.client.config.MCCICSocialModMenuImpl" ]
-  }
+  },
+  "mixins": [ "mccic-social.mixins.json" ]
 }

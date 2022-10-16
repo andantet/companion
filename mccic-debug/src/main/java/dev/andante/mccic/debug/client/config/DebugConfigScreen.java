@@ -5,6 +5,8 @@ import dev.andante.mccic.debug.MCCICDebug;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
+import java.util.List;
+
 public class DebugConfigScreen extends AbstractConfigScreen<DebugClientConfig> {
     public static final SimpleOption<Boolean> DEBUG_HUD_OPTION;
     public static final SimpleOption<Boolean> CHAT_ALL_SOUNDS_OPTION;
@@ -14,16 +16,13 @@ public class DebugConfigScreen extends AbstractConfigScreen<DebugClientConfig> {
     }
 
     @Override
-    protected void init() {
-        super.init();
-        this.list.addSingleOptionEntry(DEBUG_HUD_OPTION);
-        this.list.addSingleOptionEntry(CHAT_ALL_SOUNDS_OPTION);
+    protected List<SimpleOption<?>> getOptions() {
+        return List.of(DEBUG_HUD_OPTION, CHAT_ALL_SOUNDS_OPTION);
     }
 
     @Override
-    protected void saveConfig() {
-        DebugClientConfig.CONFIG_HOLDER.set(new DebugClientConfig(DEBUG_HUD_OPTION.getValue(), CHAT_ALL_SOUNDS_OPTION.getValue()));
-        super.saveConfig();
+    public DebugClientConfig createConfig() {
+        return new DebugClientConfig(DEBUG_HUD_OPTION.getValue(), CHAT_ALL_SOUNDS_OPTION.getValue());
     }
 
     static {
