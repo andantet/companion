@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-toasts",
+  "name": "MCCI: Companion (Toasts)",
+  "version": "${version}",
+  "description": "Text to toasts for MCCI: Companion!",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "depends": {
+    "mccic-api": "*",
+    "mccic-config": "*"
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.toasts.client.MCCICToastsClientImpl" ],
+    "modmenu": [ "dev.andante.mccic.toasts.client.config.MCCICToastsModMenuImpl" ]
+  },
+  "mixins": [ "mccic-toasts.mixins.json" ]
+}

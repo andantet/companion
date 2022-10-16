@@ -9,6 +9,7 @@
     "client.ClientLoginNetworkHandlerMixin",
     "client.ClientPlayerEntityMixin",
     "client.DeathScreenMixin",
+    "client.SoundManagerMixin",
     "client.SystemToastMixin",
     "client.access.BossBarHudAccessor"
   ],

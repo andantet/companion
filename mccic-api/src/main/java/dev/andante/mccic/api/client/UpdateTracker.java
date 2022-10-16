@@ -18,9 +18,7 @@ import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.client.toast.ToastManager;
 import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -57,10 +55,7 @@ public class UpdateTracker {
 
         Optional<UpdateTracker.Data> maybeData = this.getData();
         if (maybeData.isPresent() && this.isUpdateAvailable()) {
-            MinecraftClient client = MinecraftClient.getInstance();
-            ToastManager toastManager = client.getToastManager();
-            UpdateTracker.Data data = maybeData.get();
-            toastManager.add(new CustomToast(Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)));
+            new CustomToast(Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)).add();
         }
     }
 

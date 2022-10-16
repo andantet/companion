@@ -4,7 +4,6 @@ import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.social.MCCICSocial;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -20,12 +19,7 @@ public class SocialToast extends CustomToast {
     }
 
     public static void add(EventType eventType, String name) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        client.getToastManager().add(new SocialToast(eventType, name));
-    }
-
-    public static void add(EventType eventType) {
-        add(eventType, null);
+        new SocialToast(eventType, name).add();
     }
 
     public enum EventType {

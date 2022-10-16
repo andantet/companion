@@ -102,7 +102,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
 
     protected void onReloadButton(ButtonWidget button) {
         this.reloadConfig();
-        this.client.getToastManager().add(new CustomToast(this.getConfigReloadTitleText(), ConfigHelper.RELOAD_DESCRIPTION_TEXT));
+        new CustomToast(this.getConfigReloadTitleText(), ConfigHelper.RELOAD_DESCRIPTION_TEXT).add();
     }
 
     protected Text getConfigReloadTitleText() {

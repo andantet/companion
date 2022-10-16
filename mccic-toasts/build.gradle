@@ -1,0 +1,7 @@
+archivesBaseName = 'mccic-toasts'
+version = getSubprojectVersion(project)
+
+moduleDependencies(project, [
+        'mccic-api',
+        'mccic-config'
+])

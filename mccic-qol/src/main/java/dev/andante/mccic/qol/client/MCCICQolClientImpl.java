@@ -14,9 +14,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.client.toast.ToastManager;
 import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -52,9 +50,7 @@ public final class MCCICQolClientImpl implements MCCICQoL, ClientModInitializer 
                         Calendar calendar = Calendar.getInstance();
                         TimeZone timeZone = calendar.getTimeZone();
                         calendar.setTime(date);
-                        MinecraftClient client = MinecraftClient.getInstance();
-                        ToastManager toastManager = client.getToastManager();
-                        toastManager.add(new CustomToast(
+                        new CustomToast(
                             Text.translatable(MCC_SOON_POPUP_TITLE, data.getEventNumber()),
                             Text.translatable(MCC_SOON_POPUP_DESCRIPTION,
                                 "%02d".formatted(calendar.get(Calendar.DAY_OF_MONTH)),
@@ -63,7 +59,7 @@ public final class MCCICQolClientImpl implements MCCICQoL, ClientModInitializer 
                                 calendar.get(Calendar.AM_PM) == Calendar.PM ? "pm": "am",
                                 timeZone.getDisplayName(timeZone.inDaylightTime(date), TimeZone.SHORT)
                             )
-                        ));
+                        ).add();
                     });
                 });
             }

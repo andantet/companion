@@ -1,0 +1,7 @@
+{
+  "toast.mccic-toasts.quest_complete.title": "Quest Complete!",
+  "toast.mccic-toasts.quest_complete.description": "%s",
+
+  "ui.mccic-toasts.config": "MCCI: Companion Config - Toasts",
+  "config.mccic-toasts.quests": "Quests"
+}
