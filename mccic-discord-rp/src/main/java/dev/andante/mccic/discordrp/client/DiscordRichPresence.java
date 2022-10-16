@@ -43,7 +43,7 @@ public class DiscordRichPresence {
         }
 
         LOGGER.info("{}: Setting up Discord client", MCCIC.MOD_NAME);
-        this.executorService.scheduleAtFixedRate(this::update, 0, 5, TimeUnit.SECONDS);
+        this.executorService.scheduleAtFixedRate(this::update, 0, 15, TimeUnit.SECONDS);
 
         this.discord = new IPCClient(this.clientId);
         this.discord.setListener(new IPCListener() {
