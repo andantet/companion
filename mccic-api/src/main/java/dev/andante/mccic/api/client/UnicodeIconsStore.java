@@ -108,7 +108,9 @@ public class UnicodeIconsStore {
 
     public enum Icon {
         DEATH("death"),
-        QUEST_BOOK("quest_book");
+        QUEST_BOOK("quest_book"),
+        ACHIEVEMENT("achievement"),
+        INFINIBAG("infinibag");
 
         private final String key;
 
