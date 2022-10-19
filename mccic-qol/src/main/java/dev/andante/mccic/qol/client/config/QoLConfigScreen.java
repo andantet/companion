@@ -2,11 +2,14 @@ package dev.andante.mccic.qol.client.config;
 
 import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.qol.MCCICQoL;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
     public static final SimpleOption<ConfirmDisconnectMode> CONFIRM_DISCONNECT_MODE_OPTION;
     public static final SimpleOption<Boolean> EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION;

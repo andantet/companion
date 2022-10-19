@@ -2,11 +2,14 @@ package dev.andante.mccic.toasts.client.config;
 
 import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.toasts.MCCICToasts;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public class ToastsConfigScreen extends AbstractConfigScreen<ToastsClientConfig> {
     public static final SimpleOption<Boolean> QUESTS_OPTION;
 

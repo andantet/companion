@@ -2,11 +2,14 @@ package dev.andante.mccic.music.client.config;
 
 import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.music.MCCICMusic;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
     public static final SimpleOption<Double> MUSIC_VOLUME_OPTION;
     public static final SimpleOption<Double> MUSIC_VOLUME_AFTER_DEATH_OPTION;

@@ -2,11 +2,14 @@ package dev.andante.mccic.discordrp.client.config;
 
 import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.discordrp.MCCICDiscordRP;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
 
 import java.util.List;
 
+@Environment(EnvType.CLIENT)
 public class DiscordRPConfigScreen extends AbstractConfigScreen<DiscordRPClientConfig> {
     public static final SimpleOption<Boolean> ENABLED_OPTION;
 
