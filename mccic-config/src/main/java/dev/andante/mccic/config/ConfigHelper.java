@@ -21,8 +21,8 @@ import java.util.Optional;
 public interface ConfigHelper {
     Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve(MCCIC.MOD_ID);
 
-    Text RELOAD_TITLE_TEXT = Text.translatable("text.%s.config_reload_title".formatted(MCCIC.MOD_ID));
-    Text RELOAD_DESCRIPTION_TEXT = Text.translatable("text.%s.config_reload_description".formatted(MCCIC.MOD_ID));
+    Text RELOAD_TITLE_TEXT = Text.translatable("text.%s.reload_config.title".formatted(MCCICConfig.MOD_ID));
+    Text RELOAD_DESCRIPTION_TEXT = Text.translatable("text.%s.reload_config.description".formatted(MCCICConfig.MOD_ID));
 
     static File resolveConfigFile(String module) {
         return CONFIG_PATH.resolve("%s-%s.json".formatted(MCCIC.MOD_ID, module)).toFile();

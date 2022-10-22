@@ -4,11 +4,11 @@ import com.mojang.blaze3d.platform.GlStateManager.DstFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SrcFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.serialization.Codec;
-import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.config.ConfigHelper;
 import dev.andante.mccic.config.ConfigHolder;
+import dev.andante.mccic.config.MCCICConfig;
 import dev.andante.mccic.config.mixin.client.GameOptionsInvoker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -36,11 +36,12 @@ import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public abstract class AbstractConfigScreen<T extends Record> extends Screen {
-    public static final Identifier RELOAD_ICONS_TEXTURE = new Identifier("%s-config".formatted(MCCIC.MOD_ID), "textures/gui/reload_icons.png");
+    public static final Identifier RELOAD_ICONS_TEXTURE = new Identifier(MCCICConfig.MOD_ID, "textures/gui/reload_icons.png");
     public static final Identifier RELOAD_ICONS_TEXTURE_MCCI = new Identifier("mcci", RELOAD_ICONS_TEXTURE.getPath());
 
-    public static final String CONFIG_RELOAD_TEXT_KEY = "ui.%s.config.reload".formatted(MCCIC.MOD_ID);
+    public static final String CONFIG_RELOAD_TEXT_KEY = "ui.%s.reload".formatted(MCCICConfig.MOD_ID);
     public static final Text RELOAD_TOOLTIP_TEXT = Text.translatable("%s.tooltip".formatted(CONFIG_RELOAD_TEXT_KEY));
+    public static final Text SAVE_TEXT = Text.translatable("gui.%s.save".formatted(MCCICConfig.MOD_ID));
 
     public static final int TITLE_Y = 60;
     public static final int BACK_BUTTON_WIDTH = 102;
@@ -72,7 +73,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         // back button
         this.addDrawableChild(new ButtonWidget(
             (int) ((this.width / 2f) - (BACK_BUTTON_WIDTH / 2f)), this.height - 60,
-            BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT, ScreenTexts.BACK, this::onBackButton
+            BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT, this.hasConfiguration ? SAVE_TEXT : ScreenTexts.BACK, this::onBackButton
         ));
 
         // reload button
