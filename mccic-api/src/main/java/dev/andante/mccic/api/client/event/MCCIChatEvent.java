@@ -22,7 +22,7 @@ public interface MCCIChatEvent {
 
         for (MCCIChatEvent callback : callbacks) {
             EventResult result = callback.onChatEvent(chatHud, message, raw, signature, ticks, indicator, refresh);
-            cancels = result.isFalse();
+            cancels = cancels || result.isFalse();
             if (result.interruptsFurtherEvaluation()) {
                 return result;
             }
