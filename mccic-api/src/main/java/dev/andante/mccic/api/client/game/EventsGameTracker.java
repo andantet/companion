@@ -9,6 +9,7 @@ import dev.andante.mccic.api.mixin.client.access.BossBarHudAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.BossBarHud;
 import net.minecraft.client.gui.hud.ChatHud;
@@ -187,6 +188,10 @@ public class EventsGameTracker implements GameTracker {
 
     @Override
     public boolean isOnServer() {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            return true;
+        }
+
         ServerInfo server = this.client.getCurrentServerEntry();
         if (server != null) {
             return server.address.endsWith("mccisland.net");
