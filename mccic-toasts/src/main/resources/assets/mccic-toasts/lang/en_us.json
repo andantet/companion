@@ -1,7 +1,10 @@
 {
   "toast.mccic-toasts.quest_complete.title": "Quest Complete!",
   "toast.mccic-toasts.quest_complete.description": "%s",
+  "toast.mccic-toasts.achievement_unlocked.title": "Achievement Unlocked!",
+  "toast.mccic-toasts.achievement_unlocked.description": "%s",
 
   "ui.mccic-toasts.config": "MCCI: Companion Config - Toasts",
-  "config.mccic-toasts.quests": "Quests"
+  "config.mccic-toasts.quests": "Quests",
+  "config.mccic-toasts.achievements": "Achievements"
 }

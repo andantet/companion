@@ -2,9 +2,12 @@
   "required": true,
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_17",
-  "package": "dev.andante.mccic.social.mixin",
+  "package": "dev.andante.mccic.toasts.mixin",
   "mixins": [],
-  "client": [],
+  "client": [
+    "client.SystemToastAccessor",
+    "client.SystemToastTypeAccessor"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
