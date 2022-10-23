@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-key-bindings",
+  "name": "MCCI: Companion (Key Bindings)",
+  "version": "${version}",
+  "description": "Key Bindings for MCCI: Companion!",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "depends": {
+    "mccic-api": "*",
+    "mccic-config": "*"
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.keybindings.client.MCCICKeyBindingsClientImpl" ],
+    "modmenu": [ "dev.andante.mccic.keybindings.client.config.MCCICKeyBindingsModMenuImpl" ]
+  }
+}
