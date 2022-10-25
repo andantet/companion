@@ -15,7 +15,7 @@ public final class MCCICDiscordRPClientImpl implements MCCICDiscordRP, ClientMod
 
     @Override
     public void onInitializeClient() {
-        ClientConfigRegistry.INSTANCE.registerAndLoad(DiscordRPClientConfig.CONFIG_HOLDER);
+        ClientConfigRegistry.INSTANCE.registerAndLoad(DiscordRPClientConfig.CONFIG_HOLDER, DiscordRPConfigScreen::new);
         MCCICConfigCommand.registerNewConfig(ID, DiscordRPConfigScreen::new);
     }
 }

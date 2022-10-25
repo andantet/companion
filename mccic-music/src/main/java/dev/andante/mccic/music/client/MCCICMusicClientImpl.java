@@ -34,7 +34,7 @@ public final class MCCICMusicClientImpl implements MCCICMusic, ClientModInitiali
 
     @Override
     public void onInitializeClient() {
-        ClientConfigRegistry.INSTANCE.registerAndLoad(MusicClientConfig.CONFIG_HOLDER);
+        ClientConfigRegistry.INSTANCE.registerAndLoad(MusicClientConfig.CONFIG_HOLDER, MusicConfigScreen::new);
         MCCICConfigCommand.registerNewConfig(ID, MusicConfigScreen::new);
         MCCIChatEvent.EVENT.register(this::onChatMessage);
     }

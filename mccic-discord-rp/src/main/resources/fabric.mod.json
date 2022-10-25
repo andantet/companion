@@ -15,7 +15,6 @@
     "mccic-config": "*"
   },
   "entrypoints": {
-    "client": [ "dev.andante.mccic.discordrp.client.MCCICDiscordRPClientImpl" ],
-    "modmenu": [ "dev.andante.mccic.discordrp.client.config.MCCICDiscordRPModMenuImpl" ]
+    "client": [ "dev.andante.mccic.discordrp.client.MCCICDiscordRPClientImpl" ]
   }
 }

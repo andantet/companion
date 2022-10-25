@@ -33,7 +33,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
 
     @Override
     public void onInitializeClient() {
-        ClientConfigRegistry.INSTANCE.registerAndLoad(ToastsClientConfig.CONFIG_HOLDER);
+        ClientConfigRegistry.INSTANCE.registerAndLoad(ToastsClientConfig.CONFIG_HOLDER, ToastsConfigScreen::new);
         MCCICConfigCommand.registerNewConfig(ID, ToastsConfigScreen::new);
         MCCIChatEvent.EVENT.register(this::onChatEvent);
     }

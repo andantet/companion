@@ -15,8 +15,7 @@
     "mccic-config": "*"
   },
   "entrypoints": {
-    "client": [ "dev.andante.mccic.debug.client.MCCICDebugClientImpl" ],
-    "modmenu": [ "dev.andante.mccic.debug.client.config.MCCICDebugModMenuImpl" ]
+    "client": [ "dev.andante.mccic.debug.client.MCCICDebugClientImpl" ]
   },
   "mixins": [ "mccic-debug.mixins.json" ]
 }

@@ -29,7 +29,7 @@ public final class MCCICQolClientImpl implements MCCICQoL, ClientModInitializer 
 
     @Override
     public void onInitializeClient() {
-        ClientConfigRegistry.INSTANCE.registerAndLoad(QoLClientConfig.CONFIG_HOLDER);
+        ClientConfigRegistry.INSTANCE.registerAndLoad(QoLClientConfig.CONFIG_HOLDER, QoLConfigScreen::new);
         MCCICConfigCommand.registerNewConfig(ID, QoLConfigScreen::new);
 
         FabricLoader.getInstance().getModContainer(MOD_ID).ifPresent(container -> {

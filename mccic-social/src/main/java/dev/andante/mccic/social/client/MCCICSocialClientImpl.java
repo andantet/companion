@@ -37,7 +37,7 @@ public final class MCCICSocialClientImpl implements MCCICSocial, ClientModInitia
 
     @Override
     public void onInitializeClient() {
-        ClientConfigRegistry.INSTANCE.registerAndLoad(SocialClientConfig.CONFIG_HOLDER);
+        ClientConfigRegistry.INSTANCE.registerAndLoad(SocialClientConfig.CONFIG_HOLDER, SocialConfigScreen::new);
         MCCICConfigCommand.registerNewConfig(ID, SocialConfigScreen::new);
         MCCIChatEvent.EVENT.register(this::onChatEvent);
     }

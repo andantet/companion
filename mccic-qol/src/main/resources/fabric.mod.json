@@ -15,8 +15,7 @@
     "mccic-config": "*"
   },
   "entrypoints": {
-    "client": [ "dev.andante.mccic.qol.client.MCCICQolClientImpl" ],
-    "modmenu": [ "dev.andante.mccic.qol.client.config.MCCICQoLModMenuImpl" ]
+    "client": [ "dev.andante.mccic.qol.client.MCCICQolClientImpl" ]
   },
   "mixins": [ "mccic-qol.mixins.json" ]
 }

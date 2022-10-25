@@ -19,7 +19,7 @@ import net.minecraft.text.Text;
 public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        ClientConfigRegistry.INSTANCE.registerAndLoad(DebugClientConfig.CONFIG_HOLDER);
+        ClientConfigRegistry.INSTANCE.registerAndLoad(DebugClientConfig.CONFIG_HOLDER, DebugConfigScreen::new);
         MCCICConfigCommand.registerNewConfig(ID, DebugConfigScreen::new);
         HudRenderCallback.EVENT.register(this::onHudRender);
     }
