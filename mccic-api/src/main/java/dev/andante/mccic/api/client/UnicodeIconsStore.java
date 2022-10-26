@@ -14,6 +14,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
+import net.minecraft.text.LiteralTextContent;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -40,6 +42,24 @@ public class UnicodeIconsStore {
         }
 
         MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
+    }
+
+    public static boolean textContainsIcon(Text text, Icon icon) {
+        String cha = INSTANCE.getCharacterFor(icon) + "";
+
+        if (text.getContent() instanceof LiteralTextContent content) {
+            if (content.string().contains(cha)) {
+                return true;
+            }
+        }
+
+        for (Text sibling : text.getSiblings()) {
+            if (textContainsIcon(sibling, icon)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected void onClientLoginHello(ClientLoginNetworkHandler handler, LoginHelloS2CPacket packet) {

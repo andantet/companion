@@ -13,14 +13,9 @@ import dev.andante.mccic.toasts.client.toast.AdaptableIconToast;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.MessageIndicator;
-import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.OptionalInt;
 
 @Environment(EnvType.CLIENT)
@@ -38,11 +33,13 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         MCCIChatEvent.EVENT.register(this::onChatEvent);
     }
 
-    public EventResult onChatEvent(ChatHud chatHud, Text message, String raw, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh) {
+    public EventResult onChatEvent(MCCIChatEvent.Context context) {
         ToastsClientConfig config = ToastsClientConfig.getConfig();
+        Text message = context.message();
+        String raw = context.getRaw();
 
         if (config.quests()) {
-            OptionalInt opt = processPrefix(raw, QUEST_COMPLETE_TEXT, Icon.QUEST_BOOK);
+            OptionalInt opt = processPrefix(message, raw, QUEST_COMPLETE_TEXT, Icon.QUEST_BOOK);
             if (opt.isPresent()) {
                 int sub = opt.getAsInt();
                 String name = raw.substring(sub);
@@ -55,7 +52,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         }
 
         if (config.achievements()) {
-            OptionalInt opt = processPrefix(raw, ACHIEVEMENT_UNLOCKED_TEXT, Icon.ACHIEVEMENT);
+            OptionalInt opt = processPrefix(message, raw, ACHIEVEMENT_UNLOCKED_TEXT, Icon.ACHIEVEMENT);
             if (opt.isPresent()) {
                 int sub = opt.getAsInt();
                 String name = raw.substring(sub, raw.length() - 1);
@@ -70,8 +67,8 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         return EventResult.pass();
     }
 
-    public static OptionalInt processPrefix(String raw, String pattern, Icon icon) {
-        return raw.matches(pattern + ".+") && Objects.equals(raw.charAt(1), UnicodeIconsStore.INSTANCE.getCharacterFor(icon))
+    public static OptionalInt processPrefix(Text message, String raw, String pattern, Icon icon) {
+        return raw.matches(pattern + ".+") && UnicodeIconsStore.textContainsIcon(message, icon)
             ? OptionalInt.of(pattern.replaceAll("\\\\", "").length())
             : OptionalInt.empty();
     }

@@ -29,7 +29,7 @@ public class ChatHudMixin {
     private void onChatMessage(Text message, MessageSignatureData signature, int ticks, MessageIndicator indicator, boolean refresh, CallbackInfo ci) {
         GameTracker tracker = GameTracker.INSTANCE;
         if (tracker.isOnServer()) {
-            EventResult result = MCCIChatEvent.EVENT.invoker().onChatEvent((ChatHud) (Object) this, message, message.getString(), signature, ticks, indicator, refresh);
+            EventResult result = MCCIChatEvent.EVENT.invoker().onChatEvent(new MCCIChatEvent.Context((ChatHud) (Object) this, message, signature, ticks, indicator, refresh));
             if (result.isFalse()) {
                 ci.cancel();
             }

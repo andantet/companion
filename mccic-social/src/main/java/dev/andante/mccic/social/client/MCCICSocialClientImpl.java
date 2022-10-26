@@ -2,25 +2,20 @@ package dev.andante.mccic.social.client;
 
 import com.mojang.authlib.GameProfile;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
+import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
-import dev.andante.mccic.social.client.config.SocialConfigScreen;
+import dev.andante.mccic.social.MCCICSocial;
 import dev.andante.mccic.social.client.config.SocialClientConfig;
+import dev.andante.mccic.social.client.config.SocialConfigScreen;
 import dev.andante.mccic.social.client.toast.SocialToast;
 import dev.andante.mccic.social.client.toast.SocialToast.EventType;
-import dev.andante.mccic.api.event.EventResult;
-import dev.andante.mccic.social.MCCICSocial;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.message.MessageSignatureData;
-import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -42,8 +37,9 @@ public final class MCCICSocialClientImpl implements MCCICSocial, ClientModInitia
         MCCIChatEvent.EVENT.register(this::onChatEvent);
     }
 
-    public EventResult onChatEvent(ChatHud chatHud, Text message, String raw, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh) {
+    public EventResult onChatEvent(MCCIChatEvent.Context context) {
         SocialClientConfig config = SocialClientConfig.getConfig();
+        String raw = context.getRaw();
 
         if (config.friendToasts()) {
             if (raw.contains(FRIEND_JOIN_TEXT)) {

@@ -12,16 +12,11 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.BossBarHud;
-import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ClientBossBar;
-import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
-import net.minecraft.text.Text;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.OptionalInt;
@@ -51,9 +46,10 @@ public class EventsGameTracker implements GameTracker {
         this.updateState();
     }
 
-    protected EventResult onChatMessage(ChatHud chatHud, Text message, String raw, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh) {
+    protected EventResult onChatMessage(MCCIChatEvent.Context context) {
         GameState oldState = this.state;
 
+        String raw = context.getRaw();
         if (raw.startsWith("[")) {
             if (raw.endsWith(" started!")) {
                 this.state = GameState.ACTIVE;

@@ -1,5 +1,6 @@
 {
   "ui.mccic-debug.config": "MCCI: Companion Config - Debug",
   "config.mccic-debug.debug_hud": "Debug HUD",
-  "config.mccic-debug.chat_all_sounds": "Chat All Sounds"
+  "config.mccic-debug.chat_all_sounds": "Chat All Sounds",
+  "config.mccic-debug.raw_chat": "Raw Chat"
 }

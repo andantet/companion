@@ -17,11 +17,11 @@ public interface MCCIChatEvent {
     /**
      * Invoked before a chat message is added to chat.
      */
-    Event<MCCIChatEvent> EVENT = EventFactory.createArrayBacked(MCCIChatEvent.class, callbacks -> (chatHud, message, raw, signature, ticks, indicator, refresh) -> {
+    Event<MCCIChatEvent> EVENT = EventFactory.createArrayBacked(MCCIChatEvent.class, callbacks -> (context) -> {
         boolean cancels = false;
 
         for (MCCIChatEvent callback : callbacks) {
-            EventResult result = callback.onChatEvent(chatHud, message, raw, signature, ticks, indicator, refresh);
+            EventResult result = callback.onChatEvent(context);
             cancels = cancels || result.isFalse();
             if (result.interruptsFurtherEvaluation()) {
                 return result;
@@ -34,5 +34,11 @@ public interface MCCIChatEvent {
     /**
      * @return a {@link EventResult} - chat message will not be added when interrupting
      */
-    EventResult onChatEvent(ChatHud chatHud, Text message, String raw, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh);
+    EventResult onChatEvent(Context context);
+
+    record Context(ChatHud chatHud, Text message, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh) {
+        public String getRaw() {
+            return message.getString();
+        }
+    }
 }
