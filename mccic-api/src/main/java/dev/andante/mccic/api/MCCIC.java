@@ -7,4 +7,8 @@ public interface MCCIC {
     String MOD_ID = "mccic";
     String MOD_NAME = "MCCI: Companion";
     Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+    static String createModId(String id) {
+        return "%s-%s".formatted(MCCIC.MOD_ID, id);
+    }
 }

@@ -1,4 +1,4 @@
-package dev.andante.mccic.api.client.mccapi;
+package dev.andante.mccic.api.mccapi;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -9,8 +9,6 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.util.JsonHelper;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -26,7 +24,6 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.function.Function;
 
-@Environment(EnvType.CLIENT)
 public class EventApiHook {
     public static final Logger LOGGER = LogUtils.getLogger();
     public static final EventApiHook INSTANCE = new EventApiHook("https://api.mcchampionship.com/v1/event");

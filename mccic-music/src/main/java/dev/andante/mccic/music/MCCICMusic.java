@@ -4,5 +4,5 @@ import dev.andante.mccic.api.MCCIC;
 
 public interface MCCICMusic extends MCCIC {
     String ID = "music";
-    String MOD_ID = "%s-%s".formatted(MCCIC.MOD_ID, ID);
+    String MOD_ID = MCCIC.createModId(ID);
 }

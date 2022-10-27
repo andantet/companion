@@ -5,7 +5,7 @@ import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
-import dev.andante.mccic.api.client.mccapi.EventApiHook;
+import dev.andante.mccic.api.mccapi.EventApiHook;
 import dev.andante.mccic.api.client.toast.AdaptableIconToast;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.config.client.ClientConfigRegistry;

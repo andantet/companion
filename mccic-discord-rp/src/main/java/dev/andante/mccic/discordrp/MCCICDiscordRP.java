@@ -4,5 +4,5 @@ import dev.andante.mccic.api.MCCIC;
 
 public interface MCCICDiscordRP extends MCCIC {
     String ID = "discord-rp";
-    String MOD_ID = "%s-%s".formatted(MCCIC.MOD_ID, ID);
+    String MOD_ID = MCCIC.createModId(ID);
 }
