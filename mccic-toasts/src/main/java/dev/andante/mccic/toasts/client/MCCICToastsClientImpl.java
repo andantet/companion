@@ -5,7 +5,6 @@ import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
 import dev.andante.mccic.api.client.mccapi.EventApiHook;
-import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
@@ -27,8 +26,9 @@ import java.util.TimeZone;
 
 @Environment(EnvType.CLIENT)
 public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitializer {
-    public static final Identifier QUEST_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/quests.png");
-    public static final Identifier ACHIEVEMENT_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/achievements.png");
+    public static final Identifier QUEST_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/quest.png");
+    public static final Identifier ACHIEVEMENT_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/achievement.png");
+    public static final Identifier EVENT_ANNOUNCEMENT_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/event_announcement.png");
 
     public static final String QUEST_COMPLETE_TEXT = "\\(.\\) Quest complete: ";
     public static final String ACHIEVEMENT_UNLOCKED_TEXT = "\\(.\\) Achievement unlocked: \\[";
@@ -95,7 +95,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
                         Calendar calendar = Calendar.getInstance();
                         TimeZone timeZone = calendar.getTimeZone();
                         calendar.setTime(date);
-                        new CustomToast(
+                        new AdaptableIconToast(EVENT_ANNOUNCEMENT_TOAST_TEXTURE,
                             Text.translatable(MCC_SOON_POPUP_TITLE, data.getEventNumber()),
                             Text.translatable(MCC_SOON_POPUP_DESCRIPTION,
                                 "%02d".formatted(calendar.get(Calendar.DAY_OF_MONTH)),

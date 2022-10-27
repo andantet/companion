@@ -26,6 +26,10 @@ public class AdaptableIconToast extends CustomToast {
         this.setLines(lines);
     }
 
+    public AdaptableIconToast(Identifier texture, String id) {
+        this(texture, Text.translatable("toast.%s.title".formatted(id)), Text.translatable("toast.%s.description".formatted(id)));
+    }
+
     protected void setLines(@Nullable Text... lines) {
         ((SystemToastAccessor) this).setLines(Arrays.stream(lines).map(Text::asOrderedText).toList());
     }
