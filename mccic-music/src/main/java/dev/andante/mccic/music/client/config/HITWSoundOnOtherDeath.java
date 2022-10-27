@@ -51,7 +51,7 @@ public enum HITWSoundOnOtherDeath implements StringIdentifiable, TranslatableOpt
 
     @Override
     public int getId() {
-        return ordinal();
+        return this.ordinal();
     }
 
     @Override

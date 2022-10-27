@@ -10,12 +10,12 @@ import net.minecraft.util.TranslatableOption;
 import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
-public enum ConfirmDisconnectMode implements StringIdentifiable, TranslatableOption {
-    OFF,
-    IN_GAME,
-    ON_SERVER;
+public enum GlowingMode implements StringIdentifiable, TranslatableOption {
+    DEFAULT,
+    DISABLED,
+    DISABLED_FOR_PLAYERS;
 
-    private static final ConfirmDisconnectMode[] VALUES = values();
+    private static final GlowingMode[] VALUES = values();
 
     @Override
     public String asString() {
@@ -29,11 +29,11 @@ public enum ConfirmDisconnectMode implements StringIdentifiable, TranslatableOpt
 
     @Override
     public String getTranslationKey() {
-        return AbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "confirm_disconnect_mode.%s".formatted(this.asString()));
+        return AbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "glowing_mode.%s".formatted(this.asString()));
     }
 
-    public static ConfirmDisconnectMode byId(int ordinal) {
+    public static GlowingMode byId(int ordinal) {
         int l = VALUES.length;
-        return ordinal < 0 && ordinal < l ? VALUES[ordinal] : QoLClientConfig.createDefaultConfig().confirmDisconnectMode();
+        return ordinal < 0 && ordinal < l ? VALUES[ordinal] : QoLClientConfig.createDefaultConfig().glowingMode();
     }
 }

@@ -9,7 +9,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.util.StringIdentifiable;
 
 @Environment(EnvType.CLIENT)
-public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boolean emptySlotHighlightsFix, boolean extendedFrustums, boolean autoHitboxSkyBattle, boolean autoHitboxBattleBox) {
+public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, GlowingMode glowingMode, boolean emptySlotHighlightsFix, boolean extendedFrustums, boolean autoHitboxSkyBattle, boolean autoHitboxBattleBox) {
     public static final Codec<QoLClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             QoLClientConfig defaultConfig = createDefaultConfig();
@@ -18,6 +18,10 @@ public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boole
                                   .fieldOf("confirm_disconnect_mode")
                                   .orElse(defaultConfig.confirmDisconnectMode())
                                   .forGetter(QoLClientConfig::confirmDisconnectMode),
+                StringIdentifiable.createCodec(GlowingMode::values)
+                                  .fieldOf("glowing_mode")
+                                  .orElse(defaultConfig.glowingMode())
+                                  .forGetter(QoLClientConfig::glowingMode),
                 Codec.BOOL.fieldOf("empty_slot_highlights_fix")
                           .orElse(defaultConfig.emptySlotHighlightsFix())
                           .forGetter(QoLClientConfig::emptySlotHighlightsFix),
@@ -41,6 +45,6 @@ public record QoLClientConfig(ConfirmDisconnectMode confirmDisconnectMode, boole
     }
 
     public static QoLClientConfig createDefaultConfig() {
-        return new QoLClientConfig(ConfirmDisconnectMode.IN_GAME, true, true, false, false);
+        return new QoLClientConfig(ConfirmDisconnectMode.IN_GAME, GlowingMode.DEFAULT, true, true, false, false);
     }
 }

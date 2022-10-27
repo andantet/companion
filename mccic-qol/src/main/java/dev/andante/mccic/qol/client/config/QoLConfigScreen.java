@@ -12,6 +12,7 @@ import java.util.List;
 @Environment(EnvType.CLIENT)
 public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
     public static final SimpleOption<ConfirmDisconnectMode> CONFIRM_DISCONNECT_MODE_OPTION;
+    public static final SimpleOption<GlowingMode> GLOWING_MODE_OPTION;
     public static final SimpleOption<Boolean> EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION;
     public static final SimpleOption<Boolean> EXTENDED_FRUSTUMS_OPTION;
     public static final SimpleOption<Boolean> AUTO_HITBOX_SKY_BATTLE_OPTION;
@@ -23,18 +24,19 @@ public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(CONFIRM_DISCONNECT_MODE_OPTION, EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION, EXTENDED_FRUSTUMS_OPTION, AUTO_HITBOX_SKY_BATTLE_OPTION, AUTO_HITBOX_BATTLE_BOX_OPTION);
+        return List.of(CONFIRM_DISCONNECT_MODE_OPTION, GLOWING_MODE_OPTION, EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION, EXTENDED_FRUSTUMS_OPTION, AUTO_HITBOX_SKY_BATTLE_OPTION, AUTO_HITBOX_BATTLE_BOX_OPTION);
     }
 
     @Override
     public QoLClientConfig createConfig() {
-        return new QoLClientConfig(CONFIRM_DISCONNECT_MODE_OPTION.getValue(), EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION.getValue(), EXTENDED_FRUSTUMS_OPTION.getValue(), AUTO_HITBOX_SKY_BATTLE_OPTION.getValue(), AUTO_HITBOX_BATTLE_BOX_OPTION.getValue());
+        return new QoLClientConfig(CONFIRM_DISCONNECT_MODE_OPTION.getValue(), GLOWING_MODE_OPTION.getValue(), EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION.getValue(), EXTENDED_FRUSTUMS_OPTION.getValue(), AUTO_HITBOX_SKY_BATTLE_OPTION.getValue(), AUTO_HITBOX_BATTLE_BOX_OPTION.getValue());
     }
 
     static {
         QoLClientConfig config = QoLClientConfig.getConfig();
         QoLClientConfig defaultConfig = QoLClientConfig.createDefaultConfig();
         CONFIRM_DISCONNECT_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "confirm_disconnect_mode", ConfirmDisconnectMode::byId, ConfirmDisconnectMode.values(), config.confirmDisconnectMode(), defaultConfig.confirmDisconnectMode());
+        GLOWING_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "glowing_mode", GlowingMode::byId, GlowingMode.values(), config.glowingMode(), defaultConfig.glowingMode());
         EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION = ofBoolean(MCCICQoL.MOD_ID, "empty_slot_highlights_fix", config.emptySlotHighlightsFix(), defaultConfig.emptySlotHighlightsFix());
         EXTENDED_FRUSTUMS_OPTION = ofBoolean(MCCICQoL.MOD_ID, "extended_frustums", config.extendedFrustums(), defaultConfig.extendedFrustums());
         AUTO_HITBOX_SKY_BATTLE_OPTION = ofBoolean(MCCICQoL.MOD_ID, "auto_hitbox_sky_battle", config.autoHitboxSkyBattle(), defaultConfig.autoHitboxSkyBattle());

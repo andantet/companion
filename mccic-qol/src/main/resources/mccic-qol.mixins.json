@@ -8,7 +8,8 @@
     "client.EntityRenderDispatcherMixin",
     "client.EntityRendererMixin",
     "client.GameMenuScreenMixin",
-    "client.HandledScreenMixin"
+    "client.HandledScreenMixin",
+    "client.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
