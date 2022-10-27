@@ -24,7 +24,7 @@ public enum GameState {
     /**
      * When the player has finished the round.
      */
-    POST_ROUND_SELF(true),
+    POST_ROUND_SELF,
 
     /**
      * When a round finishes.
