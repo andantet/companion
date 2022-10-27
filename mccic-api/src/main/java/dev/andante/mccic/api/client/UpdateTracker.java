@@ -9,7 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.MCCICApi;
 import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
-import dev.andante.mccic.api.client.toast.CustomToast;
+import dev.andante.mccic.api.client.toast.AdaptableIconToast;
 import dev.andante.mccic.api.util.JsonHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,6 +21,7 @@ import net.fabricmc.loader.api.VersionParsingException;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 
 import java.io.IOException;
@@ -36,6 +37,8 @@ public class UpdateTracker {
 
     public static final String UPDATE_POPUP_TITLE = "text.%s.update_available.title".formatted(MCCICApi.MOD_ID);
     public static final String UPDATE_POPUP_DESCRIPTION = "text.%s.update_available.description".formatted(MCCICApi.MOD_ID);
+
+    public static final Identifier UPDATE_TOAST_TEXTURE = new Identifier(MCCICApi.MOD_ID, "textures/gui/toasts/update.png");
 
     private final URL url;
     private Data data;
@@ -55,7 +58,7 @@ public class UpdateTracker {
 
         Optional<UpdateTracker.Data> maybeData = this.getData();
         if (maybeData.isPresent() && this.isUpdateAvailable()) {
-            new CustomToast(Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)).add();
+            new AdaptableIconToast(UPDATE_TOAST_TEXTURE, Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)).add();
         }
     }
 
