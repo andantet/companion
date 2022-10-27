@@ -1,4 +1,4 @@
-package dev.andante.mccic.toasts.mixin.client;
+package dev.andante.mccic.api.mixin.client.access;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

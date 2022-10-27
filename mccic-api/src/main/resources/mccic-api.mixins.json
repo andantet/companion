@@ -12,7 +12,9 @@
     "client.DeathScreenMixin",
     "client.SoundManagerMixin",
     "client.SystemToastMixin",
-    "client.access.BossBarHudAccessor"
+    "client.access.BossBarHudAccessor",
+    "client.access.SystemToastAccessor",
+    "client.access.SystemToastTypeAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

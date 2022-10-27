@@ -1,9 +1,8 @@
-package dev.andante.mccic.toasts.client.toast;
+package dev.andante.mccic.api.client.toast;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.andante.mccic.api.client.toast.CustomToast;
-import dev.andante.mccic.toasts.mixin.client.SystemToastAccessor;
-import dev.andante.mccic.toasts.mixin.client.SystemToastTypeAccessor;
+import dev.andante.mccic.api.mixin.client.access.SystemToastAccessor;
+import dev.andante.mccic.api.mixin.client.access.SystemToastTypeAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

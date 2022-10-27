@@ -16,6 +16,5 @@
   },
   "entrypoints": {
     "client": [ "dev.andante.mccic.toasts.client.MCCICToastsClientImpl" ]
-  },
-  "mixins": [ "mccic-toasts.mixins.json" ]
+  }
 }
