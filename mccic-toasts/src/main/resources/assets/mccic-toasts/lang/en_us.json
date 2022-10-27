@@ -8,7 +8,16 @@
   "text.mccic-toasts.mcc_soon_popup.description": "The next event is on %s/%s @ %s%s %s!",
 
   "ui.mccic-toasts.config": "MCCI: Companion Config - Toasts",
+  "config.mccic-toasts.friends": "Friends",
+  "config.mccic-toasts.parties": "Parties",
   "config.mccic-toasts.quests": "Quests",
   "config.mccic-toasts.achievements": "Achievements",
-  "config.mccic-toasts.event_announcements": "Event Announcements"
+  "config.mccic-toasts.event_announcements": "Event Announcements",
+
+  "toast.mccic-toasts.type.friend_join": "Friend joined",
+  "toast.mccic-toasts.type.friend_leave": "Friend left",
+  "toast.mccic-toasts.type.party_invite": "Party invite",
+  "toast.mccic-toasts.type.party_join": "Party join",
+  "toast.mccic-toasts.type.party_leave": "Party leave",
+  "toast.mccic-toasts.type.party_disband": "The party you were in was disbanded"
 }

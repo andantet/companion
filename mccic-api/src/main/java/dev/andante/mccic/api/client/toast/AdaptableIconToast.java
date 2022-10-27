@@ -63,7 +63,7 @@ public class AdaptableIconToast extends CustomToast {
         TextRenderer textRenderer = manager.getClient().textRenderer;
         Text title = that.getTitle();
         float x = 5.0F + 16.0F + 5.0F + 2.0F;
-        if (lines == null) {
+        if (lines.isEmpty()) {
             textRenderer.draw(matrices, title, x, 12.0F, 0xFFFFFF00);
         } else {
             textRenderer.draw(matrices, title, x, 7.0F, 0xFFFFFF00);
@@ -100,6 +100,6 @@ public class AdaptableIconToast extends CustomToast {
     @Override
     public int getHeight() {
         SystemToastAccessor that = (SystemToastAccessor) this;
-        return 20 + that.getLines().size() * 12;
+        return 20 + Math.max(that.getLines().size(), 1) * 12;
     }
 }

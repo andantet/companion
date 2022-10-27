@@ -1,7 +1,0 @@
-archivesBaseName = 'mccic-social'
-version = getSubprojectVersion(project)
-
-moduleDependencies(project, [
-        'mccic-api',
-        'mccic-config'
-])
