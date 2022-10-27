@@ -32,8 +32,8 @@ public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
     static {
         MusicClientConfig config = MusicClientConfig.getConfig();
         MusicClientConfig defaultConfig = MusicClientConfig.createDefaultConfig();
-        MUSIC_VOLUME_OPTION = ofDouble(MCCICMusic.MOD_ID, "music_volume", config.musicVolume(), defaultConfig.musicVolume());
-        MUSIC_VOLUME_AFTER_DEATH_OPTION = ofDouble(MCCICMusic.MOD_ID, "music_volume_after_death", config.musicVolumeAfterDeath(), defaultConfig.musicVolumeAfterDeath());
+        MUSIC_VOLUME_OPTION = ofDouble(MCCICMusic.MOD_ID, "game_music_volume", config.gameMusicVolume(), defaultConfig.gameMusicVolume());
+        MUSIC_VOLUME_AFTER_DEATH_OPTION = ofDouble(MCCICMusic.MOD_ID, "game_music_volume_after_death", config.gameMusicVolumeAfterDeath(), defaultConfig.gameMusicVolumeAfterDeath());
         HITW_SOUND_ON_OTHER_DEATH = ofEnum(MCCICMusic.MOD_ID, "hitw_sound_on_other_death", HITWSoundOnOtherDeath::byId, HITWSoundOnOtherDeath.values(), config.hitwSoundOnOtherDeath(), defaultConfig.hitwSoundOnOtherDeath());
     }
 }

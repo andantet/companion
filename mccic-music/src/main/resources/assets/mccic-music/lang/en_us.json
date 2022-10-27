@@ -1,7 +1,7 @@
 {
   "ui.mccic-music.config": "MCCI: Companion Config - Music",
-  "config.mccic-music.music_volume": "Base Music Volume",
-  "config.mccic-music.music_volume_after_death": "Base Music Volume (After Death)",
+  "config.mccic-music.game_music_volume": "Game Music Volume",
+  "config.mccic-music.game_music_volume_after_death": "Game Music Volume (After Death)",
   "config.mccic-music.hitw_sound_on_other_death": "Other Player Death Sound (HITW)",
   "config.mccic-music.hitw_sound_on_other_death.off": "Off",
   "config.mccic-music.hitw_sound_on_other_death.team_eliminated": "Team Eliminated",

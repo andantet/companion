@@ -4,6 +4,7 @@ import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.util.Identifier;
 
 import java.util.OptionalInt;
 
@@ -25,4 +26,8 @@ public interface GameTracker {
      * an IP address ending in <code>mccisland.net</code>.
      */
     boolean isOnServer();
+
+    default Identifier getGameSoundId() {
+        return this.getGame().getSoundId();
+    }
 }

@@ -8,17 +8,17 @@ import net.fabricmc.api.Environment;
 import net.minecraft.util.StringIdentifiable;
 
 @Environment(EnvType.CLIENT)
-public record MusicClientConfig(float musicVolume, float musicVolumeAfterDeath, HITWSoundOnOtherDeath hitwSoundOnOtherDeath) {
+public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfterDeath, HITWSoundOnOtherDeath hitwSoundOnOtherDeath) {
     public static final Codec<MusicClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             MusicClientConfig defaultConfig = createDefaultConfig();
             return instance.group(
-                Codec.FLOAT.fieldOf("music_volume")
-                           .orElse(defaultConfig.musicVolume())
-                           .forGetter(MusicClientConfig::musicVolume),
-                Codec.FLOAT.fieldOf("music_volume_after_death")
-                           .orElse(defaultConfig.musicVolumeAfterDeath())
-                           .forGetter(MusicClientConfig::musicVolumeAfterDeath),
+                Codec.FLOAT.fieldOf("game_music_volume")
+                           .orElse(defaultConfig.gameMusicVolume())
+                           .forGetter(MusicClientConfig::gameMusicVolume),
+                Codec.FLOAT.fieldOf("game_music_volume_after_death")
+                           .orElse(defaultConfig.gameMusicVolumeAfterDeath())
+                           .forGetter(MusicClientConfig::gameMusicVolumeAfterDeath),
                 StringIdentifiable.createCodec(HITWSoundOnOtherDeath::values)
                                   .fieldOf("hitw_sound_on_other_death")
                                   .orElse(defaultConfig.hitwSoundOnOtherDeath())

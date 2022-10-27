@@ -11,7 +11,6 @@ import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public final class MCCICQolClientImpl implements MCCICQoL, ClientModInitializer {
-
     @Override
     public void onInitializeClient() {
         ClientConfigRegistry.INSTANCE.registerAndLoad(QoLClientConfig.CONFIG_HOLDER, QoLConfigScreen::new);

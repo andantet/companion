@@ -23,7 +23,7 @@ import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
 public final class MCCICMusicClientImpl implements MCCICMusic, ClientModInitializer {
-    public static final MusicTracker MUSIC_TRACKER = new MusicTracker(GameTracker.INSTANCE);
+    public static final GameSoundManager GAME_SOUND_MANAGER = new GameSoundManager(GameTracker.INSTANCE);
 
     @Override
     public void onInitializeClient() {
@@ -44,7 +44,7 @@ public final class MCCICMusicClientImpl implements MCCICMusic, ClientModInitiali
                     MinecraftClient client = MinecraftClient.getInstance();
                     PlayerEntity player = client.player;
                     if (UnicodeIconsStore.textContainsIcon(context.message(), Icon.DEATH) && !context.getRaw().contains(player.getEntityName())) {
-                        float volume = isActive ? config.musicVolumeAfterDeath() : config.musicVolume();
+                        float volume = isActive ? config.gameMusicVolumeAfterDeath() : config.gameMusicVolume();
                         float pitch = (deathSoundConfig.hasRandomPitch() ? player.getRandom().nextFloat() * 0.17F : 0.0F) + 1.0F;
                         for (Identifier sound : sounds) {
                             player.playSound(new SoundEvent(sound), volume, pitch);
