@@ -70,6 +70,13 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
 
     @Override
     protected void init() {
+        // options list
+        this.list = new ButtonListWidget(this.client, this.width, this.height, 93, this.height - 94, 25);
+        this.list.setRenderBackground(false);
+        this.list.setRenderHorizontalShadows(false);
+        this.getOptions().forEach(this.list::addSingleOptionEntry);
+        this.addSelectableChild(this.list);
+
         // back button
         this.addDrawableChild(new ButtonWidget(
             (int) ((this.width / 2f) - (BACK_BUTTON_WIDTH / 2f)), this.height - 60,
@@ -84,13 +91,6 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
                 32, 64, this::onReloadButton, this::renderReloadTooltip, RELOAD_TOOLTIP_TEXT
             ));
         }
-
-        // options list
-        this.list = new ButtonListWidget(this.client, this.width, this.height, 93, this.height - 94, 25);
-        this.list.setRenderBackground(false);
-        this.list.setRenderHorizontalShadows(false);
-        this.getOptions().forEach(this.list::addSingleOptionEntry);
-        this.addSelectableChild(this.list);
     }
 
     protected List<SimpleOption<?>> getOptions() {
