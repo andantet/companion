@@ -11,6 +11,7 @@
     "client.ClientPlayNetworkHandlerMixin",
     "client.DeathScreenMixin",
     "client.SoundManagerMixin",
+    "client.SoundSystemMixin",
     "client.SystemToastMixin",
     "client.access.BossBarHudAccessor",
     "client.access.SystemToastAccessor",

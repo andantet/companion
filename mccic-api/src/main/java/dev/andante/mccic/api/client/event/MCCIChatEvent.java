@@ -17,7 +17,7 @@ public interface MCCIChatEvent {
     /**
      * Invoked before a chat message is added to chat.
      */
-    Event<MCCIChatEvent> EVENT = EventFactory.createArrayBacked(MCCIChatEvent.class, callbacks -> (context) -> {
+    Event<MCCIChatEvent> EVENT = EventFactory.createArrayBacked(MCCIChatEvent.class, callbacks -> context -> {
         boolean cancels = false;
 
         for (MCCIChatEvent callback : callbacks) {

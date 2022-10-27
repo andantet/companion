@@ -1,12 +1,11 @@
-package dev.andante.mccic.debug.mixin.client;
+package dev.andante.mccic.api.mixin.client;
 
-import dev.andante.mccic.debug.client.config.DebugClientConfig;
+import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
+import dev.andante.mccic.api.client.game.GameTracker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.sound.SoundSystem;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,11 +23,8 @@ public class SoundSystemMixin {
         )
     )
     private void onPlay(SoundInstance sound, CallbackInfo ci) {
-        if (DebugClientConfig.getConfig().chatAllSounds()) {
-            MinecraftClient client = MinecraftClient.getInstance();
-            if (client.player != null) {
-                client.player.sendMessage(Text.of("[SOUND] %s - %s".formatted(sound.getId(), sound.getSound().getIdentifier())));
-            }
+        if (GameTracker.INSTANCE.isOnServer()) {
+            MCCISoundPlayEvent.EVENT.invoker().onSoundPlay(new MCCISoundPlayEvent.Context((SoundSystem) (Object) this, sound));
         }
     }
 }

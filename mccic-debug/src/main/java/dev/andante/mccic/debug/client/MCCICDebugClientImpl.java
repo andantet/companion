@@ -1,6 +1,7 @@
 package dev.andante.mccic.debug.client;
 
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
+import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.api.game.Game;
@@ -13,6 +14,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.LiteralTextContent;
@@ -25,6 +27,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
         ClientConfigRegistry.INSTANCE.registerAndLoad(DebugClientConfig.CONFIG_HOLDER, DebugConfigScreen::new);
         HudRenderCallback.EVENT.register(this::onHudRender);
         MCCIChatEvent.EVENT.register(this::onChatMessage);
+        MCCISoundPlayEvent.EVENT.register(this::onSoundPlay);
     }
 
     private void onHudRender(MatrixStack matrices, float tickDelta) {
@@ -76,6 +79,16 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
 
         for (Text sibling : text.getSiblings()) {
             printText(sibling);
+        }
+    }
+
+    private void onSoundPlay(MCCISoundPlayEvent.Context context) {
+        if (DebugClientConfig.getConfig().chatAllSounds()) {
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client.player != null) {
+                SoundInstance sound = context.soundInstance();
+                client.player.sendMessage(Text.of("%s - %s".formatted(sound.getId(), sound.getSound().getIdentifier())));
+            }
         }
     }
 }

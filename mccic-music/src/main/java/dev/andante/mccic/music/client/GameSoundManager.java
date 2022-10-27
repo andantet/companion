@@ -4,6 +4,7 @@ import dev.andante.mccic.api.client.event.MCCIClientDeathScreenEvent;
 import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
 import dev.andante.mccic.api.client.event.MCCIClientRespawnEvent;
 import dev.andante.mccic.api.client.event.MCCIGameEvents;
+import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
 import dev.andante.mccic.api.client.game.GameTracker;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.music.MCCICSounds;
@@ -20,6 +21,7 @@ import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 
 import java.util.function.Function;
 
@@ -29,11 +31,13 @@ public class GameSoundManager {
     private SoundManager soundManager;
     private SoundInstance lastSound;
 
+    public static final Identifier OVERTIME_MUSIC_ID = new Identifier("mcc", "games.global.music.overtime_intro_music");
+
     public GameSoundManager(GameTracker gameTracker) {
         this.gameTracker = gameTracker;
 
         MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
-        MCCIGameEvents.TIMER_UPDATE.register(this::onTimerUpdate);
+        MCCISoundPlayEvent.EVENT.register(this::onSoundPlay);
         MCCIGameEvents.STATE_UPDATE.register(this::onStateUpdate);
         MCCIClientRespawnEvent.EVENT.register(this::onRespawn);
         MCCIClientDeathScreenEvent.EVENT.register(this::onDeathScreen);
@@ -43,11 +47,10 @@ public class GameSoundManager {
         this.soundManager = MinecraftClient.getInstance().getSoundManager();
     }
 
-    protected void onTimerUpdate(int time, int lastTime) {
-        if (this.gameTracker.getGameState() == GameState.ACTIVE) {
-            if (time == 10) { // TODO replace with SoundEvent event (overtime check)
-                this.soundManager.stop(this.lastSound);
-            }
+    private void onSoundPlay(MCCISoundPlayEvent.Context context) {
+        Identifier id = context.getSoundFileIdentifier();
+        if (id.equals(OVERTIME_MUSIC_ID)) {
+            this.soundManager.stop(this.lastSound);
         }
     }
 
