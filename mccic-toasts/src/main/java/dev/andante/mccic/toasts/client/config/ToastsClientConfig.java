@@ -8,7 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record ToastsClientConfig(boolean quests, boolean achievements) {
+public record ToastsClientConfig(boolean quests, boolean achievements, boolean eventAnnouncements) {
     public static final Codec<ToastsClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             ToastsClientConfig defaultConfig = ToastsClientConfig.createDefaultConfig();
@@ -18,7 +18,10 @@ public record ToastsClientConfig(boolean quests, boolean achievements) {
                           .forGetter(ToastsClientConfig::quests),
                 Codec.BOOL.fieldOf("achievements")
                           .orElse(defaultConfig.achievements())
-                          .forGetter(ToastsClientConfig::achievements)
+                          .forGetter(ToastsClientConfig::achievements),
+                Codec.BOOL.fieldOf("event_announcements")
+                          .orElse(defaultConfig.eventAnnouncements())
+                          .forGetter(ToastsClientConfig::eventAnnouncements)
             ).apply(instance, ToastsClientConfig::new);
         }
     );
@@ -30,6 +33,6 @@ public record ToastsClientConfig(boolean quests, boolean achievements) {
     }
 
     public static ToastsClientConfig createDefaultConfig() {
-        return new ToastsClientConfig(true, true);
+        return new ToastsClientConfig(true, true, true);
     }
 }
