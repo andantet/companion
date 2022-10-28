@@ -16,8 +16,12 @@
 
   "toast.mccic-toasts.type.friend_join": "Friend joined",
   "toast.mccic-toasts.type.friend_leave": "Friend left",
-  "toast.mccic-toasts.type.party_invite": "Party invite",
+  "toast.mccic-toasts.type.party_invite": "Party invite §7/party [accept|deny]",
   "toast.mccic-toasts.type.party_join": "Party join",
+  "toast.mccic-toasts.type.party_join_self": "You joined a party",
   "toast.mccic-toasts.type.party_leave": "Party leave",
+  "toast.mccic-toasts.type.party_leave_self": "You left a party",
+  "toast.mccic-toasts.type.party_leader": "New party leader",
+  "toast.mccic-toasts.type.party_leader_self": "You are now the party leader",
   "toast.mccic-toasts.type.party_disband": "The party you were in was disbanded"
 }

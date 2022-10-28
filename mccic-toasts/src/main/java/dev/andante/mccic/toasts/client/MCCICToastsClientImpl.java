@@ -28,8 +28,11 @@ import net.minecraft.util.Identifier;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.TimeZone;
+import java.util.function.BooleanSupplier;
 
 @Environment(EnvType.CLIENT)
 public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitializer {
@@ -46,15 +49,27 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         MCC_SOON_POPUP_TITLE = "text.%s.mcc_soon_popup.title".formatted(MOD_ID),
         MCC_SOON_POPUP_DESCRIPTION = "text.%s.mcc_soon_popup.description".formatted(MOD_ID);
 
-    public static final String
-        FRIEND_JOIN_TEXT = " has come online!",
-        FRIEND_LEAVE_TEXT = " has gone offline.",
-        PARTY_INVITE_TEXT = " invites you to their party!",
-        PARTY_JOIN_TEXT = " has joined the party.",
-        PARTY_JOIN_YOU_TEXT = "You have joined the party.",
-        PARTY_LEAVE_TEXT = " leaves the party.",
-        PARTY_LEAVE_YOU_TEXT = "You left the party.",
-        PARTY_DISBAND_TEXT = "Your party has been disbanded.";
+    public static final BooleanSupplier
+        FRIEND_CONFIG = () -> ToastsClientConfig.getConfig().friends(),
+        PARTY_CONFIG = () -> ToastsClientConfig.getConfig().parties();
+
+    public static final List<SocialToastBehavior> SOCIAL_TOAST_BEHAVIORS = List.of(
+        SocialToastBehavior.create("%s has come online!", FRIEND_CONFIG, EventType.FRIEND_JOIN),
+        SocialToastBehavior.create("%s has gone offline.", FRIEND_CONFIG, EventType.FRIEND_LEAVE),
+        SocialToastBehavior.create("%s has gone offline, making you the new party leader.", FRIEND_CONFIG, EventType.FRIEND_LEAVE),
+
+        SocialToastBehavior.create("%s invites you to their party!.+", PARTY_CONFIG, EventType.PARTY_INVITE),
+        SocialToastBehavior.create("%s has joined the party.", PARTY_CONFIG, EventType.PARTY_JOIN),
+        SocialToastBehavior.create("%s leaves the party.", PARTY_CONFIG, EventType.PARTY_LEAVE),
+        SocialToastBehavior.create("%s has been promoted to party leader.", PARTY_CONFIG, EventType.PARTY_LEADER),
+        SocialToastBehavior.createUncaptured("%s has made you the party leader.", PARTY_CONFIG, EventType.PARTY_LEADER_SELF),
+        SocialToastBehavior.createUncaptured("%s has gone offline, making you the new party leader.", PARTY_CONFIG, EventType.PARTY_LEADER_SELF),
+
+        SocialToastBehavior.create("Your party has been disbanded.", PARTY_CONFIG, EventType.PARTY_DISBAND),
+        SocialToastBehavior.create("You have joined the party.", PARTY_CONFIG, EventType.PARTY_JOIN_SELF),
+        SocialToastBehavior.create("You left the party.", PARTY_CONFIG, EventType.PARTY_LEAVE_SELF),
+        SocialToastBehavior.create("You are now the party leader.", PARTY_CONFIG, EventType.PARTY_LEADER_SELF)
+    );
 
     @Override
     public void onInitializeClient() {
@@ -66,73 +81,34 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
     }
 
     public EventResult onChatEvent(MCCIChatEvent.Context context) {
-        ToastsClientConfig config = ToastsClientConfig.getConfig();
-        Text message = context.message();
+        if (context.isEmote()) {
+            return EventResult.pass();
+        }
+
         String raw = context.getRaw();
 
-        if (config.friends()) {
-            if (raw.contains(FRIEND_JOIN_TEXT)) {
-                int l = raw.length();
-                String username = raw.substring(0, l - FRIEND_JOIN_TEXT.length());
-                if (this.isUsernameValid(username)) {
-                    SocialToast.add(EventType.FRIEND_JOIN, username);
-                    return EventResult.cancel();
-                }
-            }
+        boolean socialToastBehaviorPassed = false;
 
-            if (raw.contains(FRIEND_LEAVE_TEXT)) {
-                int l = raw.length();
-                String username = raw.substring(0, l - FRIEND_LEAVE_TEXT.length());
-                if (this.isUsernameValid(username)) {
-                    SocialToast.add(EventType.FRIEND_LEAVE, username);
-                    return EventResult.cancel();
+        for (SocialToastBehavior behavior : SOCIAL_TOAST_BEHAVIORS) {
+            if (behavior.shouldToast()) {
+                Optional<String> maybeUsername = behavior.matchAndRetrieveUsername(raw);
+                if (maybeUsername.isPresent()) {
+                    String username = maybeUsername.get();
+                    for (EventType eventType : behavior.getEventTypes()) {
+                        SocialToast.add(eventType, username);
+                    }
+
+                    socialToastBehaviorPassed = true;
                 }
             }
         }
 
-        if (config.parties()) {
-            if (raw.equals(PARTY_DISBAND_TEXT)) {
-                SocialToast.add(EventType.PARTY_DISBAND, "");
-                return EventResult.cancel();
-            }
-
-            if (raw.contains(PARTY_INVITE_TEXT)) {
-                int l = raw.length();
-                String username = raw.substring(0, l - PARTY_INVITE_TEXT.length() - 6);
-                if (this.isUsernameValid(username)) {
-                    SocialToast.add(EventType.PARTY_INVITE, username);
-                    return EventResult.pass();
-                }
-            }
-
-            if (raw.contains(PARTY_JOIN_TEXT)) {
-                int l = raw.length();
-                String username = raw.substring(0, l - PARTY_JOIN_TEXT.length());
-                if (this.isUsernameValid(username)) {
-                    SocialToast.add(EventType.PARTY_JOIN, username);
-                    return EventResult.cancel();
-                }
-            }
-
-            if (raw.contains(PARTY_LEAVE_TEXT)) {
-                int l = raw.length();
-                String username = raw.substring(0, l - PARTY_LEAVE_TEXT.length());
-                if (this.isUsernameValid(username)) {
-                    SocialToast.add(EventType.PARTY_LEAVE, username);
-                    return EventResult.cancel();
-                }
-            }
-
-            if (raw.equals(PARTY_JOIN_YOU_TEXT)) {
-                SocialToast.add(EventType.PARTY_JOIN, MinecraftClient.getInstance().getSession().getProfile().getName());
-                return EventResult.cancel();
-            }
-
-            if (raw.equals(PARTY_LEAVE_YOU_TEXT)) {
-                SocialToast.add(EventType.PARTY_LEAVE, MinecraftClient.getInstance().getSession().getProfile().getName());
-                return EventResult.cancel();
-            }
+        if (socialToastBehaviorPassed) {
+            return EventResult.cancel();
         }
+
+        ToastsClientConfig config = ToastsClientConfig.getConfig();
+        Text message = context.message();
 
         if (config.quests()) {
             OptionalInt opt = processPrefix(message, raw, QUEST_COMPLETE_TEXT, Icon.QUEST_BOOK);

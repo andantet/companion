@@ -9,6 +9,7 @@ import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextColor;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
@@ -39,6 +40,16 @@ public interface MCCIChatEvent {
     record Context(ChatHud chatHud, Text message, @Nullable MessageSignatureData signature, int ticks, @Nullable MessageIndicator indicator, boolean refresh) {
         public String getRaw() {
             return message.getString();
+        }
+
+        public boolean isEmote() {
+            TextColor textColor = message.getStyle().getColor();
+            if (textColor != null) {
+                int color = textColor.getRgb();
+                return color == 0xFF7E40;
+            }
+
+            return false;
         }
     }
 }

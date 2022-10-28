@@ -27,7 +27,11 @@ public class SocialToast extends AdaptableIconToast {
         FRIEND_LEAVE(true),
         PARTY_INVITE,
         PARTY_JOIN,
+        PARTY_JOIN_SELF,
         PARTY_LEAVE,
+        PARTY_LEAVE_SELF,
+        PARTY_LEADER,
+        PARTY_LEADER_SELF,
         PARTY_DISBAND;
 
         private final boolean friend;
