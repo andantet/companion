@@ -56,7 +56,6 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
     public static final List<SocialToastBehavior> SOCIAL_TOAST_BEHAVIORS = List.of(
         SocialToastBehavior.create("%s has come online!", FRIEND_CONFIG, EventType.FRIEND_JOIN),
         SocialToastBehavior.create("%s has gone offline.", FRIEND_CONFIG, EventType.FRIEND_LEAVE),
-        SocialToastBehavior.create("%s has gone offline, making you the new party leader.", FRIEND_CONFIG, EventType.FRIEND_LEAVE),
 
         SocialToastBehavior.create("%s invites you to their party!.+", PARTY_CONFIG, EventType.PARTY_INVITE),
         SocialToastBehavior.create("%s has joined the party.", PARTY_CONFIG, EventType.PARTY_JOIN),
