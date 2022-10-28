@@ -25,7 +25,15 @@
 
   "contact": {
     "homepage": "https://andante.dev/mccic",
-    "sources": "https://github.com/andantet/mccic",
-    "issues": "https://github.com/andantet/mccic/issues"
+    "sources": "https://github.com/mccic/companion",
+    "issues": "https://github.com/mccic/companion/issues"
+  },
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "link.mccic.discord": "https://companion.andante.dev"
+      }
+    }
   }
 }
