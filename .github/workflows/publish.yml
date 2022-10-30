@@ -1,4 +1,4 @@
-name: release
+name: publish
 on: [workflow_dispatch] # Manual trigger
 
 permissions:
@@ -29,7 +29,7 @@ jobs:
 
       - uses: gradle/wrapper-validation-action@v1
 
-      - run: ./gradlew build publish releaseVersion --stacktrace -Porg.gradle.parallel.threads=4
+      - run: ./gradlew build publish --stacktrace -Porg.gradle.parallel.threads=4
         env:
           MAVEN_URL: ${{ secrets.MAVEN_URL }}
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
