@@ -12,17 +12,11 @@ jobs:
       options: --user root
     steps:
       - run: apt update && apt install git -y && git --version
-      - run: git config --global --add safe.directory /__w/mccic/mccic
+      - run: git config --global --add safe.directory /__w/mccibrawls/companion
 
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - uses: FabricMC/fabric-action-scripts@v1
-        id: changelog
-        with:
-          context: changelog
-          workflow_id: publish.yml
 
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
@@ -34,7 +28,3 @@ jobs:
           MAVEN_URL: ${{ secrets.MAVEN_URL }}
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-          CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          CHANGELOG: ${{ steps.changelog.outputs.changelog }}
