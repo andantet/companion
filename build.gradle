@@ -256,6 +256,7 @@ void setupRepositories(RepositoryHandler repositories) {
   if (ENV.MAVEN_URL) {
     repositories.maven {
       url ENV.MAVEN_URL
+      allowInsecureProtocol = true
       if (ENV.MAVEN_USERNAME) {
         credentials {
           username ENV.MAVEN_USERNAME
