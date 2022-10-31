@@ -1,22 +1,22 @@
-package dev.andante.mccic.qol.client.config;
+package dev.andante.mccic.hud.client.config;
 
 import dev.andante.mccic.api.util.EnumHelper;
 import dev.andante.mccic.config.EnumOption;
-import dev.andante.mccic.qol.MCCICQoL;
+import dev.andante.mccic.hud.MCCICHud;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
-public enum ConfirmDisconnectMode implements EnumOption {
-    OFF,
-    IN_GAME,
-    ON_SERVER;
+public enum HudMode implements EnumOption {
+    DEFAULT,
+    DISABLED,
+    CUSTOM;
 
     @Override
     public String getEnumIdentifier() {
-        return "confirm_disconnect_mode";
+        return "hud_mode";
     }
 
     @Override
@@ -26,7 +26,7 @@ public enum ConfirmDisconnectMode implements EnumOption {
 
     @Override
     public String getModId() {
-        return MCCICQoL.MOD_ID;
+        return MCCICHud.MOD_ID;
     }
 
     @Override
@@ -34,7 +34,7 @@ public enum ConfirmDisconnectMode implements EnumOption {
         return this.ordinal();
     }
 
-    public static ConfirmDisconnectMode byId(int ordinal) {
-        return EnumHelper.byId(ConfirmDisconnectMode.class, ordinal);
+    public static HudMode byId(int ordinal) {
+        return EnumHelper.byId(HudMode.class, ordinal);
     }
 }

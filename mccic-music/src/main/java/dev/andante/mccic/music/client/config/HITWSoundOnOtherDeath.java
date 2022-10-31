@@ -1,15 +1,14 @@
 package dev.andante.mccic.music.client.config;
 
-import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
+import dev.andante.mccic.api.util.EnumHelper;
+import dev.andante.mccic.config.EnumOption;
 import dev.andante.mccic.music.MCCICMusic;
 import dev.andante.mccic.music.MCCICSounds;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.TranslatableOption;
 
 import java.util.Locale;
 
-public enum HITWSoundOnOtherDeath implements StringIdentifiable, TranslatableOption {
+public enum HITWSoundOnOtherDeath implements EnumOption {
     OFF,
     TEAM_ELIMINATED(MCCICSounds.TEAM_ELIMINATED),
     EARLY_ELIMINATION(MCCICSounds.EARLY_ELIMINATION),
@@ -18,8 +17,6 @@ public enum HITWSoundOnOtherDeath implements StringIdentifiable, TranslatableOpt
     SCORE_BIG_COINS(true, true, MCCICSounds.SCORE_BIG_COINS);
 
     private final Identifier[] sounds;
-
-    private static final HITWSoundOnOtherDeath[] VALUES = values();
     private final boolean score, randomPitch;
 
     HITWSoundOnOtherDeath(boolean score, boolean randomPitch, Identifier... sounds) {
@@ -45,8 +42,18 @@ public enum HITWSoundOnOtherDeath implements StringIdentifiable, TranslatableOpt
     }
 
     @Override
-    public String asString() {
+    public String getEnumIdentifier() {
+        return "hitw_sound_on_other_death";
+    }
+
+    @Override
+    public String getIdentifier() {
         return this.name().toLowerCase(Locale.ROOT);
+    }
+
+    @Override
+    public String getModId() {
+        return MCCICMusic.MOD_ID;
     }
 
     @Override
@@ -54,13 +61,7 @@ public enum HITWSoundOnOtherDeath implements StringIdentifiable, TranslatableOpt
         return this.ordinal();
     }
 
-    @Override
-    public String getTranslationKey() {
-        return AbstractConfigScreen.createConfigTranslationKey(MCCICMusic.MOD_ID, "hitw_sound_on_other_death.%s".formatted(this.asString()));
-    }
-
     public static HITWSoundOnOtherDeath byId(int ordinal) {
-        int l = VALUES.length;
-        return ordinal < 0 && ordinal < l ? VALUES[ordinal] : MusicClientConfig.createDefaultConfig().hitwSoundOnOtherDeath();
+        return EnumHelper.byId(HITWSoundOnOtherDeath.class, ordinal);
     }
 }

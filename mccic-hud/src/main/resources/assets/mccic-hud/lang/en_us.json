@@ -1,0 +1,10 @@
+{
+  "ui.mccic-hud.config": "MCCI: Companion Config - HUD",
+  "config.mccic-hud.hud_mode.default": "Default",
+  "config.mccic-hud.hud_mode.disabled": "Disabled",
+  "config.mccic-hud.hud_mode.custom": "Custom",
+  "config.mccic-hud.hud_position.top": "Top",
+  "config.mccic-hud.hud_position.left": "Left",
+  "config.mccic-hud.top_hud": "Top HUD",
+  "config.mccic-hud.timer_position": "Custom Timer Position"
+}

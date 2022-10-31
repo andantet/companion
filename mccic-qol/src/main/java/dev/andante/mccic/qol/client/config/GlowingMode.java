@@ -1,25 +1,32 @@
 package dev.andante.mccic.qol.client.config;
 
-import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
+import dev.andante.mccic.api.util.EnumHelper;
+import dev.andante.mccic.config.EnumOption;
 import dev.andante.mccic.qol.MCCICQoL;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.TranslatableOption;
 
 import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
-public enum GlowingMode implements StringIdentifiable, TranslatableOption {
+public enum GlowingMode implements EnumOption {
     DEFAULT,
     DISABLED,
     DISABLED_FOR_PLAYERS;
 
-    private static final GlowingMode[] VALUES = values();
+    @Override
+    public String getEnumIdentifier() {
+        return "glowing_mode";
+    }
 
     @Override
-    public String asString() {
+    public String getIdentifier() {
         return this.name().toLowerCase(Locale.ROOT);
+    }
+
+    @Override
+    public String getModId() {
+        return MCCICQoL.MOD_ID;
     }
 
     @Override
@@ -27,13 +34,7 @@ public enum GlowingMode implements StringIdentifiable, TranslatableOption {
         return this.ordinal();
     }
 
-    @Override
-    public String getTranslationKey() {
-        return AbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "glowing_mode.%s".formatted(this.asString()));
-    }
-
     public static GlowingMode byId(int ordinal) {
-        int l = VALUES.length;
-        return ordinal < 0 && ordinal < l ? VALUES[ordinal] : QoLClientConfig.createDefaultConfig().glowingMode();
+        return EnumHelper.byId(GlowingMode.class, ordinal);
     }
 }

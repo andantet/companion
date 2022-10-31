@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-hud",
+  "name": "MCCI: Companion (HUD)",
+  "version": "${version}",
+  "description": "Custom HUD elements for MCC: Island.",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "depends": {
+    "mccic-api": "*",
+    "mccic-config": "*"
+  },
+  "entrypoints": {
+    "client": [
+      "dev.andante.mccic.hud.client.MCCICHudClientImpl"
+    ]
+  },
+  "mixins": [ "mccic-hud.mixins.json" ]
+}
