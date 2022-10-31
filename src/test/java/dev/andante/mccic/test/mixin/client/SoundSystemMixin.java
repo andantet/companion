@@ -18,7 +18,8 @@ public class SoundSystemMixin {
         method = "reloadSounds",
         at = @At(
             value = "INVOKE",
-            target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V"
+            target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;)V",
+            remap = false
         )
     )
     private void onReloadSoundsWarn(Logger instance, String s, Object o) {
