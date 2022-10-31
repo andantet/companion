@@ -1,6 +1,6 @@
 package dev.andante.mccic.hud.mixin.client;
 
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.config.client.screen.AbstractConfigScreen;
 import dev.andante.mccic.hud.client.config.HudClientConfig;
 import dev.andante.mccic.hud.client.config.HudPosition;

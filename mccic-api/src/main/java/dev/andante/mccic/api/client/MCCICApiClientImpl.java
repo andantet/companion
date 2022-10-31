@@ -2,7 +2,7 @@ package dev.andante.mccic.api.client;
 
 import com.google.common.reflect.Reflection;
 import dev.andante.mccic.api.MCCICApi;
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

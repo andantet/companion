@@ -7,7 +7,7 @@ import com.jagrosh.discordipc.entities.User;
 import com.jagrosh.discordipc.entities.pipe.PipeStatus;
 import com.mojang.logging.LogUtils;
 import dev.andante.mccic.api.MCCIC;
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.discordrp.MCCICDiscordRP;

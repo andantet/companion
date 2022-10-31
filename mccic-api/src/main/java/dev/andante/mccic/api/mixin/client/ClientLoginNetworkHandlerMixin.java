@@ -1,7 +1,7 @@
 package dev.andante.mccic.api.mixin.client;
 
 import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientLoginNetworkHandler;

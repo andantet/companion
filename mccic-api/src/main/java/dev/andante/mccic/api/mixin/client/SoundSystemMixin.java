@@ -1,7 +1,7 @@
 package dev.andante.mccic.api.mixin.client;
 
 import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.sound.SoundInstance;
@@ -19,7 +19,8 @@ public class SoundSystemMixin {
         at = @At(
             value = "INVOKE",
             target = "Lorg/slf4j/Logger;debug(Lorg/slf4j/Marker;Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V",
-            ordinal = 0
+            ordinal = 0,
+            remap = false
         )
     )
     private void onPlay(SoundInstance sound, CallbackInfo ci) {

@@ -1,6 +1,6 @@
 package dev.andante.mccic.discordrp.client;
 
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.discordrp.client.config.DiscordRPClientConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

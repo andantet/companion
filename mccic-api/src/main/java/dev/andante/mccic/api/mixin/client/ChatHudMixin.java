@@ -1,7 +1,7 @@
 package dev.andante.mccic.api.mixin.client;
 
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.event.EventResult;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

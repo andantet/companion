@@ -23,7 +23,8 @@ public class SoundManagerMixin {
         at = @At(
             value = "INVOKE",
             target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V",
-            shift = At.Shift.BEFORE
+            shift = At.Shift.BEFORE,
+            remap = false
         ),
         cancellable = true
     )

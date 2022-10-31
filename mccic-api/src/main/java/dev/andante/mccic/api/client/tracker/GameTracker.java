@@ -1,4 +1,4 @@
-package dev.andante.mccic.api.client.game;
+package dev.andante.mccic.api.client.tracker;
 
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.event.MCCIGameEvents;
@@ -17,12 +17,18 @@ import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.util.Identifier;
 
 import java.util.List;
 import java.util.OptionalInt;
 
+/**
+ * Tracks game active data.
+ */
 @Environment(EnvType.CLIENT)
-public class EventsGameTracker implements GameTracker {
+public class GameTracker {
+    public static final GameTracker INSTANCE = new GameTracker();
+
     private static final String TIME_IDENTIFIER = ":";
     private static final String MCCI_PREFIX = "MCCI: ";
 
@@ -32,7 +38,7 @@ public class EventsGameTracker implements GameTracker {
     private Game game;
     private int time;
 
-    public EventsGameTracker() {
+    public GameTracker() {
         ClientTickEvents.END_WORLD_TICK.register(this::onWorldTick);
         MCCIChatEvent.EVENT.register(this::onChatMessage);
     }
@@ -162,27 +168,22 @@ public class EventsGameTracker implements GameTracker {
         }
     }
 
-    @Override
     public Game getGame() {
         return this.game;
     }
 
-    @Override
     public GameState getGameState() {
         return this.state;
     }
 
-    @Override
     public OptionalInt getTime() {
         return time == -1 ? OptionalInt.empty() : OptionalInt.of(this.time);
     }
 
-    @Override
     public boolean isInGame() {
         return this.game != null;
     }
 
-    @Override
     public boolean isOnServer() {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             return true;
@@ -194,5 +195,13 @@ public class EventsGameTracker implements GameTracker {
         }
 
         return false;
+    }
+
+    /**
+     * Whether the client is connected to a server with
+     * an IP address ending in <code>mccisland.net</code>.
+     */
+    public Identifier getGameSoundId() {
+        return this.getGame().getSoundId();
     }
 }

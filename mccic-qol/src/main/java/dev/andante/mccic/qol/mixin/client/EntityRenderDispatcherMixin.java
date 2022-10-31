@@ -1,6 +1,6 @@
 package dev.andante.mccic.qol.mixin.client;
 
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.qol.client.config.QoLClientConfig;

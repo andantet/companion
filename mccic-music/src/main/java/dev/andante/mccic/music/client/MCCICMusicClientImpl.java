@@ -3,7 +3,7 @@ package dev.andante.mccic.music.client;
 import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;

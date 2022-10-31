@@ -20,7 +20,8 @@ public class ClientPlayNetworkHandlerMixin {
         at = @At(
             value = "INVOKE",
             target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;)V",
-            shift = At.Shift.BEFORE
+            shift = At.Shift.BEFORE,
+            remap = false
         ),
         cancellable = true
     )

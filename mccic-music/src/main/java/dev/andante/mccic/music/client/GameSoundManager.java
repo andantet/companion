@@ -5,7 +5,7 @@ import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
 import dev.andante.mccic.api.client.event.MCCIClientRespawnEvent;
 import dev.andante.mccic.api.client.event.MCCIGameEvents;
 import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
-import dev.andante.mccic.api.client.game.GameTracker;
+import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.music.MCCICSounds;
 import dev.andante.mccic.music.client.config.MusicClientConfig;
