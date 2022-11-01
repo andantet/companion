@@ -182,6 +182,10 @@ public class GameTracker {
         return this.game != null;
     }
 
+    /**
+     * Whether the client is connected to a server with
+     * an IP address ending in <code>mccisland.net</code>.
+     */
     public boolean isOnServer() {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             return true;
@@ -195,10 +199,6 @@ public class GameTracker {
         return false;
     }
 
-    /**
-     * Whether the client is connected to a server with
-     * an IP address ending in <code>mccisland.net</code>.
-     */
     public Identifier getGameSoundId() {
         return this.getGame().getSoundId();
     }
