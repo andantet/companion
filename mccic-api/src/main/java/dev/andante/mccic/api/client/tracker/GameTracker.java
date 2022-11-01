@@ -2,24 +2,23 @@ package dev.andante.mccic.api.client.tracker;
 
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.event.MCCIGameEvents;
+import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
-import dev.andante.mccic.api.mixin.client.access.BossBarHudAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.BossBarHud;
-import net.minecraft.client.gui.hud.ClientBossBar;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.boss.BossBar;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
 import java.util.OptionalInt;
 
 /**
@@ -32,13 +31,16 @@ public class GameTracker {
     private static final String TIME_IDENTIFIER = ":";
     private static final String MCCI_PREFIX = "MCCI: ";
 
-    private final MinecraftClient client = MinecraftClient.getInstance();
+    private final MinecraftClient client;
 
-    private GameState state = GameState.NONE;
+    private GameState state;
     private Game game;
     private int time;
 
     public GameTracker() {
+        this.client = MinecraftClient.getInstance();
+        this.state = GameState.NONE;
+
         ClientTickEvents.END_WORLD_TICK.register(this::onWorldTick);
         MCCIChatEvent.EVENT.register(this::onChatMessage);
     }
@@ -117,29 +119,25 @@ public class GameTracker {
             int lastTime = this.time;
             this.time = -1;
 
-            BossBarHud hud = this.client.inGameHud.getBossBarHud();
-            List<ClientBossBar> bars = ((BossBarHudAccessor) hud).getBossBars().values().stream().toList();
-            if (bars.size() > 0) {
-                for (ClientBossBar bar : bars) {
-                    String name = bar.getName().getString();
-                    if (name.contains(TIME_IDENTIFIER)) {
-                        int index = name.indexOf(TIME_IDENTIFIER);
-                        String rawMins = name.substring(index - 2, index);
-                        String rawSecs = name.substring(index + 1, index + 3);
-                        int mins = Integer.parseInt(rawMins);
-                        int secs = Integer.parseInt(rawSecs);
-                        int time = (mins * 60) + secs;
+            ClientHelper.getBossBarStream()
+                        .map(BossBar::getName)
+                        .map(Text::getString)
+                        .filter(name -> name.contains(TIME_IDENTIFIER))
+                        .findAny()
+                        .ifPresent(name -> {
+                            int index = name.indexOf(TIME_IDENTIFIER);
+                            String rawMins = name.substring(index - 2, index);
+                            String rawSecs = name.substring(index + 1, index + 3);
+                            int mins = Integer.parseInt(rawMins);
+                            int secs = Integer.parseInt(rawSecs);
+                            int time = (mins * 60) + secs;
 
-                        if (time != lastTime) {
-                            MCCIGameEvents.TIMER_UPDATE.invoker().onTimerUpdate(time, lastTime);
-                        }
+                            if (time != lastTime) {
+                                MCCIGameEvents.TIMER_UPDATE.invoker().onTimerUpdate(time, lastTime);
+                            }
 
-                        this.time = time;
-
-                        break;
-                    }
-                }
-            }
+                            this.time = time;
+                        });
         } else {
             if (this.time != -1) {
                 MCCIGameEvents.TIMER_UPDATE.invoker().onTimerUpdate(-1, this.time);
