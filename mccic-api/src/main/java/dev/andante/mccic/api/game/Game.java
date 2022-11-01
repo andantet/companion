@@ -3,6 +3,7 @@ package dev.andante.mccic.api.game;
 import dev.andante.mccic.api.MCCIC;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.TypedActionResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -17,21 +18,23 @@ public enum Game implements StringIdentifiable {
     SKY_BATTLE("Sky Battle", "SKY BATTLE"),
     BATTLE_BOX("Battle Box", "BATTLE BOX");
 
-    private static final Map<String, Game> GAMES_FOR_SCOREBOARD = Arrays.stream(Game.values())
-                                                                        .collect(Collectors.toMap(Game::getScoreboardName, Function.identity()));
+    private static final Map<String, Game> TO_SCOREBOARD_NAME = Arrays.stream(Game.values())
+                                                                      .collect(Collectors.toMap(Game::getScoreboardName, Function.identity()));
 
     private final String displayName, scoreboardName;
     private final Identifier soundId;
 
     Game(String displayName, String scoreboardName) {
         this.displayName = displayName;
-        this.scoreboardName = scoreboardName + " ";
+        this.scoreboardName = scoreboardName;
         this.soundId = new Identifier("%s-music".formatted(MCCIC.MOD_ID), "game.%s".formatted(this.getId()));
     }
 
     @Nullable
-    public static Game fromScoreboard(String scoreboardName) {
-        return GAMES_FOR_SCOREBOARD.getOrDefault(scoreboardName, null);
+    public static TypedActionResult<Game> fromScoreboard(String name) {
+        String trim = name.trim();
+        Game game = TO_SCOREBOARD_NAME.getOrDefault(trim, null);
+        return trim.equals(name) ? TypedActionResult.success(game) : TypedActionResult.fail(game);
     }
 
     public String getId() {

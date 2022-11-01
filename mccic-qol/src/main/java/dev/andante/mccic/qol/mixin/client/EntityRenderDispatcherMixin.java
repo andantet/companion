@@ -19,6 +19,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Optional;
+
 @Environment(EnvType.CLIENT)
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatcherMixin {
@@ -42,11 +44,14 @@ public abstract class EntityRenderDispatcherMixin {
             return;
         }
 
-        Game game = tracker.getGame();
-        QoLClientConfig config = QoLClientConfig.getConfig();
-        if ((game == Game.SKY_BATTLE && config.autoHitboxSkyBattle()) || (game == Game.BATTLE_BOX && config.autoHitboxBattleBox())) {
-            if (!this.renderHitboxes && !entity.isInvisible() && !MinecraftClient.getInstance().hasReducedDebugInfo()) {
-                renderHitbox(matrices, vertices.getBuffer(RenderLayer.getLines()), entity, tickDelta);
+        Optional<Game> maybeGame = tracker.getGame();
+        if (maybeGame.isPresent()) {
+            Game game = maybeGame.get();
+            QoLClientConfig config = QoLClientConfig.getConfig();
+            if ((game == Game.SKY_BATTLE && config.autoHitboxSkyBattle()) || (game == Game.BATTLE_BOX && config.autoHitboxBattleBox())) {
+                if (!this.renderHitboxes && !entity.isInvisible() && !MinecraftClient.getInstance().hasReducedDebugInfo()) {
+                    renderHitbox(matrices, vertices.getBuffer(RenderLayer.getLines()), entity, tickDelta);
+                }
             }
         }
     }

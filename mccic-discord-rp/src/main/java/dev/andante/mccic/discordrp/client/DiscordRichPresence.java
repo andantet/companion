@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 
 import java.time.OffsetDateTime;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -82,8 +83,9 @@ public class DiscordRichPresence {
         RichPresence.Builder builder = new RichPresence.Builder().setLargeImage("logo-mcci", "MCCI: Companion");
 
         GameTracker tracker = GameTracker.INSTANCE;
-        Game game = tracker.getGame();
-        if (game != null) {
+        Optional<Game> maybeGame = tracker.getGame();
+        if (maybeGame.isPresent()) {
+            Game game = maybeGame.get();
             String displayName = game.getDisplayName();
             builder.setDetails(displayName);
             GameState state = tracker.getGameState();

@@ -47,7 +47,7 @@ public class SocialToastBehavior {
     }
 
     public Optional<String> matchAndRetrieveUsername(String str) {
-        Matcher matcher = pattern.matcher(str);
+        Matcher matcher = this.pattern.matcher(str);
         if (matcher.matches()) {
             try {
                 return Optional.of(matcher.group(1));

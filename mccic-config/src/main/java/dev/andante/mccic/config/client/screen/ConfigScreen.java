@@ -1,5 +1,6 @@
 package dev.andante.mccic.config.client.screen;
 
+import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.config.ConfigHolder;
 import dev.andante.mccic.config.MCCICConfig;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
@@ -48,7 +49,7 @@ public class ConfigScreen extends AbstractConfigScreen<Record> {
         int l = OTHER_CONFIG_LOCATION_TEXTS.size();
         int padding = 6;
         int y = (int) (this.height / 2f) - this.textRenderer.fontHeight;
-        drawOpaqueBlack(0, y - padding, this.width, y + (this.textRenderer.fontHeight * l) + padding);
+        ClientHelper.drawOpaqueBlack(0, y - padding, this.width, y + (this.textRenderer.fontHeight * l) + padding);
 
         for (int i = 0; i < l; i++) {
             Text text = OTHER_CONFIG_LOCATION_TEXTS.get(i);

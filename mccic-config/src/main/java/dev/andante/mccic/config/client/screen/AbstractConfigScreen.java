@@ -1,11 +1,9 @@
 package dev.andante.mccic.config.client.screen;
 
-import com.mojang.blaze3d.platform.GlStateManager.DstFactor;
-import com.mojang.blaze3d.platform.GlStateManager.SrcFactor;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.serialization.Codec;
 import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.api.client.tracker.GameTracker;
+import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.config.ConfigHelper;
 import dev.andante.mccic.config.ConfigHolder;
 import dev.andante.mccic.config.MCCICConfig;
@@ -18,11 +16,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormat.DrawMode;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
@@ -127,7 +120,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
 
         // title
         int padding = 6;
-        drawOpaqueBlack(0, TITLE_Y - padding, this.width, TITLE_Y + this.textRenderer.fontHeight + padding);
+        ClientHelper.drawOpaqueBlack(0, TITLE_Y - padding, this.width, TITLE_Y + this.textRenderer.fontHeight + padding);
 
         this.textRenderer.draw(matrices, this.title, (int) ((this.width / 2f) - (this.textRenderer.getWidth(this.title) / 2f)), TITLE_Y, 0xFFFFFFFF);
 
@@ -135,23 +128,6 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         if (!this.list.children().isEmpty()) {
             this.list.render(matrices, mouseX, mouseY, delta);
         }
-    }
-
-    public static void drawOpaqueBlack(int x1, int y1, int x2, int y2) {
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        RenderSystem.disableTexture();
-        RenderSystem.disableDepthTest();
-        RenderSystem.enableBlend();
-        RenderSystem.blendFuncSeparate(SrcFactor.SRC_ALPHA, DstFactor.ONE_MINUS_SRC_ALPHA, SrcFactor.ZERO, DstFactor.ONE);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder buffer = tessellator.getBuffer();
-        int alpha = (int) (255 * 0.5F);
-        buffer.begin(DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        buffer.vertex(x1, y1, 0).color(0, 0, 0, alpha).next();
-        buffer.vertex(x1, y2, 0).color(0, 0, 0, alpha).next();
-        buffer.vertex(x2, y2, 0).color(0, 0, 0, alpha).next();
-        buffer.vertex(x2, y1, 0).color(0, 0, 0, alpha).next();
-        tessellator.draw();
     }
 
     @Override

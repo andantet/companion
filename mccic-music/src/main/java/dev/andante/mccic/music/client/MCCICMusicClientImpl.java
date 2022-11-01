@@ -38,7 +38,7 @@ public final class MCCICMusicClientImpl implements MCCICMusic, ClientModInitiali
         Identifier[] sounds = deathSoundConfig.getSounds();
         if (sounds.length > 0) {
             GameTracker gameTracker = GameTracker.INSTANCE;
-            if (gameTracker.getGame() == Game.HOLE_IN_THE_WALL) {
+            if (gameTracker.getGame().orElse(null) == Game.HOLE_IN_THE_WALL) {
                 boolean isActive = gameTracker.getGameState() == GameState.ACTIVE;
                 if (!deathSoundConfig.isScore() || isActive) {
                     MinecraftClient client = MinecraftClient.getInstance();

@@ -18,7 +18,9 @@ import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypedActionResult;
 
+import java.util.Optional;
 import java.util.OptionalInt;
 
 /**
@@ -98,7 +100,8 @@ public class GameTracker {
             String name = objective.getDisplayName().getString();
             if (name.contains(MCCI_PREFIX)) {
                 String id = name.substring(MCCI_PREFIX.length());
-                Game game = Game.fromScoreboard(id);
+                TypedActionResult<Game> result = Game.fromScoreboard(id);
+                Game game = !result.getResult().isAccepted() ? result.getValue() : null;
                 if (game != this.game) {
                     MCCIGameEvents.GAME_CHANGE.invoker().onGameChange(game, this.game);
                     this.game = game;
@@ -166,8 +169,8 @@ public class GameTracker {
         }
     }
 
-    public Game getGame() {
-        return this.game;
+    public Optional<Game> getGame() {
+        return Optional.ofNullable(this.game);
     }
 
     public GameState getGameState() {
@@ -200,6 +203,6 @@ public class GameTracker {
     }
 
     public Identifier getGameSoundId() {
-        return this.getGame().getSoundId();
+        return this.getGame().map(Game::getSoundId).orElse(null);
     }
 }

@@ -80,9 +80,12 @@ public class GameSoundManager {
     }
 
     public void playCurrent(Function<MusicClientConfig, Float> volume) {
-        SoundInstance sound = new VolumeAdjustableSoundInstance(this.gameTracker.getGameSoundId(), () -> volume.apply(MusicClientConfig.getConfig()));
-        this.soundManager.stop(this.lastSound);
-        this.lastSound = sound;
-        this.soundManager.play(sound);
+        Identifier id = this.gameTracker.getGameSoundId();
+        if (id != null) {
+            SoundInstance sound = new VolumeAdjustableSoundInstance(this.gameTracker.getGameSoundId(), () -> volume.apply(MusicClientConfig.getConfig()));
+            this.soundManager.stop(this.lastSound);
+            this.lastSound = sound;
+            this.soundManager.play(sound);
+        }
     }
 }

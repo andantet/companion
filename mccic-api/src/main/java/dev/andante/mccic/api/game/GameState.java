@@ -7,11 +7,6 @@ public enum GameState {
     NONE,
 
     /**
-     * The player is in a queue state.
-     */
-    QUEUE,
-
-    /**
      * Waiting for a game to begin.
      */
     WAITING_FOR_GAME,
