@@ -8,6 +8,8 @@ import com.jagrosh.discordipc.entities.pipe.PipeStatus;
 import com.mojang.logging.LogUtils;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.tracker.GameTracker;
+import dev.andante.mccic.api.client.tracker.QueueTracker;
+import dev.andante.mccic.api.client.tracker.QueueType;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.discordrp.MCCICDiscordRP;
@@ -25,26 +27,32 @@ import java.util.concurrent.TimeUnit;
 
 @Environment(EnvType.CLIENT)
 public class DiscordRichPresence {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final OffsetDateTime INITIAL_TIME = OffsetDateTime.now();
-    private final ScheduledExecutorService executorService;
-    private final long clientId;
+    public static final String QUEUE_TEXT = "text.%s.queue".formatted(MCCICDiscordRP.MOD_ID);
+    public static final String QUEUE_QUICKPLAY_TEXT = "%s.quickplay".formatted(QUEUE_TEXT);
+    public static final String IDLE_TEXT = "text.%s.idle".formatted(MCCICDiscordRP.MOD_ID);
+    public static final String LARGE_IMAGE_TEXT = "text.%s.large_image_text".formatted(MCCICDiscordRP.MOD_ID);
 
+    private static final Logger LOGGER = LogUtils.getLogger();
+
+    private final long clientId;
+    private final ScheduledExecutorService executorService;
+
+    private OffsetDateTime initialTime;
     private IPCClient discord;
 
     public DiscordRichPresence(long clientId) {
         this.clientId = clientId;
         this.executorService = Executors.newSingleThreadScheduledExecutor();
+        this.initialTime = OffsetDateTime.now();
     }
 
     public void tryConnect() {
-        // Connect to the client in the thread to prevent blocking logic
         if (this.discord != null) {
             return;
         }
 
         LOGGER.info("{}: Setting up Discord client", MCCIC.MOD_NAME);
-        this.executorService.scheduleAtFixedRate(this::update, 0, 5, TimeUnit.SECONDS);
+        this.executorService.scheduleAtFixedRate(this::update, 0, 1, TimeUnit.SECONDS);
 
         this.discord = new IPCClient(this.clientId);
         this.discord.setListener(new IPCListener() {
@@ -80,22 +88,56 @@ public class DiscordRichPresence {
             return;
         }
 
-        RichPresence.Builder builder = new RichPresence.Builder().setLargeImage("logo-mcci", "MCCI: Companion");
+        RichPresence.Builder builder = new RichPresence.Builder().setLargeImage("logo-mcci", I18n.translate(LARGE_IMAGE_TEXT))
+                                                                 .setState(I18n.translate(IDLE_TEXT))
+                                                                 .setStartTimestamp(this.initialTime);
 
-        GameTracker tracker = GameTracker.INSTANCE;
-        Optional<Game> maybeGame = tracker.getGame();
-        if (maybeGame.isPresent()) {
-            Game game = maybeGame.get();
-            String displayName = game.getDisplayName();
-            builder.setDetails(displayName);
-            GameState state = tracker.getGameState();
-            builder.setState(I18n.translate("text.%s.state.%s".formatted(MCCICDiscordRP.MOD_ID, state.name().toLowerCase(Locale.ROOT))));
-            builder.setSmallImage("logo_game-%s".formatted(game.getId()), displayName);
-            tracker.getTime().ifPresent(time -> builder.setEndTimestamp(OffsetDateTime.now().plusSeconds(time)));
+        QueueTracker queueTracker = QueueTracker.INSTANCE;
+        QueueType queueType = queueTracker.getQueueType();
+        if (queueType != QueueType.NONE) {
+            builder.setDetails(I18n.translate(QUEUE_TEXT));
+
+            Optional<Game> maybeGame = queueTracker.getGame();
+            if (maybeGame.isPresent()) {
+                Game game = maybeGame.get();
+                builder.setState(game.getDisplayName());
+                builder.setSmallImage(getIconForGame(game));
+            } else {
+                builder.setState(I18n.translate(QUEUE_QUICKPLAY_TEXT));
+                builder.setSmallImage("shuffle");
+            }
+
+            builder.setStartTimestamp(null);
+            setEndTimestampIfPresent(queueTracker.getTime().orElse(-1), builder);
         } else {
-            builder.setState(I18n.translate("text.%s.idle".formatted(MCCICDiscordRP.MOD_ID))).setStartTimestamp(INITIAL_TIME);
+            GameTracker gameTracker = GameTracker.INSTANCE;
+            Optional<Game> maybeGame = gameTracker.getGame();
+            if (maybeGame.isPresent()) {
+                Game game = maybeGame.get();
+                String displayName = game.getDisplayName();
+                builder.setDetails(displayName);
+                GameState state = gameTracker.getGameState();
+                builder.setState(I18n.translate("text.%s.state.%s".formatted(MCCICDiscordRP.MOD_ID, state.name().toLowerCase(Locale.ROOT))));
+                builder.setSmallImage(getIconForGame(game), displayName);
+                setEndTimestampIfPresent(gameTracker.getTime().orElse(-1), builder);
+            }
         }
 
         this.discord.sendRichPresence(builder.build());
+    }
+
+    public static void setEndTimestampIfPresent(int time, RichPresence.Builder builder) {
+        if (time != -1) {
+            builder.setStartTimestamp(null);
+            builder.setEndTimestamp(OffsetDateTime.now().plusSeconds(time));
+        }
+    }
+
+    public static String getIconForGame(Game game) {
+        return "logo_game-%s".formatted(game.getId());
+    }
+
+    public void resetInitialTime() {
+        this.initialTime = OffsetDateTime.now();
     }
 }
