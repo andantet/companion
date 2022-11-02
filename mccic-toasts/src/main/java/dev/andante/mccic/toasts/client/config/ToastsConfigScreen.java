@@ -34,10 +34,10 @@ public class ToastsConfigScreen extends AbstractConfigScreen<ToastsClientConfig>
     static {
         ToastsClientConfig config = ToastsClientConfig.getConfig();
         ToastsClientConfig defaultConfig = ToastsClientConfig.createDefaultConfig();
-        FRIENDS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "friends", config.friends(), defaultConfig.friends());
-        PARTIES_OPTION = ofBoolean(MCCICToasts.MOD_ID, "parties", config.parties(), defaultConfig.parties());
-        QUESTS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "quests", config.quests(), defaultConfig.quests());
-        ACHIEVEMENTS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "achievements", config.achievements(), defaultConfig.achievements());
-        EVENT_ANNOUNCEMENTS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "event_announcements", config.eventAnnouncements(), defaultConfig.eventAnnouncements());
+        FRIENDS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "friends", config, defaultConfig, ToastsClientConfig::friends);
+        PARTIES_OPTION = ofBoolean(MCCICToasts.MOD_ID, "parties", config, defaultConfig, ToastsClientConfig::parties);
+        QUESTS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "quests", config, defaultConfig, ToastsClientConfig::quests);
+        ACHIEVEMENTS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "achievements", config, defaultConfig, ToastsClientConfig::achievements);
+        EVENT_ANNOUNCEMENTS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "event_announcements", config, defaultConfig, ToastsClientConfig::eventAnnouncements);
     }
 }

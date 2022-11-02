@@ -37,13 +37,13 @@ public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
     static {
         QoLClientConfig config = QoLClientConfig.getConfig();
         QoLClientConfig defaultConfig = QoLClientConfig.createDefaultConfig();
-        CONFIRM_DISCONNECT_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "confirm_disconnect_mode", ConfirmDisconnectMode::byId, ConfirmDisconnectMode.values(), config.confirmDisconnectMode(), defaultConfig.confirmDisconnectMode());
-        GLOWING_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "glowing_mode", GlowingMode::byId, GlowingMode.values(), config.glowingMode(), defaultConfig.glowingMode());
-        EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION = ofBoolean(MCCICQoL.MOD_ID, "empty_slot_highlights_fix", config.emptySlotHighlightsFix(), defaultConfig.emptySlotHighlightsFix());
-        EXTENDED_FRUSTUMS_OPTION = ofBoolean(MCCICQoL.MOD_ID, "extended_frustums", config.extendedFrustums(), defaultConfig.extendedFrustums(), SimpleOption.constantTooltip(Text.translatable(AbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "extended_frustums.tooltip"))));
+        CONFIRM_DISCONNECT_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "confirm_disconnect_mode", ConfirmDisconnectMode::byId, ConfirmDisconnectMode.values(), config, defaultConfig, QoLClientConfig::confirmDisconnectMode);
+        GLOWING_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "glowing_mode", GlowingMode::byId, GlowingMode.values(), config, defaultConfig, QoLClientConfig::glowingMode);
+        EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION = ofBoolean(MCCICQoL.MOD_ID, "empty_slot_highlights_fix", config, defaultConfig, QoLClientConfig::emptySlotHighlightsFix);
+        EXTENDED_FRUSTUMS_OPTION = ofBoolean(MCCICQoL.MOD_ID, "extended_frustums", config, defaultConfig, QoLClientConfig::extendedFrustums, SimpleOption.constantTooltip(Text.translatable(AbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "extended_frustums.tooltip"))));
 
         TooltipFactoryGetter<Boolean> autoHitboxTooltip = SimpleOption.constantTooltip(Text.translatable(AbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "auto_hitbox.tooltip")));
-        AUTO_HITBOX_SKY_BATTLE_OPTION = ofBoolean(MCCICQoL.MOD_ID, "auto_hitbox_sky_battle", config.autoHitboxSkyBattle(), defaultConfig.autoHitboxSkyBattle(), autoHitboxTooltip);
-        AUTO_HITBOX_BATTLE_BOX_OPTION = ofBoolean(MCCICQoL.MOD_ID, "auto_hitbox_battle_box", config.autoHitboxBattleBox(), defaultConfig.autoHitboxBattleBox(), autoHitboxTooltip);
+        AUTO_HITBOX_SKY_BATTLE_OPTION = ofBoolean(MCCICQoL.MOD_ID, "auto_hitbox_sky_battle", config, defaultConfig, QoLClientConfig::autoHitboxSkyBattle, autoHitboxTooltip);
+        AUTO_HITBOX_BATTLE_BOX_OPTION = ofBoolean(MCCICQoL.MOD_ID, "auto_hitbox_battle_box", config, defaultConfig, QoLClientConfig::autoHitboxBattleBox, autoHitboxTooltip);
     }
 }

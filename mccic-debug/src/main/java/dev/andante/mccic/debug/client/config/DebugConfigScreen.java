@@ -32,8 +32,8 @@ public class DebugConfigScreen extends AbstractConfigScreen<DebugClientConfig> {
     static {
         DebugClientConfig config = DebugClientConfig.getConfig();
         DebugClientConfig defaultConfig = DebugClientConfig.createDefaultConfig();
-        DEBUG_HUD_OPTION = ofBoolean(MCCICDebug.MOD_ID, "debug_hud", config.debugHud(), defaultConfig.debugHud());
-        CHAT_ALL_SOUNDS_OPTION = ofBoolean(MCCICDebug.MOD_ID, "chat_all_sounds", config.chatAllSounds(), defaultConfig.chatAllSounds());
-        RAW_CHAT_OPTION = ofBoolean(MCCICDebug.MOD_ID, "raw_chat", config.rawChat(), defaultConfig.rawChat());
+        DEBUG_HUD_OPTION = ofBoolean(MCCICDebug.MOD_ID, "debug_hud", config, defaultConfig, DebugClientConfig::debugHud);
+        CHAT_ALL_SOUNDS_OPTION = ofBoolean(MCCICDebug.MOD_ID, "chat_all_sounds", config, defaultConfig, DebugClientConfig::chatAllSounds);
+        RAW_CHAT_OPTION = ofBoolean(MCCICDebug.MOD_ID, "raw_chat", config, defaultConfig, DebugClientConfig::rawChat);
     }
 }

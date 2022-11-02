@@ -35,10 +35,10 @@ public class DiscordRPConfigScreen extends AbstractConfigScreen<DiscordRPClientC
     static {
         DiscordRPClientConfig config = DiscordRPClientConfig.getConfig();
         DiscordRPClientConfig defaultConfig = DiscordRPClientConfig.createDefaultConfig();
-        ENABLED_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "enabled", config.enabled(), defaultConfig.enabled());
-        DISPLAY_GAME_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_game", config.displayGame(), defaultConfig.displayGame());
-        DISPLAY_GAME_TIME_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_game_time", config.displayGameTime(), defaultConfig.displayGameTime());
-        DISPLAY_GAME_STATE_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_game_state", config.displayGameState(), defaultConfig.displayGameState());
-        DISPLAY_QUEUE_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_queue", config.displayQueue(), defaultConfig.displayQueue());
+        ENABLED_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "enabled", config, defaultConfig, DiscordRPClientConfig::enabled);
+        DISPLAY_GAME_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_game", config, defaultConfig, DiscordRPClientConfig::displayGame);
+        DISPLAY_GAME_TIME_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_game_time", config, defaultConfig, DiscordRPClientConfig::displayGameTime);
+        DISPLAY_GAME_STATE_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_game_state", config, defaultConfig, DiscordRPClientConfig::displayGameState);
+        DISPLAY_QUEUE_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_queue", config, defaultConfig, DiscordRPClientConfig::displayQueue);
     }
 }

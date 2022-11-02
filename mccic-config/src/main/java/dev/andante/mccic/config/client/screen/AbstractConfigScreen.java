@@ -1,5 +1,6 @@
 package dev.andante.mccic.config.client.screen;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import dev.andante.mccic.api.client.toast.CustomToast;
 import dev.andante.mccic.api.client.tracker.GameTracker;
@@ -27,6 +28,7 @@ import net.minecraft.util.TranslatableOption;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -157,46 +159,81 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         return false;
     }
 
-    public static <T extends Enum<T> & TranslatableOption> SimpleOption<T> ofEnum(String modId, String id, Function<Integer, T> fromId, T[] values, T value, T defaultValue) {
-        return ofEnum(modId, id, fromId, values, value, defaultValue, SimpleOption.emptyTooltip(), v -> {});
+    public static <T extends Record, E extends Enum<E> & TranslatableOption> SimpleOption<E> ofEnum(String modId, String id, Function<Integer, E> fromId, E[] values, T config, T defaultConfig, Function<T, E> valueGetter) {
+        return ofEnum(modId, id, fromId, values, config, defaultConfig, valueGetter, SimpleOption.emptyTooltip(), v -> {});
     }
 
-    public static <T extends Enum<T> & TranslatableOption> SimpleOption<T> ofEnum(String modId, String id, Function<Integer, T> fromId, T[] values, T value, T defaultValue, TooltipFactoryGetter<T> tooltipFactory, Consumer<T> changeCallback) {
-        SimpleOption<T> option = new SimpleOption<>(
+    public static <T extends Record, E extends Enum<E> & TranslatableOption> SimpleOption<E> ofEnum(String modId, String id, Function<Integer, E> fromId, E[] values, T config, T defaultConfig, Function<T, E> valueGetter, TooltipFactoryGetter<E> tooltipFactory, Consumer<E> changeCallback) {
+        SimpleOption<E> option = new SimpleOption<>(
             createConfigTranslationKey(modId, id),
             tooltipFactory, SimpleOption.enumValueText(),
             new SimpleOption.PotentialValuesBasedCallbacks<>(
                 Arrays.asList(values),
-                Codec.INT.xmap(fromId, T::ordinal)
-            ), defaultValue, changeCallback
+                Codec.INT.xmap(fromId, E::ordinal)
+            ), valueGetter.apply(defaultConfig), changeCallback
         );
-        option.setValue(value);
+        option.setValue(valueGetter.apply(config));
         return option;
     }
 
-    public static SimpleOption<Boolean> ofBoolean(String modId, String id, boolean value, boolean defaultValue) {
-        return ofBoolean(modId, id, value, defaultValue, SimpleOption.emptyTooltip(), v -> {});
+    public static <T extends Record> SimpleOption<Boolean> ofBoolean(String modId, String id, T config, T defaultConfig, Function<T, Boolean> valueGetter) {
+        return ofBoolean(modId, id, config, defaultConfig, valueGetter, SimpleOption.emptyTooltip(), v -> {});
     }
 
-    public static SimpleOption<Boolean> ofBoolean(String modId, String id, boolean value, boolean defaultValue, TooltipFactoryGetter<Boolean> tooltipFactory) {
-        return ofBoolean(modId, id, value, defaultValue, tooltipFactory, v -> {});
+    public static <T extends Record> SimpleOption<Boolean> ofBoolean(String modId, String id, T config, T defaultConfig, Function<T, Boolean> valueGetter, TooltipFactoryGetter<Boolean> tooltipFactory) {
+        return ofBoolean(modId, id, config, defaultConfig, valueGetter, tooltipFactory, v -> {});
     }
 
-    public static SimpleOption<Boolean> ofBoolean(String modId, String id, boolean value, boolean defaultValue, TooltipFactoryGetter<Boolean> tooltipFactory, Consumer<Boolean> changeCallback) {
-        SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(modId, id), tooltipFactory, defaultValue, changeCallback);
-        option.setValue(value);
+    public static <T extends Record> SimpleOption<Boolean> ofBoolean(String modId, String id, T config, T defaultConfig, Function<T, Boolean> valueGetter, TooltipFactoryGetter<Boolean> tooltipFactory, Consumer<Boolean> changeCallback) {
+        SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(modId, id), tooltipFactory, valueGetter.apply(defaultConfig), changeCallback);
+        option.setValue(valueGetter.apply(config));
         return option;
     }
 
-    public static SimpleOption<Double> ofDouble(String modId, String id, double value, double defaultValue) {
+    public static <T extends Record> SimpleOption<Double> ofDouble(String modId, String id, T config, T defaultConfig, Function<T, Double> valueGetter) {
         SimpleOption<Double> option = new SimpleOption<>(createConfigTranslationKey(modId, id), SimpleOption.emptyTooltip(), (text, val) -> {
             return val == 0.0 ? GameOptions.getGenericValueText(text, ScreenTexts.OFF) : GameOptionsInvoker.invokeGetPercentValueText(text, val);
-        }, SimpleOption.DoubleSliderCallbacks.INSTANCE, defaultValue, val -> {});
-        option.setValue(value);
+        }, SimpleOption.DoubleSliderCallbacks.INSTANCE, valueGetter.apply(defaultConfig), val -> {});
+        option.setValue(valueGetter.apply(config));
+        return option;
+    }
+
+    public static <T extends Record> SimpleOption<Float> ofFloat(String modId, String id, T config, T defaultConfig, Function<T, Float> valueGetter) {
+        SimpleOption<Float> option = new SimpleOption<>(createConfigTranslationKey(modId, id), SimpleOption.emptyTooltip(), (text, val) -> {
+            return val == 0.0 ? GameOptions.getGenericValueText(text, ScreenTexts.OFF) : GameOptionsInvoker.invokeGetPercentValueText(text, val);
+        }, FloatSliderCallbacks.INSTANCE, valueGetter.apply(defaultConfig), val -> {});
+        option.setValue(valueGetter.apply(config));
         return option;
     }
 
     public static String createConfigTranslationKey(String modId, String id) {
         return "config.%s.%s".formatted(modId, id);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public enum FloatSliderCallbacks implements SimpleOption.SliderCallbacks<Float> {
+        INSTANCE;
+
+
+        @Override
+        public Optional<Float> validate(Float value) {
+            return value >= 0.0 && value <= 1.0 ? Optional.of(value) : Optional.empty();
+        }
+
+        @Override
+        public double toSliderProgress(Float value) {
+            return value;
+        }
+
+        @Override
+        public Float toValue(double progress) {
+            return (float) progress;
+        }
+
+        @Override
+        public Codec<Float> codec() {
+            return Codec.either(Codec.floatRange(0.0F, 1.0F), Codec.BOOL)
+                        .xmap(either -> either.map(value -> value, value -> value ? 1.0F : 0.0F), Either::left);
+        }
     }
 }

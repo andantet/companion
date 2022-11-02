@@ -4,3 +4,7 @@ version = getSubprojectVersion(project)
 moduleDependencies(project, [
         'mccic-api'
 ])
+
+loom {
+    accessWidenerPath = file("src/main/resources/${archivesBaseName}.accesswidener")
+}

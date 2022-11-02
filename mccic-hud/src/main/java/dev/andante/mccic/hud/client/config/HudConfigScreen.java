@@ -31,7 +31,7 @@ public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
     static {
         HudClientConfig config = HudClientConfig.getConfig();
         HudClientConfig defaultConfig = HudClientConfig.createDefaultConfig();
-        TOP_HUD_OPTION = ofEnum(MCCICHud.MOD_ID, "top_hud", HudMode::byId, HudMode.values(), config.topHud(), defaultConfig.topHud());
-        TIMER_POSITION_OPTION = ofEnum(MCCICHud.MOD_ID, "timer_position", HudPosition::byId, HudPosition.values(), config.timerPosition(), defaultConfig.timerPosition());
+        TOP_HUD_OPTION = ofEnum(MCCICHud.MOD_ID, "top_hud", HudMode::byId, HudMode.values(), config, defaultConfig, HudClientConfig::topHud);
+        TIMER_POSITION_OPTION = ofEnum(MCCICHud.MOD_ID, "timer_position", HudPosition::byId, HudPosition.values(), config, defaultConfig, HudClientConfig::timerPosition);
     }
 }

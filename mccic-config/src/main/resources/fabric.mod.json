@@ -17,5 +17,6 @@
     "client": [ "dev.andante.mccic.config.client.MCCICConfigClientImpl" ],
     "modmenu": [ "dev.andante.mccic.config.client.MCCICConfigModMenuImpl" ]
   },
-  "mixins": [ "mccic-config.mixins.json" ]
+  "mixins": [ "mccic-config.mixins.json" ],
+  "accessWidener": "mccic-config.accesswidener"
 }
