@@ -41,7 +41,12 @@ public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
         MUSIC_VOLUME_AFTER_DEATH_OPTION = ofDouble(MCCICMusic.MOD_ID, "game_music_volume_after_death", config.gameMusicVolumeAfterDeath(), defaultConfig.gameMusicVolumeAfterDeath());
         HITW_SOUND_ON_OTHER_DEATH = ofEnum(MCCICMusic.MOD_ID, "hitw_sound_on_other_death", HITWSoundOnOtherDeath::byId, HITWSoundOnOtherDeath.values(), config.hitwSoundOnOtherDeath(), defaultConfig.hitwSoundOnOtherDeath(),
             SimpleOption.constantTooltip(Text.translatable(AbstractConfigScreen.createConfigTranslationKey(MCCICMusic.MOD_ID, "hitw_sound_on_other_death.tooltip"))),
-            value -> MCCICMusicClientImpl.playHoleInTheWallOtherDeathSound(config, value, MinecraftClient.getInstance(), random, false)
+            value -> {
+                MinecraftClient client = MinecraftClient.getInstance();
+                if (client.currentScreen != null) {
+                    MCCICMusicClientImpl.playHoleInTheWallOtherDeathSound(config, value, client, random, false);
+                }
+            }
         );
     }
 }
