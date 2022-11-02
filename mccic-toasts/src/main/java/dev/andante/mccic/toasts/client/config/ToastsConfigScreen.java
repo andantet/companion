@@ -11,33 +11,38 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class ToastsConfigScreen extends AbstractConfigScreen<ToastsClientConfig> {
-    public static final SimpleOption<Boolean> FRIENDS_OPTION;
-    public static final SimpleOption<Boolean> PARTIES_OPTION;
-    public static final SimpleOption<Boolean> QUESTS_OPTION;
-    public static final SimpleOption<Boolean> ACHIEVEMENTS_OPTION;
-    public static final SimpleOption<Boolean> EVENT_ANNOUNCEMENTS_OPTION;
+    public final SimpleOption<Boolean> friendsOption;
+    public final SimpleOption<Boolean> partiesOption;
+    public final SimpleOption<Boolean> questsOption;
+    public final SimpleOption<Boolean> achievementsOption;
+    public final SimpleOption<Boolean> eventAnnouncementsOption;
 
     public ToastsConfigScreen(Screen parent) {
         super(MCCICToasts.MOD_ID, parent, ToastsClientConfig.CONFIG_HOLDER);
+        this.friendsOption = this.ofBoolean("friends", ToastsClientConfig::friends);
+        this.partiesOption = this.ofBoolean("parties", ToastsClientConfig::parties);
+        this.questsOption = this.ofBoolean("quests", ToastsClientConfig::quests);
+        this.achievementsOption = this.ofBoolean("achievements", ToastsClientConfig::achievements);
+        this.eventAnnouncementsOption = this.ofBoolean("event_announcements", ToastsClientConfig::eventAnnouncements);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(FRIENDS_OPTION, PARTIES_OPTION, QUESTS_OPTION, ACHIEVEMENTS_OPTION, EVENT_ANNOUNCEMENTS_OPTION);
+        return List.of(this.friendsOption, this.partiesOption, this.questsOption, this.achievementsOption, this.eventAnnouncementsOption);
     }
 
     @Override
     public ToastsClientConfig createConfig() {
-        return new ToastsClientConfig(FRIENDS_OPTION.getValue(), PARTIES_OPTION.getValue(), QUESTS_OPTION.getValue(), ACHIEVEMENTS_OPTION.getValue(), EVENT_ANNOUNCEMENTS_OPTION.getValue());
+        return new ToastsClientConfig(this.friendsOption.getValue(), this.partiesOption.getValue(), this.questsOption.getValue(), this.achievementsOption.getValue(), this.eventAnnouncementsOption.getValue());
     }
 
-    static {
-        ToastsClientConfig config = ToastsClientConfig.getConfig();
-        ToastsClientConfig defaultConfig = ToastsClientConfig.createDefaultConfig();
-        FRIENDS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "friends", config, defaultConfig, ToastsClientConfig::friends);
-        PARTIES_OPTION = ofBoolean(MCCICToasts.MOD_ID, "parties", config, defaultConfig, ToastsClientConfig::parties);
-        QUESTS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "quests", config, defaultConfig, ToastsClientConfig::quests);
-        ACHIEVEMENTS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "achievements", config, defaultConfig, ToastsClientConfig::achievements);
-        EVENT_ANNOUNCEMENTS_OPTION = ofBoolean(MCCICToasts.MOD_ID, "event_announcements", config, defaultConfig, ToastsClientConfig::eventAnnouncements);
+    @Override
+    public ToastsClientConfig getConfig() {
+        return ToastsClientConfig.getConfig();
+    }
+
+    @Override
+    public ToastsClientConfig getDefaultConfig() {
+        return ToastsClientConfig.createDefaultConfig();
     }
 }

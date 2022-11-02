@@ -13,37 +13,43 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
-    public static final SimpleOption<ConfirmDisconnectMode> CONFIRM_DISCONNECT_MODE_OPTION;
-    public static final SimpleOption<GlowingMode> GLOWING_MODE_OPTION;
-    public static final SimpleOption<Boolean> EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION;
-    public static final SimpleOption<Boolean> EXTENDED_FRUSTUMS_OPTION;
-    public static final SimpleOption<Boolean> AUTO_HITBOX_SKY_BATTLE_OPTION;
-    public static final SimpleOption<Boolean> AUTO_HITBOX_BATTLE_BOX_OPTION;
+    public final SimpleOption<ConfirmDisconnectMode> confirmDisconnectModeOption;
+    public final SimpleOption<GlowingMode> glowingModeOption;
+    public final SimpleOption<Boolean> emptySlotHighlightsFixOption;
+    public final SimpleOption<Boolean> extendedFrustumsOption;
+    public final SimpleOption<Boolean> autoHitboxSkyBattleOption;
+    public final SimpleOption<Boolean> autoHitboxBattleBoxOption;
 
     public QoLConfigScreen(Screen parent) {
         super(MCCICQoL.MOD_ID, parent, QoLClientConfig.CONFIG_HOLDER);
+
+        this.confirmDisconnectModeOption = this.ofEnum("confirm_disconnect_mode", ConfirmDisconnectMode::byId, ConfirmDisconnectMode.values(), QoLClientConfig::confirmDisconnectMode);
+        this.glowingModeOption = this.ofEnum("glowing_mode", GlowingMode::byId, GlowingMode.values(), QoLClientConfig::glowingMode);
+        this.emptySlotHighlightsFixOption = this.ofBoolean("empty_slot_highlights_fix", QoLClientConfig::emptySlotHighlightsFix);
+        this.extendedFrustumsOption = this.ofBoolean("extended_frustums", QoLClientConfig::extendedFrustums, SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey("extended_frustums.tooltip"))));
+
+        TooltipFactoryGetter<Boolean> autoHitboxTooltip = SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey("auto_hitbox.tooltip")));
+        this.autoHitboxSkyBattleOption = this.ofBoolean("auto_hitbox_sky_battle", QoLClientConfig::autoHitboxSkyBattle, autoHitboxTooltip);
+        this.autoHitboxBattleBoxOption = this.ofBoolean("auto_hitbox_battle_box", QoLClientConfig::autoHitboxBattleBox, autoHitboxTooltip);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(CONFIRM_DISCONNECT_MODE_OPTION, GLOWING_MODE_OPTION, EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION, EXTENDED_FRUSTUMS_OPTION, AUTO_HITBOX_SKY_BATTLE_OPTION, AUTO_HITBOX_BATTLE_BOX_OPTION);
+        return List.of(this.confirmDisconnectModeOption, this.glowingModeOption, this.emptySlotHighlightsFixOption, this.extendedFrustumsOption, this.autoHitboxSkyBattleOption, this.autoHitboxBattleBoxOption);
     }
 
     @Override
     public QoLClientConfig createConfig() {
-        return new QoLClientConfig(CONFIRM_DISCONNECT_MODE_OPTION.getValue(), GLOWING_MODE_OPTION.getValue(), EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION.getValue(), EXTENDED_FRUSTUMS_OPTION.getValue(), AUTO_HITBOX_SKY_BATTLE_OPTION.getValue(), AUTO_HITBOX_BATTLE_BOX_OPTION.getValue());
+        return new QoLClientConfig(this.confirmDisconnectModeOption.getValue(), this.glowingModeOption.getValue(), this.emptySlotHighlightsFixOption.getValue(), this.extendedFrustumsOption.getValue(), this.autoHitboxSkyBattleOption.getValue(), this.autoHitboxBattleBoxOption.getValue());
     }
 
-    static {
-        QoLClientConfig config = QoLClientConfig.getConfig();
-        QoLClientConfig defaultConfig = QoLClientConfig.createDefaultConfig();
-        CONFIRM_DISCONNECT_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "confirm_disconnect_mode", ConfirmDisconnectMode::byId, ConfirmDisconnectMode.values(), config, defaultConfig, QoLClientConfig::confirmDisconnectMode);
-        GLOWING_MODE_OPTION = ofEnum(MCCICQoL.MOD_ID, "glowing_mode", GlowingMode::byId, GlowingMode.values(), config, defaultConfig, QoLClientConfig::glowingMode);
-        EMPTY_SLOT_HIGHLIGHTS_FIX_OPTION = ofBoolean(MCCICQoL.MOD_ID, "empty_slot_highlights_fix", config, defaultConfig, QoLClientConfig::emptySlotHighlightsFix);
-        EXTENDED_FRUSTUMS_OPTION = ofBoolean(MCCICQoL.MOD_ID, "extended_frustums", config, defaultConfig, QoLClientConfig::extendedFrustums, SimpleOption.constantTooltip(Text.translatable(AbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "extended_frustums.tooltip"))));
+    @Override
+    public QoLClientConfig getConfig() {
+        return QoLClientConfig.getConfig();
+    }
 
-        TooltipFactoryGetter<Boolean> autoHitboxTooltip = SimpleOption.constantTooltip(Text.translatable(AbstractConfigScreen.createConfigTranslationKey(MCCICQoL.MOD_ID, "auto_hitbox.tooltip")));
-        AUTO_HITBOX_SKY_BATTLE_OPTION = ofBoolean(MCCICQoL.MOD_ID, "auto_hitbox_sky_battle", config, defaultConfig, QoLClientConfig::autoHitboxSkyBattle, autoHitboxTooltip);
-        AUTO_HITBOX_BATTLE_BOX_OPTION = ofBoolean(MCCICQoL.MOD_ID, "auto_hitbox_battle_box", config, defaultConfig, QoLClientConfig::autoHitboxBattleBox, autoHitboxTooltip);
+    @Override
+    public QoLClientConfig getDefaultConfig() {
+        return QoLClientConfig.createDefaultConfig();
     }
 }

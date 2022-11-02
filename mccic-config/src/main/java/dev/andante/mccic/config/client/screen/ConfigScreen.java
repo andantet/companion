@@ -38,6 +38,16 @@ public class ConfigScreen extends AbstractConfigScreen<Record> {
     }
 
     @Override
+    public Record getConfig() {
+        return null;
+    }
+
+    @Override
+    public Record getDefaultConfig() {
+        return null;
+    }
+
+    @Override
     protected void reloadConfig() {
         ClientConfigRegistry.INSTANCE.forEach(ConfigHolder::load);
     }

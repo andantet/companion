@@ -25,13 +25,13 @@ public enum ConfirmDisconnectMode implements EnumOption {
     }
 
     @Override
-    public String getModId() {
-        return MCCICQoL.MOD_ID;
+    public int getId() {
+        return this.ordinal();
     }
 
     @Override
-    public int getId() {
-        return this.ordinal();
+    public String getModId() {
+        return MCCICQoL.MOD_ID;
     }
 
     public static ConfirmDisconnectMode byId(int ordinal) {

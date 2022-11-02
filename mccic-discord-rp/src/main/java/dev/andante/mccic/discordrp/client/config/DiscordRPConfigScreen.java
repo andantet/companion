@@ -11,34 +11,39 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class DiscordRPConfigScreen extends AbstractConfigScreen<DiscordRPClientConfig> {
-    public static final SimpleOption<Boolean> ENABLED_OPTION;
-    public static final SimpleOption<Boolean> DISPLAY_GAME_OPTION;
-    public static final SimpleOption<Boolean> DISPLAY_GAME_TIME_OPTION;
-    public static final SimpleOption<Boolean> DISPLAY_GAME_STATE_OPTION;
-    public static final SimpleOption<Boolean> DISPLAY_QUEUE_OPTION;
+    public final SimpleOption<Boolean> enabledOption;
+    public final SimpleOption<Boolean> displayGameOption;
+    public final SimpleOption<Boolean> displayGameTimeOption;
+    public final SimpleOption<Boolean> displayGameStateOption;
+    public final SimpleOption<Boolean> displayQueueOption;
 
     public DiscordRPConfigScreen(Screen parent) {
         super(MCCICDiscordRP.MOD_ID, parent, DiscordRPClientConfig.CONFIG_HOLDER);
+        this.enabledOption = this.ofBoolean("enabled", DiscordRPClientConfig::enabled);
+        this.displayGameOption = this.ofBoolean("display_game", DiscordRPClientConfig::displayGame);
+        this.displayGameTimeOption = this.ofBoolean("display_game_time", DiscordRPClientConfig::displayGameTime);
+        this.displayGameStateOption = this.ofBoolean("display_game_state", DiscordRPClientConfig::displayGameState);
+        this.displayQueueOption = this.ofBoolean("display_queue", DiscordRPClientConfig::displayQueue);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(ENABLED_OPTION, DISPLAY_GAME_OPTION, DISPLAY_GAME_TIME_OPTION, DISPLAY_GAME_STATE_OPTION, DISPLAY_QUEUE_OPTION);
+        return List.of(this.enabledOption, this.displayGameOption, this.displayGameTimeOption, this.displayGameStateOption, this.displayQueueOption);
     }
 
     @Override
     public DiscordRPClientConfig createConfig() {
         DiscordRPClientConfig defaultConfig = DiscordRPClientConfig.createDefaultConfig();
-        return new DiscordRPClientConfig(defaultConfig.clientId(), ENABLED_OPTION.getValue(), DISPLAY_GAME_OPTION.getValue(), DISPLAY_GAME_TIME_OPTION.getValue(), DISPLAY_GAME_STATE_OPTION.getValue(), DISPLAY_QUEUE_OPTION.getValue());
+        return new DiscordRPClientConfig(defaultConfig.clientId(), this.enabledOption.getValue(), this.displayGameOption.getValue(), this.displayGameTimeOption.getValue(), this.displayGameStateOption.getValue(), this.displayQueueOption.getValue());
     }
 
-    static {
-        DiscordRPClientConfig config = DiscordRPClientConfig.getConfig();
-        DiscordRPClientConfig defaultConfig = DiscordRPClientConfig.createDefaultConfig();
-        ENABLED_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "enabled", config, defaultConfig, DiscordRPClientConfig::enabled);
-        DISPLAY_GAME_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_game", config, defaultConfig, DiscordRPClientConfig::displayGame);
-        DISPLAY_GAME_TIME_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_game_time", config, defaultConfig, DiscordRPClientConfig::displayGameTime);
-        DISPLAY_GAME_STATE_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_game_state", config, defaultConfig, DiscordRPClientConfig::displayGameState);
-        DISPLAY_QUEUE_OPTION = ofBoolean(MCCICDiscordRP.MOD_ID, "display_queue", config, defaultConfig, DiscordRPClientConfig::displayQueue);
+    @Override
+    public DiscordRPClientConfig getConfig() {
+        return DiscordRPClientConfig.getConfig();
+    }
+
+    @Override
+    public DiscordRPClientConfig getDefaultConfig() {
+        return DiscordRPClientConfig.createDefaultConfig();
     }
 }

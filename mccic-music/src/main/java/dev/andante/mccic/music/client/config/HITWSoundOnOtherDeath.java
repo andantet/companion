@@ -52,13 +52,13 @@ public enum HITWSoundOnOtherDeath implements EnumOption {
     }
 
     @Override
-    public String getModId() {
-        return MCCICMusic.MOD_ID;
+    public int getId() {
+        return this.ordinal();
     }
 
     @Override
-    public int getId() {
-        return this.ordinal();
+    public String getModId() {
+        return MCCICMusic.MOD_ID;
     }
 
     public static HITWSoundOnOtherDeath byId(int ordinal) {

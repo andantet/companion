@@ -27,13 +27,13 @@ public enum HudPosition implements EnumOption {
     }
 
     @Override
-    public String getModId() {
-        return MCCICHud.MOD_ID;
+    public int getId() {
+        return this.ordinal();
     }
 
     @Override
-    public int getId() {
-        return this.ordinal();
+    public String getModId() {
+        return MCCICHud.MOD_ID;
     }
 
     public static HudPosition byId(int ordinal) {

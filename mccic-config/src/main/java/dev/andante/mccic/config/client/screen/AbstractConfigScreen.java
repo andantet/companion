@@ -47,6 +47,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     public static final int SQUARE_BUTTON_SIZE = 20;
 
     protected final Screen parent;
+    private final String modId;
     protected final boolean hasConfiguration;
     protected final ConfigHolder<T> configHolder;
 
@@ -55,6 +56,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     public AbstractConfigScreen(Text title, Screen parent) {
         super(title);
         this.parent = parent;
+        this.modId = null;
         this.hasConfiguration = false;
         this.configHolder = null;
     }
@@ -62,6 +64,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     public AbstractConfigScreen(String modId, Screen parent, ConfigHolder<T> configHolder) {
         super(Text.translatable("ui.%s.config".formatted(modId)));
         this.parent = parent;
+        this.modId = modId;
         this.hasConfiguration = true;
         this.configHolder = configHolder;
     }
@@ -154,56 +157,63 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
 
     public abstract T createConfig();
 
+    public abstract T getConfig();
+    public abstract T getDefaultConfig();
+
     @Override
     public boolean shouldPause() {
         return false;
     }
 
-    public static <T extends Record, E extends Enum<E> & TranslatableOption> SimpleOption<E> ofEnum(String modId, String id, Function<Integer, E> fromId, E[] values, T config, T defaultConfig, Function<T, E> valueGetter) {
-        return ofEnum(modId, id, fromId, values, config, defaultConfig, valueGetter, SimpleOption.emptyTooltip(), v -> {});
+    public <E extends Enum<E> & TranslatableOption> SimpleOption<E> ofEnum(String id, Function<Integer, E> fromId, E[] values, Function<T, E> valueGetter) {
+        return this.ofEnum(id, fromId, values, valueGetter, SimpleOption.emptyTooltip(), v -> {});
     }
 
-    public static <T extends Record, E extends Enum<E> & TranslatableOption> SimpleOption<E> ofEnum(String modId, String id, Function<Integer, E> fromId, E[] values, T config, T defaultConfig, Function<T, E> valueGetter, TooltipFactoryGetter<E> tooltipFactory, Consumer<E> changeCallback) {
+    public <E extends Enum<E> & TranslatableOption> SimpleOption<E> ofEnum(String id, Function<Integer, E> fromId, E[] values, Function<T, E> valueGetter, TooltipFactoryGetter<E> tooltipFactory, Consumer<E> changeCallback) {
         SimpleOption<E> option = new SimpleOption<>(
-            createConfigTranslationKey(modId, id),
+            createConfigTranslationKey(id),
             tooltipFactory, SimpleOption.enumValueText(),
             new SimpleOption.PotentialValuesBasedCallbacks<>(
                 Arrays.asList(values),
                 Codec.INT.xmap(fromId, E::ordinal)
-            ), valueGetter.apply(defaultConfig), changeCallback
+            ), valueGetter.apply(this.getDefaultConfig()), changeCallback
         );
-        option.setValue(valueGetter.apply(config));
+        option.setValue(valueGetter.apply(this.getConfig()));
         return option;
     }
 
-    public static <T extends Record> SimpleOption<Boolean> ofBoolean(String modId, String id, T config, T defaultConfig, Function<T, Boolean> valueGetter) {
-        return ofBoolean(modId, id, config, defaultConfig, valueGetter, SimpleOption.emptyTooltip(), v -> {});
+    public SimpleOption<Boolean> ofBoolean(String id, Function<T, Boolean> valueGetter) {
+        return this.ofBoolean(id, valueGetter, SimpleOption.emptyTooltip(), v -> {});
     }
 
-    public static <T extends Record> SimpleOption<Boolean> ofBoolean(String modId, String id, T config, T defaultConfig, Function<T, Boolean> valueGetter, TooltipFactoryGetter<Boolean> tooltipFactory) {
-        return ofBoolean(modId, id, config, defaultConfig, valueGetter, tooltipFactory, v -> {});
+    public SimpleOption<Boolean> ofBoolean(String id, Function<T, Boolean> valueGetter, TooltipFactoryGetter<Boolean> tooltipFactory) {
+        return this.ofBoolean(id, valueGetter, tooltipFactory, v -> {});
     }
 
-    public static <T extends Record> SimpleOption<Boolean> ofBoolean(String modId, String id, T config, T defaultConfig, Function<T, Boolean> valueGetter, TooltipFactoryGetter<Boolean> tooltipFactory, Consumer<Boolean> changeCallback) {
-        SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(modId, id), tooltipFactory, valueGetter.apply(defaultConfig), changeCallback);
-        option.setValue(valueGetter.apply(config));
+    public SimpleOption<Boolean> ofBoolean(String id, Function<T, Boolean> valueGetter, TooltipFactoryGetter<Boolean> tooltipFactory, Consumer<Boolean> changeCallback) {
+        SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(id), tooltipFactory, valueGetter.apply(this.getDefaultConfig()), changeCallback);
+        option.setValue(valueGetter.apply(this.getConfig()));
         return option;
     }
 
-    public static <T extends Record> SimpleOption<Double> ofDouble(String modId, String id, T config, T defaultConfig, Function<T, Double> valueGetter) {
-        SimpleOption<Double> option = new SimpleOption<>(createConfigTranslationKey(modId, id), SimpleOption.emptyTooltip(), (text, val) -> {
+    public SimpleOption<Double> ofDouble(String id, Function<T, Double> valueGetter) {
+        SimpleOption<Double> option = new SimpleOption<>(createConfigTranslationKey(id), SimpleOption.emptyTooltip(), (text, val) -> {
             return val == 0.0 ? GameOptions.getGenericValueText(text, ScreenTexts.OFF) : GameOptionsInvoker.invokeGetPercentValueText(text, val);
-        }, SimpleOption.DoubleSliderCallbacks.INSTANCE, valueGetter.apply(defaultConfig), val -> {});
-        option.setValue(valueGetter.apply(config));
+        }, SimpleOption.DoubleSliderCallbacks.INSTANCE, valueGetter.apply(this.getDefaultConfig()), val -> {});
+        option.setValue(valueGetter.apply(this.getConfig()));
         return option;
     }
 
-    public static <T extends Record> SimpleOption<Float> ofFloat(String modId, String id, T config, T defaultConfig, Function<T, Float> valueGetter) {
-        SimpleOption<Float> option = new SimpleOption<>(createConfigTranslationKey(modId, id), SimpleOption.emptyTooltip(), (text, val) -> {
+    public SimpleOption<Float> ofFloat(String id, Function<T, Float> valueGetter) {
+        SimpleOption<Float> option = new SimpleOption<>(createConfigTranslationKey(id), SimpleOption.emptyTooltip(), (text, val) -> {
             return val == 0.0 ? GameOptions.getGenericValueText(text, ScreenTexts.OFF) : GameOptionsInvoker.invokeGetPercentValueText(text, val);
-        }, FloatSliderCallbacks.INSTANCE, valueGetter.apply(defaultConfig), val -> {});
-        option.setValue(valueGetter.apply(config));
+        }, FloatSliderCallbacks.INSTANCE, valueGetter.apply(this.getDefaultConfig()), val -> {});
+        option.setValue(valueGetter.apply(this.getConfig()));
         return option;
+    }
+
+    public String createConfigTranslationKey(String id) {
+        return createConfigTranslationKey(this.modId, id);
     }
 
     public static String createConfigTranslationKey(String modId, String id) {

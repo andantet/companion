@@ -11,29 +11,34 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class DebugConfigScreen extends AbstractConfigScreen<DebugClientConfig> {
-    public static final SimpleOption<Boolean> DEBUG_HUD_OPTION;
-    public static final SimpleOption<Boolean> CHAT_ALL_SOUNDS_OPTION;
-    public static final SimpleOption<Boolean> RAW_CHAT_OPTION;
+    public final SimpleOption<Boolean> debugHudOption;
+    public final SimpleOption<Boolean> chatAllSoundsOption;
+    public final SimpleOption<Boolean> rawChatOption;
 
     public DebugConfigScreen(Screen parent) {
         super(MCCICDebug.MOD_ID, parent, DebugClientConfig.CONFIG_HOLDER);
+        this.debugHudOption = this.ofBoolean("debug_hud", DebugClientConfig::debugHud);
+        this.chatAllSoundsOption = this.ofBoolean("chat_all_sounds", DebugClientConfig::chatAllSounds);
+        this.rawChatOption = this.ofBoolean("raw_chat", DebugClientConfig::rawChat);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(DEBUG_HUD_OPTION, CHAT_ALL_SOUNDS_OPTION, RAW_CHAT_OPTION);
+        return List.of(this.debugHudOption, this.chatAllSoundsOption, this.rawChatOption);
     }
 
     @Override
     public DebugClientConfig createConfig() {
-        return new DebugClientConfig(DEBUG_HUD_OPTION.getValue(), CHAT_ALL_SOUNDS_OPTION.getValue(), RAW_CHAT_OPTION.getValue());
+        return new DebugClientConfig(this.debugHudOption.getValue(), this.chatAllSoundsOption.getValue(), this.rawChatOption.getValue());
     }
 
-    static {
-        DebugClientConfig config = DebugClientConfig.getConfig();
-        DebugClientConfig defaultConfig = DebugClientConfig.createDefaultConfig();
-        DEBUG_HUD_OPTION = ofBoolean(MCCICDebug.MOD_ID, "debug_hud", config, defaultConfig, DebugClientConfig::debugHud);
-        CHAT_ALL_SOUNDS_OPTION = ofBoolean(MCCICDebug.MOD_ID, "chat_all_sounds", config, defaultConfig, DebugClientConfig::chatAllSounds);
-        RAW_CHAT_OPTION = ofBoolean(MCCICDebug.MOD_ID, "raw_chat", config, defaultConfig, DebugClientConfig::rawChat);
+    @Override
+    public DebugClientConfig getConfig() {
+        return DebugClientConfig.getConfig();
+    }
+
+    @Override
+    public DebugClientConfig getDefaultConfig() {
+        return DebugClientConfig.createDefaultConfig();
     }
 }
