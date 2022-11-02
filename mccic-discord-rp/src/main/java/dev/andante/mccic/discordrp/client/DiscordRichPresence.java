@@ -113,10 +113,7 @@ public class DiscordRichPresence {
             }
 
             builder.setStartTimestamp(null);
-
-            if (config.displayGameTime()) {
-                setEndTimestampIfPresent(queueTracker.getTime().orElse(-1), builder);
-            }
+            setEndTimestampIfPresent(queueTracker.getTime().orElse(-1), builder);
         } else {
             GameTracker gameTracker = GameTracker.INSTANCE;
             Optional<Game> maybeGame = gameTracker.getGame();
@@ -127,7 +124,9 @@ public class DiscordRichPresence {
                 GameState state = gameTracker.getGameState();
                 builder.setState(config.displayGameState() ? I18n.translate("text.%s.state.%s".formatted(MCCICDiscordRP.MOD_ID, state.name().toLowerCase(Locale.ROOT))) : null);
                 builder.setSmallImage(getIconForGame(game), displayName);
-                setEndTimestampIfPresent(gameTracker.getTime().orElse(-1), builder);
+                if (config.displayGameTime()) {
+                    setEndTimestampIfPresent(gameTracker.getTime().orElse(-1), builder);
+                }
             }
         }
 
