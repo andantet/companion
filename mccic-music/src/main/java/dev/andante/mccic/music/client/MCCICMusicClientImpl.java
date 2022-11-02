@@ -17,9 +17,12 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.random.Random;
 
 @Environment(EnvType.CLIENT)
 public final class MCCICMusicClientImpl implements MCCICMusic, ClientModInitializer {
@@ -33,27 +36,28 @@ public final class MCCICMusicClientImpl implements MCCICMusic, ClientModInitiali
     }
 
     public EventResult onChatMessage(MCCIChatEvent.Context context) {
-        MusicClientConfig config = MusicClientConfig.getConfig();
-        HITWSoundOnOtherDeath deathSoundConfig = config.hitwSoundOnOtherDeath();
-        Identifier[] sounds = deathSoundConfig.getSounds();
-        if (sounds.length > 0) {
-            GameTracker gameTracker = GameTracker.INSTANCE;
-            if (gameTracker.getGame().orElse(null) == Game.HOLE_IN_THE_WALL) {
-                boolean isActive = gameTracker.getGameState() == GameState.ACTIVE;
-                if (!deathSoundConfig.isScore() || isActive) {
-                    MinecraftClient client = MinecraftClient.getInstance();
-                    PlayerEntity player = client.player;
-                    if (UnicodeIconsStore.textContainsIcon(context.message(), Icon.DEATH) && !context.getRaw().contains(player.getEntityName())) {
-                        float volume = isActive ? config.gameMusicVolumeAfterDeath() : config.gameMusicVolume();
-                        float pitch = (deathSoundConfig.hasRandomPitch() ? player.getRandom().nextFloat() * 0.17F : 0.0F) + 1.0F;
-                        for (Identifier sound : sounds) {
-                            player.playSound(new SoundEvent(sound), volume, pitch);
-                        }
-                    }
+        GameTracker gameTracker = GameTracker.INSTANCE;
+        if (gameTracker.getGame().orElse(null) == Game.HOLE_IN_THE_WALL) {
+            MusicClientConfig config = MusicClientConfig.getConfig();
+            HITWSoundOnOtherDeath deathSoundConfig = config.hitwSoundOnOtherDeath();
+            boolean isActive = gameTracker.getGameState() == GameState.ACTIVE;
+            if (!deathSoundConfig.isScore() || isActive) {
+                MinecraftClient client = MinecraftClient.getInstance();
+                PlayerEntity player = client.player;
+                if (UnicodeIconsStore.textContainsIcon(context.message(), Icon.DEATH) && !context.getRaw().contains(player.getEntityName())) {
+                    playHoleInTheWallOtherDeathSound(config, deathSoundConfig, client, player.getRandom(), !isActive);
                 }
             }
         }
 
         return EventResult.pass();
+    }
+
+    public static void playHoleInTheWallOtherDeathSound(MusicClientConfig config, HITWSoundOnOtherDeath deathSoundConfig, MinecraftClient client, Random random, boolean deathVolume) {
+        float volume = deathVolume ? config.gameMusicVolume() : config.gameMusicVolumeAfterDeath();
+        float pitch = (deathSoundConfig.hasRandomPitch() ? random.nextFloat() * 0.17F : 0.0F) + 1.0F;
+        for (Identifier sound : deathSoundConfig.getSounds()) {
+            client.getSoundManager().play(new PositionedSoundInstance(sound, SoundCategory.MASTER, volume, pitch, random, false, 0, SoundInstance.AttenuationType.NONE, 0.0, 0.0, 0.0, true));
+        }
     }
 }

@@ -12,8 +12,8 @@ public enum HITWSoundOnOtherDeath implements EnumOption {
     OFF,
     TEAM_ELIMINATED(MCCICSounds.TEAM_ELIMINATED),
     EARLY_ELIMINATION(MCCICSounds.EARLY_ELIMINATION),
-    SCORE(true, true, MCCICSounds.SCORE_ACQUIRED, MCCICSounds.SCORE_BIG_COINS),
-    SCORE_ACQUIRED(true, true, MCCICSounds.SCORE_ACQUIRED),
+    SCORE(true, false, MCCICSounds.SCORE_ACQUIRED, MCCICSounds.SCORE_BIG_COINS),
+    SCORE_ACQUIRED(true, false, MCCICSounds.SCORE_ACQUIRED),
     SCORE_BIG_COINS(true, true, MCCICSounds.SCORE_BIG_COINS);
 
     private final Identifier[] sounds;

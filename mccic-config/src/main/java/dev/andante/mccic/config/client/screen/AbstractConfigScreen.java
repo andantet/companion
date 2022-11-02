@@ -11,11 +11,13 @@ import dev.andante.mccic.config.mixin.client.GameOptionsInvoker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.option.VideoOptionsScreen;
 import net.minecraft.client.gui.widget.ButtonListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
+import net.minecraft.client.option.SimpleOption.TooltipFactoryGetter;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
@@ -25,6 +27,7 @@ import net.minecraft.util.TranslatableOption;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
@@ -127,6 +130,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         // options
         if (!this.list.children().isEmpty()) {
             this.list.render(matrices, mouseX, mouseY, delta);
+            this.renderOrderedTooltip(matrices, VideoOptionsScreen.getHoveredButtonTooltip(this.list, mouseX, mouseY), mouseX, mouseY);
         }
     }
 
@@ -154,20 +158,28 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     }
 
     public static <T extends Enum<T> & TranslatableOption> SimpleOption<T> ofEnum(String modId, String id, Function<Integer, T> fromId, T[] values, T value, T defaultValue) {
+        return ofEnum(modId, id, fromId, values, value, defaultValue, SimpleOption.emptyTooltip(), v -> {});
+    }
+
+    public static <T extends Enum<T> & TranslatableOption> SimpleOption<T> ofEnum(String modId, String id, Function<Integer, T> fromId, T[] values, T value, T defaultValue, TooltipFactoryGetter<T> tooltipFactory, Consumer<T> changeCallback) {
         SimpleOption<T> option = new SimpleOption<>(
             createConfigTranslationKey(modId, id),
-            SimpleOption.emptyTooltip(), SimpleOption.enumValueText(),
+            tooltipFactory, SimpleOption.enumValueText(),
             new SimpleOption.PotentialValuesBasedCallbacks<>(
                 Arrays.asList(values),
                 Codec.INT.xmap(fromId, T::ordinal)
-            ), defaultValue, val -> {}
+            ), defaultValue, changeCallback
         );
         option.setValue(value);
         return option;
     }
 
     public static SimpleOption<Boolean> ofBoolean(String modId, String id, boolean value, boolean defaultValue) {
-        SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(modId, id), SimpleOption.emptyTooltip(), defaultValue);
+        return ofBoolean(modId, id, value, defaultValue, SimpleOption.emptyTooltip(), v -> {});
+    }
+
+    public static SimpleOption<Boolean> ofBoolean(String modId, String id, boolean value, boolean defaultValue, TooltipFactoryGetter<Boolean> tooltipFactory, Consumer<Boolean> changeCallback) {
+        SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(modId, id), tooltipFactory, defaultValue, changeCallback);
         option.setValue(value);
         return option;
     }
