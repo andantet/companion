@@ -8,7 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum QueueType {
-    NONE,
+    NONE(null, null),
     QUICKPLAY(null, "Quickplay"),
     CASUAL("CASUAL", "Casual");
 
@@ -22,10 +22,6 @@ public enum QueueType {
     QueueType(String name, String displayName) {
         this.name = name;
         this.displayName = displayName;
-    }
-
-    QueueType() {
-        this(null, null);
     }
 
     @Nullable
