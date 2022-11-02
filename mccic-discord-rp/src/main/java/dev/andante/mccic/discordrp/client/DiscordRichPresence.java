@@ -13,6 +13,7 @@ import dev.andante.mccic.api.client.tracker.QueueType;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.discordrp.MCCICDiscordRP;
+import dev.andante.mccic.discordrp.client.config.DiscordRPClientConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.language.I18n;
@@ -30,6 +31,7 @@ public class DiscordRichPresence {
     public static final String QUEUE_TEXT = "text.%s.queue".formatted(MCCICDiscordRP.MOD_ID);
     public static final String QUEUE_QUICKPLAY_TEXT = "%s.quickplay".formatted(QUEUE_TEXT);
     public static final String IDLE_TEXT = "text.%s.idle".formatted(MCCICDiscordRP.MOD_ID);
+    public static final String GAME_TEXT = "text.%s.game_display".formatted(MCCICDiscordRP.MOD_ID);
     public static final String LARGE_IMAGE_TEXT = "text.%s.large_image_text".formatted(MCCICDiscordRP.MOD_ID);
 
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -92,32 +94,38 @@ public class DiscordRichPresence {
                                                                  .setState(I18n.translate(IDLE_TEXT))
                                                                  .setStartTimestamp(this.initialTime);
 
+        DiscordRPClientConfig config = DiscordRPClientConfig.getConfig();
+        boolean displayGame = config.displayGame();
+
         QueueTracker queueTracker = QueueTracker.INSTANCE;
         QueueType queueType = queueTracker.getQueueType();
-        if (queueType != QueueType.NONE) {
+        if (queueType != QueueType.NONE && config.displayQueue()) {
             builder.setDetails(I18n.translate(QUEUE_TEXT));
 
             Optional<Game> maybeGame = queueTracker.getGame();
             if (maybeGame.isPresent()) {
                 Game game = maybeGame.get();
-                builder.setState(game.getDisplayName());
-                builder.setSmallImage(getIconForGame(game));
+                builder.setState(displayGame ? I18n.translate(GAME_TEXT, game.getDisplayName(), queueType.getDisplayName()) : queueType.getDisplayName());
+                builder.setSmallImage(displayGame ? getIconForGame(game) : null);
             } else {
                 builder.setState(I18n.translate(QUEUE_QUICKPLAY_TEXT));
                 builder.setSmallImage("shuffle");
             }
 
             builder.setStartTimestamp(null);
-            setEndTimestampIfPresent(queueTracker.getTime().orElse(-1), builder);
+
+            if (config.displayGameTime()) {
+                setEndTimestampIfPresent(queueTracker.getTime().orElse(-1), builder);
+            }
         } else {
             GameTracker gameTracker = GameTracker.INSTANCE;
             Optional<Game> maybeGame = gameTracker.getGame();
-            if (maybeGame.isPresent()) {
+            if (maybeGame.isPresent() && config.displayGame()) {
                 Game game = maybeGame.get();
                 String displayName = game.getDisplayName();
                 builder.setDetails(displayName);
                 GameState state = gameTracker.getGameState();
-                builder.setState(I18n.translate("text.%s.state.%s".formatted(MCCICDiscordRP.MOD_ID, state.name().toLowerCase(Locale.ROOT))));
+                builder.setState(config.displayGameState() ? I18n.translate("text.%s.state.%s".formatted(MCCICDiscordRP.MOD_ID, state.name().toLowerCase(Locale.ROOT))) : null);
                 builder.setSmallImage(getIconForGame(game), displayName);
                 setEndTimestampIfPresent(gameTracker.getTime().orElse(-1), builder);
             }

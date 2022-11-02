@@ -1,6 +1,7 @@
 {
   "ui.mccic-discord-rp.config": "MCCI: Companion Config - Discord Rich Presence",
   "text.mccic-discord-rp.large_image_text": "MCCI: Companion",
+  "text.mccic-discord-rp.game_display": "%s (%s)",
   "text.mccic-discord-rp.idle": "Chilling on the island",
   "text.mccic-discord-rp.queue": "In the queue...",
   "text.mccic-discord-rp.queue.quickplay": "Quickplay",
@@ -11,5 +12,9 @@
   "text.mccic-discord-rp.state.post_game": "Game Over!",
   "text.mccic-discord-rp.state.none": "Loading",
 
-  "config.mccic-discord-rp.enabled": "Enabled"
+  "config.mccic-discord-rp.enabled": "Enabled",
+  "config.mccic-discord-rp.display_game": "Display Active Game",
+  "config.mccic-discord-rp.display_game_time": "Display Game Time",
+  "config.mccic-discord-rp.display_game_state": "Display Game State",
+  "config.mccic-discord-rp.display_queue": "Display Queue Status"
 }
