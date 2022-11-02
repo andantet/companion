@@ -178,6 +178,10 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         return ofBoolean(modId, id, value, defaultValue, SimpleOption.emptyTooltip(), v -> {});
     }
 
+    public static SimpleOption<Boolean> ofBoolean(String modId, String id, boolean value, boolean defaultValue, TooltipFactoryGetter<Boolean> tooltipFactory) {
+        return ofBoolean(modId, id, value, defaultValue, tooltipFactory, v -> {});
+    }
+
     public static SimpleOption<Boolean> ofBoolean(String modId, String id, boolean value, boolean defaultValue, TooltipFactoryGetter<Boolean> tooltipFactory, Consumer<Boolean> changeCallback) {
         SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(modId, id), tooltipFactory, defaultValue, changeCallback);
         option.setValue(value);

@@ -13,6 +13,8 @@
   "config.mccic-qol.glowing_mode.no_shader": "No Shader",
   "config.mccic-qol.empty_slot_highlights_fix": "Empty Slot Highlights Fix",
   "config.mccic-qol.extended_frustums": "Extended Frustums",
+  "config.mccic-qol.extended_frustums.tooltip": "Extends the visibility bounding box on Armor Stands, Item Frames, and Paintings to fix model culling issues.",
   "config.mccic-qol.auto_hitbox_sky_battle": "Auto-Hitbox (Sky Battle)",
-  "config.mccic-qol.auto_hitbox_battle_box": "Auto-Hitbox (Battle Box)"
+  "config.mccic-qol.auto_hitbox_battle_box": "Auto-Hitbox (Battle Box)",
+  "config.mccic-qol.auto_hitbox.tooltip": "Automatically enables hitboxes in this game."
 }
