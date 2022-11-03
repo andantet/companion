@@ -5,6 +5,12 @@
   "config.mccic-hud.hud_mode.custom": "Custom",
   "config.mccic-hud.hud_position.top": "Top",
   "config.mccic-hud.hud_position.left": "Left",
-  "config.mccic-hud.top_hud": "Top HUD",
-  "config.mccic-hud.timer_position": "Custom Timer Position"
+  "config.mccic-hud.hud_position.disabled": "Disabled",
+  "config.mccic-hud.enabled": "Custom HUD",
+  "config.mccic-hud.timer_position": "Timer Position",
+  "config.mccic-hud.queue_position": "Queue Position",
+  "text.mccic-hud.hud.time": "TELEPORTING %s IN %s!",
+  "text.mccic-hud.hud.time.in_queue": "IN QUEUE",
+  "text.mccic-hud.hud.time.player_count": "(%s/%s)",
+  "text.mccic-hud.hud.time.teleported": "TELEPORTED!"
 }

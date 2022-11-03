@@ -14,7 +14,12 @@ import java.util.Locale;
 @Environment(EnvType.CLIENT)
 public enum HudPosition implements EnumOption {
     TOP,
-    LEFT;
+    LEFT,
+    DISABLED;
+
+    public boolean isEnabled() {
+        return this != DISABLED;
+    }
 
     @Override
     public String getEnumIdentifier() {

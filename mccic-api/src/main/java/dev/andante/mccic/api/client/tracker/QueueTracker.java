@@ -101,17 +101,17 @@ public class QueueTracker {
         });
 
         // infer the countdown
-        TextQuery.findText(text, " IN ([0-9]+)!").ifPresentOrElse(query -> {
+        TextQuery.findText(text, TIME_REGEX).ifPresentOrElse(query -> {
             Text result = query.getResult();
             String raw = result.getString();
-            Matcher matcher = Pattern.compile(" IN ([0-9]+)!").matcher(raw);
+            Matcher matcher = Pattern.compile(TIME_REGEX).matcher(raw);
             if (matcher.matches()) {
                 this.time = Integer.parseInt(matcher.group(1));
             } else {
                 this.time = -1;
             }
         }, () -> {
-            Optional<TextQuery> query = TextQuery.findText(text, "TELEPORTED");
+            Optional<TextQuery> query = TextQuery.findText(text, "TELEPORTED!");
             this.time = query.isPresent() ? 0 : -1;
         });
     }

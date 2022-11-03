@@ -10,7 +10,7 @@ public final class ConfigHolder<T extends Record> {
     private final String module;
     private final Codec<T> codec;
     private final T defaultConfig;
-    private final List<Consumer<ConfigHolder<T>>> listeners;
+    private final List<Consumer<ConfigHolder<T>>> loadListeners, saveListeners;
 
     private T config;
 
@@ -18,7 +18,8 @@ public final class ConfigHolder<T extends Record> {
         this.module = module;
         this.codec = codec;
         this.config = this.defaultConfig = defaultConfig;
-        this.listeners = new ArrayList<>();
+        this.loadListeners = new ArrayList<>();
+        this.saveListeners = new ArrayList<>();
     }
 
     public T get() {
@@ -41,18 +42,32 @@ public final class ConfigHolder<T extends Record> {
         return this.defaultConfig;
     }
 
+    public ConfigHolder<T> registerSaveListener(Consumer<ConfigHolder<T>> action) {
+        this.saveListeners.add(action);
+        return this;
+    }
+
     public ConfigHolder<T> registerLoadListener(Consumer<ConfigHolder<T>> action) {
-        this.listeners.add(action);
+        this.loadListeners.add(action);
         return this;
     }
 
     public void load() {
         ConfigHelper.load(this.module, this.codec).ifPresent(config -> this.config = config);
         ConfigHelper.save(this.module, this.codec, this.config);
-        this.listeners.forEach(action -> action.accept(this));
+        this.forEachLoadListener(action -> action.accept(this));
+    }
+
+    public void forEachLoadListener(Consumer<Consumer<ConfigHolder<T>>> action) {
+        this.loadListeners.forEach(action);
     }
 
     public void save() {
         ConfigHelper.save(this.module, this.codec, this.config);
+        this.forEachSaveListener(action -> action.accept(this));
+    }
+
+    public void forEachSaveListener(Consumer<Consumer<ConfigHolder<T>>> action) {
+        this.saveListeners.forEach(action);
     }
 }
