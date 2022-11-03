@@ -20,6 +20,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class MCCIHudRenderer extends DrawableHelper {
     public static final Style HUD_FONT_STYLE = Style.EMPTY.withFont(HUD_FONT);
 
     public static final String
+        HUD_GAME_QUICKPLAY_TEXT = "text.%s.hud.game.quickplay".formatted(MCCICHud.MOD_ID),
         HUD_TIME_TEXT = "text.%s.hud.time".formatted(MCCICHud.MOD_ID),
         HUD_TIME_IN_QUEUE_TEXT = "%s.in_queue".formatted(HUD_TIME_TEXT),
         HUD_TIME_PLAYER_COUNT_TEXT = "%s.player_count".formatted(HUD_TIME_TEXT),
@@ -136,7 +138,7 @@ public class MCCIHudRenderer extends DrawableHelper {
         public void render(MatrixStack matrices, float tickDelta, int x, int y, HudClientConfig config) {
             GameTracker gameTracker = GameTracker.INSTANCE;
             int time = gameTracker.getTime().orElse(0);
-            Text text = Text.literal("%02d:%02d".formatted(time / 60, time % 60)).setStyle(HUD_FONT_STYLE);
+            Text text = Text.literal("%02d:%02d".formatted(time / 60, time % 60)).setStyle(HUD_FONT_STYLE.withColor(time <= 10 && time % 2 == 0 ? Formatting.RED : Formatting.WHITE));
             this.drawTextInfer(matrices, text, x, y - 1);
         }
 
@@ -161,26 +163,20 @@ public class MCCIHudRenderer extends DrawableHelper {
         @Override
         public void render(MatrixStack matrices, float tickDelta, int x, int y, HudClientConfig config) {
             y -= 1;
-
             QueueTracker queueTracker = QueueTracker.INSTANCE;
-
-            Optional<Game> maybeGame = queueTracker.getGame();
-            if (maybeGame.isPresent()) {
-                Game game = maybeGame.get();
-                Text text = this.createGameText(game);
-                this.drawTextInfer(matrices, text, x, y);
-            }
-
-            Text typeText = this.createQueueTypeText(queueTracker.getQueueType());
-            this.drawTextInfer(matrices, typeText, x, y + 8);
-
-            Text text = this.createTimeText(queueTracker.getTime(), queueTracker.getPlayers(), queueTracker.getMaxPlayers());
-            this.drawTextInfer(matrices, text, x, y + 16);
+            this.drawTextInfer(matrices, this.createGameText(queueTracker.getGame()), x, y);
+            this.drawTextInfer(matrices, this.createQueueTypeText(queueTracker.getQueueType()), x, y + 8);
+            this.drawTextInfer(matrices, this.createTimeText(queueTracker.getTime(), queueTracker.getPlayers(), queueTracker.getMaxPlayers()), x, y + 16);
         }
 
-        public Text createGameText(Game game) {
-            List<String> scoreboardNames = game.getScoreboardNames();
-            return Text.literal(scoreboardNames.get(scoreboardNames.size() - 1)).setStyle(HUD_FONT_STYLE);
+        @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+        public Text createGameText(Optional<Game> game) {
+            return (game.isPresent()
+                ? Util.make(() -> {
+                    List<String> scoreboardNames = game.get().getScoreboardNames();
+                    return Text.literal(scoreboardNames.get(scoreboardNames.size() - 1));
+            }) : Text.translatable(HUD_GAME_QUICKPLAY_TEXT)
+            ).setStyle(HUD_FONT_STYLE);
         }
 
         public Text createQueueTypeText(QueueType queueType) {
@@ -188,12 +184,13 @@ public class MCCIHudRenderer extends DrawableHelper {
         }
 
         @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-        public Text createTimeText(OptionalInt time, int players, int maxPlayers) {
-            if (time.isEmpty()) {
-                return Text.translatable(HUD_TIME_IN_QUEUE_TEXT);
+        public Text createTimeText(OptionalInt maybeTime, int players, int maxPlayers) {
+            if (maybeTime.isEmpty()) {
+                return Text.translatable(HUD_TIME_IN_QUEUE_TEXT).setStyle(HUD_FONT_STYLE.withColor(Formatting.YELLOW));
             }
 
-            return (time.getAsInt() != 0 ? Text.translatable(HUD_TIME_TEXT,
+            int time = maybeTime.getAsInt();
+            return (time != 0 ? Text.translatable(HUD_TIME_TEXT,
                 Text.translatable(HUD_TIME_PLAYER_COUNT_TEXT, players, maxPlayers).formatted(Formatting.WHITE),
                 Text.literal("" + time)
             ) : Text.translatable(HUD_TIME_TELEPORTED_TEXT)).setStyle(HUD_FONT_STYLE.withColor(Formatting.YELLOW));
@@ -209,11 +206,9 @@ public class MCCIHudRenderer extends DrawableHelper {
             QueueTracker queueTracker = QueueTracker.INSTANCE;
             OptionalInt maybeTime = queueTracker.getTime();
 
-            Text gameText = this.createGameText(queueTracker.getGame().orElseThrow());
+            Text gameText = this.createGameText(queueTracker.getGame());
             Text queueTypeText = this.createQueueTypeText(queueTracker.getQueueType());
-            Text timeText = maybeTime.isPresent()
-                ? this.createTimeText(maybeTime, queueTracker.getPlayers(), queueTracker.getMaxPlayers())
-                : Text.empty();
+            Text timeText = this.createTimeText(maybeTime, queueTracker.getPlayers(), queueTracker.getMaxPlayers());
 
             int largest = Math.max(Math.max(textRenderer.getWidth(gameText), textRenderer.getWidth(queueTypeText)), textRenderer.getWidth(timeText));
             return this.shouldCenterText() ? Math.max(largest, maybeTime.isPresent() ? 220 : 160) : largest;
@@ -221,7 +216,7 @@ public class MCCIHudRenderer extends DrawableHelper {
 
         @Override
         public int getHeight() {
-            return 14 + (QueueTracker.INSTANCE.getTime().isPresent() ? 8 : 0);
+            return 22;
         }
     }
 
