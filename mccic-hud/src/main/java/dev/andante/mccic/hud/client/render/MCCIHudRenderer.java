@@ -64,8 +64,8 @@ public class MCCIHudRenderer extends DrawableHelper {
         this.leftElements.clear();
 
         HudClientConfig config = configHolder.get();
-        this.addElement(config.timerPosition(), new TimeElement());
         this.addElement(config.queuePosition(), new QueueElement());
+        this.addElement(config.timerPosition(), new TimeElement());
     }
 
     public void addElement(HudPosition position, Element element) {
