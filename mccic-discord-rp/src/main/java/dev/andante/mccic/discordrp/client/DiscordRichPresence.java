@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 @Environment(EnvType.CLIENT)
 public class DiscordRichPresence {
     public static final String QUEUE_TEXT = "text.%s.queue".formatted(MCCICDiscordRP.MOD_ID);
+    public static final String QUEUE_PLAYERS_TEXT = "%s.players".formatted(QUEUE_TEXT);
     public static final String QUEUE_QUICKPLAY_TEXT = "%s.quickplay".formatted(QUEUE_TEXT);
     public static final String IDLE_TEXT = "text.%s.idle".formatted(MCCICDiscordRP.MOD_ID);
     public static final String GAME_TEXT = "text.%s.game_display".formatted(MCCICDiscordRP.MOD_ID);
@@ -100,7 +101,11 @@ public class DiscordRichPresence {
         QueueTracker queueTracker = QueueTracker.INSTANCE;
         QueueType queueType = queueTracker.getQueueType();
         if (queueType != QueueType.NONE && config.displayQueue()) {
-            builder.setDetails(I18n.translate(QUEUE_TEXT));
+            int maxPlayers = queueTracker.getMaxPlayers();
+            builder.setDetails(maxPlayers != 0 && displayGame
+                ? I18n.translate(QUEUE_PLAYERS_TEXT, queueTracker.getPlayers(), queueTracker.getMaxPlayers())
+                : I18n.translate(QUEUE_TEXT)
+            );
 
             Optional<Game> maybeGame = queueTracker.getGame();
             if (maybeGame.isPresent()) {

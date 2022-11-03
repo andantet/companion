@@ -2,6 +2,7 @@ package dev.andante.mccic.api.client.tracker;
 
 import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.game.Game;
+import dev.andante.mccic.api.util.TextQuery;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -24,12 +25,12 @@ public class QueueTracker {
 
     @RegExp
     public static final String
-        ALL_REGEX = ".+?(?=[A-Z])([A-Z ]+).{4}([A-Z ]+).{5}(.+).",
-        TELEPORTING_REGEX = ".+\\(([0-9]+)/([0-9]+)\\).+?(?=[0-9])([0-9]+).+";
+        PLAYER_COUNT_REGEX = "\\(([0-9]+)/([0-9]+)\\)",
+        TIME_REGEX = " IN ([0-9]+)!";
 
     public static final Pattern
-        ALL_PATTERN = Pattern.compile(ALL_REGEX),
-        TELEPORTING_PATTERN = Pattern.compile(TELEPORTING_REGEX);
+        PLAYER_COUNT_PATTERN = Pattern.compile(PLAYER_COUNT_REGEX),
+        TIME_PATTERN = Pattern.compile(TIME_REGEX);
 
     private Game game;
     private QueueType queueType;
@@ -43,8 +44,10 @@ public class QueueTracker {
     protected void onWorldTick(ClientWorld world) {
         ClientHelper.getBossBarStream()
                     .map(BossBar::getName)
-                    .map(Text::getString)
-                    .filter(s -> s.matches(ALL_REGEX))
+                    .filter(text -> {
+                        String raw = text.getString();
+                        return raw.contains("IN QUEUE") || raw.contains("TELEPORTING") || raw.contains("TELEPORTED");
+                    })
                     .findAny()
                     .ifPresentOrElse(this::ifPresent, this::reset);
     }
@@ -57,37 +60,60 @@ public class QueueTracker {
         this.maxPlayers = 0;
     }
 
-    protected void ifPresent(String string) {
-        Matcher matcher = ALL_PATTERN.matcher(string);
-        if (matcher.matches()) {
-            String gameId = matcher.group(1);
-            if (string.contains("QUICKPLAY")) {
-                this.game = null;
-                this.queueType = QueueType.QUICKPLAY;
-            } else {
-                this.game = Game.fromScoreboard(gameId).getValue();
+    protected void ifPresent(Text text) {
+        // is it quickplay?
+        TextQuery.findText(text, "QUICKPLAY").ifPresentOrElse(query -> {
+            this.game = null;
+            this.queueType = QueueType.QUICKPLAY;
+        }, () -> {
+            // if not quickplay, find the queued game
+            TextQuery.findText(text, "[A-Z ]+").ifPresentOrElse(query -> {
+                Text result = query.getResult();
+                String raw = result.getString();
+                this.game = Game.fromScoreboard(raw).getValue();
+            }, () -> this.game = null);
+        });
 
-                String queueTypeId = matcher.group(2);
-                QueueType queueType = QueueType.fromScoreboard(queueTypeId);
-                this.queueType = queueType == null ? QueueType.NONE : queueType;
-            }
+        // infer the queue type
+        TextQuery.findText(text, "\\(").ifPresentOrElse(query -> {
+            Text result = query.getOffsetResult(1);
+            String raw = result.getString();
+            this.queueType = QueueType.fromScoreboard(raw);
+        }, () -> this.queueType = null);
 
-            if (string.contains("TELEPORTED!")) {
-                this.time = 0;
+        // infer the player count
+        TextQuery.findText(text, PLAYER_COUNT_REGEX).ifPresentOrElse(query -> {
+            Text result = query.getResult();
+            String raw = result.getString();
+            Matcher matcher = PLAYER_COUNT_PATTERN.matcher(raw);
+            if (matcher.matches()) {
+                int players = Integer.parseInt(matcher.group(1));
+                int maxPlayers = Integer.parseInt(matcher.group(2));
+                this.players = players;
+                this.maxPlayers = maxPlayers;
             } else {
-                String timeLine = matcher.group(3);
-                Matcher timeMatcher = TELEPORTING_PATTERN.matcher(timeLine);
-                if (timeMatcher.matches()) {
-                    this.players = Integer.parseInt(timeMatcher.group(1));
-                    this.maxPlayers = Integer.parseInt(timeMatcher.group(2));
-                    this.time = timeMatcher.matches() ? Integer.parseInt(timeMatcher.group(3)) : -1;
-                } else {
-                    this.time = -1;
-                }
+                this.players = 0;
+                this.maxPlayers = 0;
             }
-        } else {
-            this.reset();
-        }
+        }, () -> {
+            this.players = 0;
+            this.maxPlayers = 0;
+        });
+
+        // infer the countdown
+        TextQuery.findText(text, " IN ([0-9]+)!").ifPresentOrElse(query -> {
+            Text result = query.getResult();
+            String raw = result.getString();
+            Matcher matcher = Pattern.compile(" IN ([0-9]+)!").matcher(raw);
+            if (matcher.matches()) {
+                this.time = Integer.parseInt(matcher.group(1));
+            } else {
+                this.time = -1;
+            }
+        }, () -> {
+            Optional<TextQuery> query = TextQuery.findText(text, "TELEPORTED");
+            this.time = query.isPresent() ? 0 : -1;
+        });
     }
 
     public Optional<Game> getGame() {
