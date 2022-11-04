@@ -3,16 +3,39 @@
   "id": "mccic-api",
   "name": "MCCI: Companion (API)",
   "version": "${version}",
-  "description": "The exposed MCCI:C API.",
-  "icon": "assets/mccic/textures/icon.png",
-  "custom": {
-    "modmenu": {
-      "parent": "mccic"
-    }
-  },
+
+  "environment": "*",
+
   "entrypoints": {
     "main": [ "dev.andante.mccic.api.MCCICApiImpl" ],
     "client": [ "dev.andante.mccic.api.client.MCCICApiClientImpl" ]
   },
-  "mixins": [ "mccic-api.mixins.json" ]
+  "mixins": [ "mccic-api.mixins.json" ],
+
+  "icon": "assets/mccic/textures/icon.png",
+  "description": "The exposed MCCI: Companion API.",
+
+  "authors": [
+    {
+      "name": "Andante",
+      "contact": {
+        "homepage": "https://andante.dev"
+      }
+    }
+  ],
+
+  "contact": {
+    "homepage": "https://andante.dev/mccic",
+    "sources": "https://github.com/mccic/companion/tree/HEAD/mccic-api",
+    "issues": "https://github.com/mccic/companion/issues"
+  },
+
+  "custom": {
+    "modmenu": {
+      "links": {
+        "link.mccic.discord": "https://companion.andante.dev"
+      },
+      "badges": [ "library" ]
+    }
+  }
 }
