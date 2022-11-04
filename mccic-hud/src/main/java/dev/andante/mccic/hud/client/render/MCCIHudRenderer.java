@@ -34,7 +34,7 @@ public class MCCIHudRenderer extends DrawableHelper {
 
     public static final int
         BORDER = 3,
-        ELEMENT_SEPARATOR = BORDER * 2 + 2;
+        ELEMENT_SEPARATOR = (BORDER * 2) + 2;
 
     public static final Identifier HUD_FONT = new Identifier("mcc", "hud");
     public static final Style HUD_FONT_STYLE = Style.EMPTY.withFont(HUD_FONT);
@@ -86,7 +86,7 @@ public class MCCIHudRenderer extends DrawableHelper {
 
         {
             int x = this.scaledWidth / 2;
-            int y = ELEMENT_SEPARATOR;
+            int y = BORDER * 2;
             for (Element element : this.topElements) {
                 if (element.shouldRender(config)) {
                     int width = element.getWidth();
@@ -100,7 +100,7 @@ public class MCCIHudRenderer extends DrawableHelper {
         }
 
         {
-            int x = BORDER + 6;
+            int x = BORDER + 1;
             int y = (this.scaledHeight / 2) - (this.sum(
                 this.leftElements.stream()
                                  .filter(element -> element.shouldRender(config)).toList(),
