@@ -29,7 +29,7 @@ public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
             SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey("hitw_sound_on_other_death.tooltip"))),
             value -> {
                 MinecraftClient client = MinecraftClient.getInstance();
-                if (client.currentScreen != null) {
+                if (client.currentScreen instanceof MusicConfigScreen) {
                     MCCICMusicClientImpl.playHoleInTheWallOtherDeathSound(this.getConfig(), value, client, random, false);
                 }
             }
