@@ -217,18 +217,11 @@ subprojects {
   }
 }
 
-task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
-  input = jar.archiveFile
-  archiveFileName = "${archivesBaseName}-${project.version}-maven.jar"
-  addNestedDependencies = false
-}
-build.dependsOn remapMavenJar
-
 publishing {
   publications {
     mavenJava(MavenPublication) {
-      artifact(remapMavenJar) {
-        builtBy(remapMavenJar)
+      artifact(remapJar) {
+        builtBy(remapJar)
       }
 
       artifact(sourcesJar) {
