@@ -34,7 +34,7 @@ public class MCCIHudRenderer extends DrawableHelper {
 
     public static final int
         BORDER = 3,
-        ELEMENT_SEPARATOR = (BORDER * 2) + 2;
+        ELEMENT_SEPARATOR = (BORDER * 2) + 1;
 
     public static final Identifier HUD_FONT = new Identifier("mcc", "hud");
     public static final Style HUD_FONT_STYLE = Style.EMPTY.withFont(HUD_FONT);
