@@ -16,4 +16,4 @@
 
 ## 🕸 Miscellaneous
 
-* [Recommended Mods](miscellaneous/recommended-mods.md)
+* [✅ Recommended Mods](miscellaneous/recommended-mods.md)
