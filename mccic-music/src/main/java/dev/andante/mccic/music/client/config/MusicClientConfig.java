@@ -29,10 +29,6 @@ public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfte
 
     public static final ConfigHolder<MusicClientConfig> CONFIG_HOLDER = new ConfigHolder<>("music", CODEC, createDefaultConfig());
 
-    public MusicClientConfig(double musicVolume, double musicVolumeAfterDeath, HITWSoundOnOtherDeath hitwSoundOnOtherDeath) {
-        this((float) musicVolume, (float) musicVolumeAfterDeath, hitwSoundOnOtherDeath);
-    }
-
     public static MusicClientConfig getConfig() {
         return CONFIG_HOLDER.get();
     }
