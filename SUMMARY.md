@@ -4,7 +4,8 @@
 
 ## 📦 Modules
 
-* [Chat](modules/chat.md)
+* [Chat](modules/chat/README.md)
+  * [Mentions](modules/chat/mentions.md)
 * [Discord Rich Presence](modules/discord-rich-presence.md)
 * [HUD](modules/hud.md)
 * [Music](modules/music.md)
