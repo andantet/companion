@@ -13,3 +13,7 @@
   * [Confirm Disconnect Mode](modules/quality-of-life/confirm-disconnect-mode.md)
   * [Extended Frustums](modules/quality-of-life/extended-frustums.md)
 * [Toasts](modules/toasts.md)
+
+## 🕸 Miscellaneous
+
+* [Recommended Mods](miscellaneous/recommended-mods.md)
