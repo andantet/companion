@@ -1,40 +1,24 @@
-CHANGELOG FOR 4.0.0-beta.19:
+CHANGELOG FOR 4.0.0-beta.20:
 
-* Added Discord link to Mod Menu
-* More config tooltips!
+* Updated URLs in Mod Menu
 
-#### Changes in `mccic-hud` **!!! NEW !!!**
-+ *First iteration* of a custom HUD system
-+ Can be enabled to disable the 'vanilla' hud and activate a custom-rendered HUD that emulates the vanilla feeling
-+ Currently has the ability to display *the game time and queue status*; game-specific information is not present as of yet
-+ Hud elements can be positioned *at the top of the screen or to the left*
+#### + `mccic-chat` 0.1.0
++ Chat mentions: highlights your name in chat!
 
-![hud on the left](https://media.discordapp.net/attachments/680748717644578880/1037872569082191932/image.png?width=400&height=200)
+#### ^ `mccic-hud` 0.2.1
+* Tweaked borders and element separators
 
-#### Changes in `mccic-music`
-+ Configuring 'Hole in the Wall Death Sound' now previews the sound
-* Score/Score Acquired HITW Death Sounds no longer vary pitch
+#### ^ `mccic-music` 0.2.1
+* Game Music Volume, default change: `1.0` -> `0.5`
+* Game Music Volume (After Death), default change: `0.3` -> `0.25`
+* Fixed the Hole in the Wall Death Sound preview playing in so many stupid places for whatever reason
 
-#### Changes in `mccic-discord-rp`
-+ More configs!
-  + Display Game
-  + Display Game Time
-  + Display Game State
-  + Display Queue Status
+#### ^ `mccic-api` 0.3.0
++ `GameRegistry`: moved games from an enum to a registry, which allows for game-specific classes and more game-specific functionality in the future
++ `TextQuery#findTexts`: finds every text matching a predicate within a given text object and its siblings
 
-#### Changes in `mccic-api`
-+ `QueueTracker`: current queue data
+* `TextQuery#findText(Text, Predicate<Text>)`: added a more abstract version of `findText`, the regex overloads still exist but just point to the predicate overload
+* Separated `MCCI: Companion (API)` as a child of `MCCI: Companion` in Mod Menu
 
-#### Changes in `mccic-debug`
-* New debug HUD! Now fancier!
-
-#### Technical Changes
-* Flattened `GameTracker`
-* Refactored a considerable amount of code for readability and expandability
-  * Configuration
-  * Discord RPC
-  * `EnumOption` 🥰
-  * `ClientHelper#getBossBars` 🥰
-  * `TextQuery`
-* Fixed some warnings where `remap=false` should be present
-+ Added the ability to disable the server resource pack (testmod only, jank af)
+#### ^ `mccic-debug` 0.2.1
++ 'Display Name Suffix' debug option: adds `(DN)` to the end of anything that uses `PlayerEntity#getDisplayName`
