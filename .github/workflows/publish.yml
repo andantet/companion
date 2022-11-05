@@ -12,7 +12,7 @@ jobs:
       options: --user root
     steps:
       - run: apt update && apt install git -y && git --version
-      - run: git config --global --add safe.directory /__w/mccibrawls/companion
+      - run: git config --global --add safe.directory /__w/companion/companion
 
       - uses: actions/checkout@v2
         with:
