@@ -6,6 +6,10 @@ description: 'Discord Rich Presence integration for MCC: Island.'
 
 <figure><img src="../.gitbook/assets/image (8).png" alt="MCC: Island Discord Rich Presence preview image"><figcaption></figcaption></figure>
 
+{% hint style="info" %}
+If you are using a client such as **Feather**, you may need to disable their rich presence integration as it will override that of **MCCI: Companion**.
+{% endhint %}
+
 ## Configuration
 
 <details>
