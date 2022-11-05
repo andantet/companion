@@ -25,7 +25,8 @@ public class ChatConfigScreen extends AbstractConfigScreen<ChatClientConfig> {
 
     @Override
     public ChatClientConfig createConfig() {
-        return new ChatClientConfig(this.mentionsOption.getValue());
+        ChatClientConfig config = this.getConfig();
+        return new ChatClientConfig(this.mentionsOption.getValue(), config.mentionsColor());
     }
 
     @Override

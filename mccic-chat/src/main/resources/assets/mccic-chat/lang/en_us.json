@@ -1,4 +1,5 @@
 {
   "ui.mccic-chat.config": "MCCI: Companion Config - Chat",
-  "config.mccic-chat.mentions": "Mentions"
+  "config.mccic-chat.mentions": "Mentions",
+  "config.mccic-chat.mentions_color": "Mentions Color"
 }

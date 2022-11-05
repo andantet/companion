@@ -47,7 +47,7 @@ public final class MCCICChatClientImpl implements MCCICChat, ClientModInitialize
                 }
 
                 return false;
-            }).forEach(query -> replaceAndHighlightRegex(query.getResult(), regex, profileName));
+            }).forEach(query -> replaceAndHighlightRegex(query.getResult(), regex, profileName, config.mentionsColor()));
         }
 
         return EventResult.pass();
@@ -65,7 +65,7 @@ public final class MCCICChatClientImpl implements MCCICChat, ClientModInitialize
      *
      * @param regex must contain at least 2 captured groups
      */
-    public static Text replaceAndHighlightRegex(Text text, String regex, String replacement) {
+    public static Text replaceAndHighlightRegex(Text text, String regex, String replacement, int color) {
         if (text instanceof MutableText mutable && text.getContent() instanceof LiteralTextContent content) {
             String raw = content.string();
             Matcher matcher = Pattern.compile(regex).matcher(raw);
@@ -76,9 +76,9 @@ public final class MCCICChatClientImpl implements MCCICChat, ClientModInitialize
                 String after = matcher.group(2);
 
                 MutableText modified = Text.empty();
-                modified.append(replaceAndHighlightRegex(Text.literal(before), regex, replacement));
-                modified.append(Text.literal(replacement).fillStyle(Style.EMPTY.withColor(0xE7FF54)));
-                modified.append(replaceAndHighlightRegex(Text.literal(after), regex, replacement));
+                modified.append(replaceAndHighlightRegex(Text.literal(before), regex, replacement, color));
+                modified.append(Text.literal(replacement).fillStyle(Style.EMPTY.withColor(color)));
+                modified.append(replaceAndHighlightRegex(Text.literal(after), regex, replacement, color));
                 mutable.getSiblings().add(0, modified);
             }
         }

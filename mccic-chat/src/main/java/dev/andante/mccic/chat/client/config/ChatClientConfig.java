@@ -8,14 +8,17 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record ChatClientConfig(boolean mentions) {
+public record ChatClientConfig(boolean mentions, int mentionsColor) {
     public static final Codec<ChatClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             ChatClientConfig defaultConfig = createDefaultConfig();
             return instance.group(
                 Codec.BOOL.fieldOf("mentions")
                           .orElse(defaultConfig.mentions())
-                          .forGetter(ChatClientConfig::mentions)
+                          .forGetter(ChatClientConfig::mentions),
+                Codec.INT.fieldOf("mentions_color")
+                          .orElse(defaultConfig.mentionsColor())
+                          .forGetter(ChatClientConfig::mentionsColor)
             ).apply(instance, ChatClientConfig::new);
         }
     );
@@ -27,6 +30,6 @@ public record ChatClientConfig(boolean mentions) {
     }
 
     public static ChatClientConfig createDefaultConfig() {
-        return new ChatClientConfig(false);
+        return new ChatClientConfig(false, 0xE7FF54);
     }
 }
