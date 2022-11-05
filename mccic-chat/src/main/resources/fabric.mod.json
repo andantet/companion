@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-chat",
+  "name": "MCCI: Companion (Chat)",
+  "version": "${version}",
+  "description": "Chat changes and features for MCC: Island.",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "depends": {
+    "mccic-api": "*",
+    "mccic-config": "*"
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.chat.client.MCCICChatClientImpl" ]
+  },
+  "mixins": [ "mccic-chat.mixins.json" ]
+}

@@ -13,6 +13,7 @@ pluginManagement {
 rootProject.name = 'mccic'
 
 include 'mccic-api'
+include 'mccic-chat'
 include 'mccic-config'
 include 'mccic-debug'
 include 'mccic-discord-rp'
