@@ -24,9 +24,9 @@
   ],
 
   "contact": {
-    "homepage": "https://andante.dev/mccic",
-    "sources": "https://github.com/mccic/companion",
-    "issues": "https://github.com/mccic/companion/issues"
+    "homepage": "https://mccic.andante.dev",
+    "sources": "https://github.com/mccibrawls/companion",
+    "issues": "https://github.com/mccibrawls/companion/issues"
   },
 
   "custom": {
