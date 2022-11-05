@@ -14,22 +14,24 @@ public class DebugConfigScreen extends AbstractConfigScreen<DebugClientConfig> {
     public final SimpleOption<Boolean> debugHudOption;
     public final SimpleOption<Boolean> chatAllSoundsOption;
     public final SimpleOption<Boolean> rawChatOption;
+    public final SimpleOption<Boolean> displayNameSuffixOption;
 
     public DebugConfigScreen(Screen parent) {
         super(MCCICDebug.MOD_ID, parent, DebugClientConfig.CONFIG_HOLDER);
         this.debugHudOption = this.ofBoolean("debug_hud", DebugClientConfig::debugHud);
         this.chatAllSoundsOption = this.ofBoolean("chat_all_sounds", DebugClientConfig::chatAllSounds);
         this.rawChatOption = this.ofBoolean("raw_chat", DebugClientConfig::rawChat);
+        this.displayNameSuffixOption = this.ofBoolean("display_name_suffix", DebugClientConfig::displayNameSuffix);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.debugHudOption, this.chatAllSoundsOption, this.rawChatOption);
+        return List.of(this.debugHudOption, this.chatAllSoundsOption, this.rawChatOption, this.displayNameSuffixOption);
     }
 
     @Override
     public DebugClientConfig createConfig() {
-        return new DebugClientConfig(this.debugHudOption.getValue(), this.chatAllSoundsOption.getValue(), this.rawChatOption.getValue());
+        return new DebugClientConfig(this.debugHudOption.getValue(), this.chatAllSoundsOption.getValue(), this.rawChatOption.getValue(), this.displayNameSuffixOption.getValue());
     }
 
     @Override
