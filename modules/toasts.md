@@ -10,7 +10,7 @@ description: 'Text to toasts for MCC: Island.'
 
 Whether friend toasts are shown.
 
-![](<../.gitbook/assets/image (12).png>)
+![](<../.gitbook/assets/friend left.png>)
 
 **Type:** boolean\
 **Default:** true
@@ -23,9 +23,9 @@ Whether friend toasts are shown.
 
 Whether party toasts are shown.
 
-![](<../.gitbook/assets/image (13).png>)
+![](<../.gitbook/assets/party leave toast.png>)
 
-![](../.gitbook/assets/image.png)
+![](<../.gitbook/assets/party disband toast.png>)
 
 **Type:** boolean\
 **Default:** true
@@ -38,7 +38,7 @@ Whether party toasts are shown.
 
 Whether quest toasts are shown.
 
-![](<../.gitbook/assets/image (6).png>)
+![](<../.gitbook/assets/quest toast.png>)
 
 **Type:** boolean\
 **Default:** true
@@ -51,7 +51,7 @@ Whether quest toasts are shown.
 
 Whether achievement toasts are shown.
 
-![](<../.gitbook/assets/image (4).png>)
+![](<../.gitbook/assets/achievement toast.png>)
 
 **Type:** boolean\
 **Default:** true
@@ -65,7 +65,7 @@ Whether achievement toasts are shown.
 Whether to show a toast when an event is soon.\
 Pulled from the mcc.live API.
 
-<img src="../.gitbook/assets/image (9).png" alt="" data-size="original">
+<img src="../.gitbook/assets/event announcement toast #2.png" alt="" data-size="original">
 
 **Type:** boolean\
 **Default:** true

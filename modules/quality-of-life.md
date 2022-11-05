@@ -12,7 +12,7 @@ description: 'Quality of life changes and fixes for MCC: Island.'
 
 Controls the behavior of the confirm disconnect screen.
 
-![](../.gitbook/assets/2022-11-05\_14.43.42.png)
+![](<../.gitbook/assets/confirm disconnect.png>)
 
 **Type:** Confirm Disconnect Mode\
 **Default:** In Game\

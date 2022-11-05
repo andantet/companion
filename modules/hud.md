@@ -8,7 +8,7 @@ description: 'Custom HUD elements for MCC: Island.'
 This module is in-development! Features may change and configuration may be reset between releases.
 {% endhint %}
 
-<figure><img src="../.gitbook/assets/image (11).png" alt="MCCI: Companion custom HUD on the left side of the screen."><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/left hud preview.png" alt="MCCI: Companion custom HUD on the left side of the screen."><figcaption></figcaption></figure>
 
 ## Configuration
 
