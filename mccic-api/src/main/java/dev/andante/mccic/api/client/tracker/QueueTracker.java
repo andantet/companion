@@ -2,6 +2,7 @@ package dev.andante.mccic.api.client.tracker;
 
 import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.game.Game;
+import dev.andante.mccic.api.game.GameRegistry;
 import dev.andante.mccic.api.util.TextQuery;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -70,7 +71,7 @@ public class QueueTracker {
             TextQuery.findText(text, "[A-Z ]+").ifPresentOrElse(query -> {
                 Text result = query.getResult();
                 String raw = result.getString();
-                this.game = Game.fromScoreboard(raw).getValue();
+                this.game = GameRegistry.INSTANCE.fromScoreboard(raw).getValue();
             }, () -> this.game = null);
         });
 

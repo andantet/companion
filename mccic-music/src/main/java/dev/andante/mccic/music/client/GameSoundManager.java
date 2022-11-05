@@ -1,12 +1,10 @@
 package dev.andante.mccic.music.client;
 
-import dev.andante.mccic.api.client.event.MCCIClientDeathScreenEvent;
-import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
-import dev.andante.mccic.api.client.event.MCCIClientRespawnEvent;
-import dev.andante.mccic.api.client.event.MCCIGameEvents;
-import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
+import dev.andante.mccic.api.client.event.*;
 import dev.andante.mccic.api.client.tracker.GameTracker;
+import dev.andante.mccic.api.game.GameRegistry;
 import dev.andante.mccic.api.game.GameState;
+import dev.andante.mccic.music.MCCICMusic;
 import dev.andante.mccic.music.MCCICSounds;
 import dev.andante.mccic.music.client.config.MusicClientConfig;
 import dev.andante.mccic.music.client.sound.VolumeAdjustableSoundInstance;
@@ -80,12 +78,12 @@ public class GameSoundManager {
     }
 
     public void playCurrent(Function<MusicClientConfig, Float> volume) {
-        Identifier id = this.gameTracker.getGameSoundId();
-        if (id != null) {
-            SoundInstance sound = new VolumeAdjustableSoundInstance(this.gameTracker.getGameSoundId(), () -> volume.apply(MusicClientConfig.getConfig()));
+        this.gameTracker.getGame().ifPresent(game -> {
+            Identifier id = new Identifier(MCCICMusic.MOD_ID, "game.%s".formatted(GameRegistry.INSTANCE.getId(game)));
+            SoundInstance sound = new VolumeAdjustableSoundInstance(id, () -> volume.apply(MusicClientConfig.getConfig()));
             this.soundManager.stop(this.lastSound);
             this.lastSound = sound;
             this.soundManager.play(sound);
-        }
+        });
     }
 }

@@ -3,6 +3,7 @@ package dev.andante.mccic.qol.mixin.client;
 import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
+import dev.andante.mccic.api.game.Games;
 import dev.andante.mccic.qol.client.config.QoLClientConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -48,7 +49,7 @@ public abstract class EntityRenderDispatcherMixin {
         if (maybeGame.isPresent()) {
             Game game = maybeGame.get();
             QoLClientConfig config = QoLClientConfig.getConfig();
-            if ((game == Game.SKY_BATTLE && config.autoHitboxSkyBattle()) || (game == Game.BATTLE_BOX && config.autoHitboxBattleBox())) {
+            if ((game == Games.SKY_BATTLE && config.autoHitboxSkyBattle()) || (game == Games.BATTLE_BOX && config.autoHitboxBattleBox())) {
                 if (!this.renderHitboxes && !entity.isInvisible() && !MinecraftClient.getInstance().hasReducedDebugInfo()) {
                     renderHitbox(matrices, vertices.getBuffer(RenderLayer.getLines()), entity, tickDelta);
                 }

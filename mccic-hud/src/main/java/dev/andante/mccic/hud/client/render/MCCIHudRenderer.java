@@ -173,8 +173,7 @@ public class MCCIHudRenderer extends DrawableHelper {
         public Text createGameText(Optional<Game> game) {
             return (game.isPresent()
                 ? Util.make(() -> {
-                    List<String> scoreboardNames = game.get().getScoreboardNames();
-                    return Text.literal(scoreboardNames.get(scoreboardNames.size() - 1));
+                    return Text.literal(game.get().getDisplayString().toUpperCase());
             }) : Text.translatable(HUD_GAME_QUICKPLAY_TEXT)
             ).setStyle(HUD_FONT_STYLE);
         }

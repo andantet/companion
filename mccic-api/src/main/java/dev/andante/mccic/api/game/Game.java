@@ -1,66 +1,43 @@
 package dev.andante.mccic.api.game;
 
 import dev.andante.mccic.api.MCCIC;
-import net.minecraft.util.Identifier;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.TypedActionResult;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-public enum Game implements StringIdentifiable {
-    HOLE_IN_THE_WALL("Hole in the Wall", "HOLE IN THE WALL"),
-    TGTTOS("TGTTOS", "TGTTOS", "TO GET TO THE OTHER SIDE"),
-    SKY_BATTLE("Sky Battle", "SKY BATTLE"),
-    BATTLE_BOX("Battle Box", "BATTLE BOX");
+public abstract class Game implements StringIdentifiable {
+    private String translationKey;
 
-    private static final Map<List<String>, Game> TO_SCOREBOARD_NAME = Arrays.stream(Game.values())
-                                                                            .collect(Collectors.toMap(Game::getScoreboardNames, Function.identity()));
-
-    private final String displayName;
-    private final String[] scoreboardNames;
-    private final Identifier soundId;
-
-    Game(String displayName, String... scoreboardNames) {
-        this.displayName = displayName;
-        this.scoreboardNames = scoreboardNames;
-        this.soundId = new Identifier("%s-music".formatted(MCCIC.MOD_ID), "game.%s".formatted(this.getId()));
+    public Game() {
     }
 
-    @Nullable
-    public static TypedActionResult<Game> fromScoreboard(String name) {
-        String trim = name.trim();
-        Game game = TO_SCOREBOARD_NAME.entrySet().stream()
-                                      .filter(entry -> entry.getKey().contains(trim))
-                                      .map(Map.Entry::getValue)
-                                      .findAny()
-                                      .orElse(null);
-        return trim.equals(name) ? TypedActionResult.success(game) : TypedActionResult.fail(game);
+    public String getOrCreateTranslationKey() {
+        if (this.translationKey == null) {
+            this.translationKey = "%s.game.%s".formatted(MCCIC.MOD_ID, GameRegistry.INSTANCE.getId(this));
+        }
+
+        return this.translationKey;
     }
 
-    public String getId() {
-        return this.name().toLowerCase(Locale.ROOT);
+    public MutableText getDisplayName() {
+        return Text.translatable(this.getOrCreateTranslationKey());
     }
 
-    public List<String> getScoreboardNames() {
-        return Arrays.asList(this.scoreboardNames);
+    public String getDisplayString() {
+        return this.getDisplayName().getString();
     }
 
-    public Identifier getSoundId() {
-        return this.soundId;
-    }
-
-    public String getDisplayName() {
-        return this.displayName;
-    }
+    public abstract List<String> getScoreboardNames();
 
     @Override
     public String asString() {
-        return this.displayName;
+        return GameRegistry.INSTANCE.getId(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" + GameRegistry.INSTANCE.getId(this) + "}";
     }
 }

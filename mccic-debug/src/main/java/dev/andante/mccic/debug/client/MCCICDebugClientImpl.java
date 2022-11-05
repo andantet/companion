@@ -64,7 +64,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private void renderContent(MatrixStack matrices, Optional<Game> maybeGame, OptionalInt maybeTime) {
-        maybeGame.map(Game::asString).ifPresent(game -> this.drawText(matrices, Text.of("Game: " + game)));
+        maybeGame.map(Game::getDisplayString).ifPresent(game -> this.drawText(matrices, Text.of("Game: " + game)));
         maybeTime.ifPresent(time -> this.drawText(matrices, Text.of("Time: %s (%sm %ss)".formatted(time, time / 60, time % 60))));
     }
 

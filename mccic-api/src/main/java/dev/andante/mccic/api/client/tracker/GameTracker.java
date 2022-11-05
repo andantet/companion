@@ -5,6 +5,7 @@ import dev.andante.mccic.api.client.event.MCCIGameEvents;
 import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.api.game.Game;
+import dev.andante.mccic.api.game.GameRegistry;
 import dev.andante.mccic.api.game.GameState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -17,7 +18,6 @@ import net.minecraft.entity.boss.BossBar;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 
 import java.util.Optional;
@@ -100,7 +100,7 @@ public class GameTracker {
             String name = objective.getDisplayName().getString();
             if (name.contains(MCCI_PREFIX)) {
                 String id = name.substring(MCCI_PREFIX.length());
-                TypedActionResult<Game> result = Game.fromScoreboard(id);
+                TypedActionResult<Game> result = GameRegistry.INSTANCE.fromScoreboard(id);
                 Game game = !result.getResult().isAccepted() ? result.getValue() : null;
                 if (game != this.game) {
                     MCCIGameEvents.GAME_CHANGE.invoker().onGameChange(game, this.game);
@@ -200,9 +200,5 @@ public class GameTracker {
         }
 
         return false;
-    }
-
-    public Identifier getGameSoundId() {
-        return this.getGame().map(Game::getSoundId).orElse(null);
     }
 }

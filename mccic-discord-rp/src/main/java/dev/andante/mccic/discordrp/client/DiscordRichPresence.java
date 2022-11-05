@@ -11,6 +11,7 @@ import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.client.tracker.QueueTracker;
 import dev.andante.mccic.api.client.tracker.QueueType;
 import dev.andante.mccic.api.game.Game;
+import dev.andante.mccic.api.game.GameRegistry;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.discordrp.MCCICDiscordRP;
 import dev.andante.mccic.discordrp.client.config.DiscordRPClientConfig;
@@ -110,7 +111,7 @@ public class DiscordRichPresence {
             Optional<Game> maybeGame = queueTracker.getGame();
             if (maybeGame.isPresent()) {
                 Game game = maybeGame.get();
-                builder.setState(displayGame ? I18n.translate(GAME_TEXT, game.getDisplayName(), queueType.getDisplayName()) : queueType.getDisplayName());
+                builder.setState(displayGame ? I18n.translate(GAME_TEXT, game.getDisplayString(), queueType.getDisplayName()) : queueType.getDisplayName());
                 builder.setSmallImage(displayGame ? getIconForGame(game) : null);
             } else {
                 builder.setState(I18n.translate(QUEUE_QUICKPLAY_TEXT));
@@ -124,7 +125,7 @@ public class DiscordRichPresence {
             Optional<Game> maybeGame = gameTracker.getGame();
             if (maybeGame.isPresent() && config.displayGame()) {
                 Game game = maybeGame.get();
-                String displayName = game.getDisplayName();
+                String displayName = game.getDisplayString();
                 builder.setDetails(displayName);
                 GameState state = gameTracker.getGameState();
                 builder.setState(config.displayGameState() ? I18n.translate("text.%s.state.%s".formatted(MCCICDiscordRP.MOD_ID, state.name().toLowerCase(Locale.ROOT))) : null);
@@ -146,7 +147,7 @@ public class DiscordRichPresence {
     }
 
     public static String getIconForGame(Game game) {
-        return "logo_game-%s".formatted(game.getId());
+        return "logo_game-%s".formatted(GameRegistry.INSTANCE.getId(game));
     }
 
     public void resetInitialTime() {

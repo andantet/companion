@@ -5,8 +5,8 @@ import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.event.EventResult;
-import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
+import dev.andante.mccic.api.game.Games;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
 import dev.andante.mccic.music.MCCICMusic;
@@ -37,7 +37,7 @@ public final class MCCICMusicClientImpl implements MCCICMusic, ClientModInitiali
 
     public EventResult onChatMessage(MCCIChatEvent.Context context) {
         GameTracker gameTracker = GameTracker.INSTANCE;
-        if (gameTracker.getGame().orElse(null) == Game.HOLE_IN_THE_WALL) {
+        if (gameTracker.getGame().orElse(null) == Games.HOLE_IN_THE_WALL) {
             MusicClientConfig config = MusicClientConfig.getConfig();
             HITWSoundOnOtherDeath deathSoundConfig = config.hitwSoundOnOtherDeath();
             boolean isActive = gameTracker.getGameState() == GameState.ACTIVE;
