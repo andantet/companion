@@ -1,4 +1,4 @@
-name: release
+name: modrinth
 on: [workflow_dispatch] # Manual trigger
 
 permissions:
@@ -22,7 +22,7 @@ jobs:
         id: changelog
         with:
           context: changelog
-          workflow_id: release.yml
+          workflow_id: modrinth.yml
 
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
