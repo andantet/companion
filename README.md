@@ -7,6 +7,8 @@ coverY: 0
 
 MCCI: Companion is the one-size-fits-all companion mod for [MCC: Island](https://mccisland.net)!
 
+{% embed url="https://modrinth.com/mod/mccic" %}
+
 {% embed url="https://discord.gg/rHjPjUzhUQ" %}
 
 {% content-ref url="broken-reference" %}
