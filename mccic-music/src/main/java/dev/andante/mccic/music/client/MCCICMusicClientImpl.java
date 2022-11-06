@@ -44,7 +44,7 @@ public final class MCCICMusicClientImpl implements MCCICMusic, ClientModInitiali
             if (!deathSoundConfig.isScore() || isActive) {
                 MinecraftClient client = MinecraftClient.getInstance();
                 PlayerEntity player = client.player;
-                if (UnicodeIconsStore.textContainsIcon(context.message(), Icon.DEATH) && !context.getRaw().contains(player.getEntityName())) {
+                if (UnicodeIconsStore.isPrefixedWith(Icon.DEATH, context.message()) && !context.getRaw().contains(player.getEntityName())) {
                     playHoleInTheWallOtherDeathSound(config, deathSoundConfig, client, player.getRandom(), !isActive);
                 }
             }

@@ -1,13 +1,12 @@
 package dev.andante.mccic.toasts.client;
 
-import com.mojang.authlib.GameProfile;
 import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
-import dev.andante.mccic.api.mccapi.EventApiHook;
 import dev.andante.mccic.api.client.toast.AdaptableIconToast;
 import dev.andante.mccic.api.event.EventResult;
+import dev.andante.mccic.api.mccapi.EventApiHook;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
 import dev.andante.mccic.toasts.MCCICToasts;
@@ -18,20 +17,12 @@ import dev.andante.mccic.toasts.client.toast.SocialToast.EventType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.function.BooleanSupplier;
 
 @Environment(EnvType.CLIENT)
@@ -110,7 +101,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         Text message = context.message();
 
         if (config.quests()) {
-            OptionalInt opt = processPrefix(message, raw, QUEST_COMPLETE_TEXT, Icon.QUEST_BOOK);
+            OptionalInt opt = matchAndGrabIndex(message, raw, QUEST_COMPLETE_TEXT, Icon.QUEST_BOOK);
             if (opt.isPresent()) {
                 int sub = opt.getAsInt();
                 String name = raw.substring(sub);
@@ -123,7 +114,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         }
 
         if (config.achievements()) {
-            OptionalInt opt = processPrefix(message, raw, ACHIEVEMENT_UNLOCKED_TEXT, Icon.ACHIEVEMENT);
+            OptionalInt opt = matchAndGrabIndex(message, raw, ACHIEVEMENT_UNLOCKED_TEXT, Icon.ACHIEVEMENT);
             if (opt.isPresent()) {
                 int sub = opt.getAsInt();
                 String name = raw.substring(sub, raw.length() - 1);
@@ -138,8 +129,8 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         return EventResult.pass();
     }
 
-    public static OptionalInt processPrefix(Text message, String raw, String pattern, Icon icon) {
-        return raw.matches(pattern + ".+") && UnicodeIconsStore.textContainsIcon(message, icon)
+    public static OptionalInt matchAndGrabIndex(Text message, String raw, String pattern, Icon icon) {
+        return raw.matches(pattern + ".+") && UnicodeIconsStore.doesTextContainIcon(message, icon)
             ? OptionalInt.of(pattern.replaceAll("\\\\", "").length())
             : OptionalInt.empty();
     }
@@ -168,15 +159,5 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
                 });
             }
         }
-    }
-
-    public boolean isUsernameValid(String username) {
-        return username.indexOf(' ') == -1;
-    }
-
-    public static boolean isPlayerInPlayerList(MinecraftClient client, PlayerEntity player) {
-        GameProfile profile = player.getGameProfile();
-        Collection<PlayerListEntry> playerList = client.getNetworkHandler().getPlayerList();
-        return playerList.stream().anyMatch(entry -> entry.getProfile().equals(profile));
     }
 }

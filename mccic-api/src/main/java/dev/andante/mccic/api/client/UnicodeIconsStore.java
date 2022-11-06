@@ -10,6 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
 import dev.andante.mccic.api.util.JsonHelper;
+import dev.andante.mccic.api.util.TextQuery;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
@@ -44,19 +45,17 @@ public class UnicodeIconsStore {
         MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
     }
 
-    public static boolean textContainsIcon(Text text, Icon icon) {
-        String cha = INSTANCE.getCharacterFor(icon) + "";
+    public static boolean doesTextContainIcon(Text text, Icon icon) {
+        return TextQuery.findText(text, ".*" + INSTANCE.getCharacterFor(icon) + ".*").isPresent();
+    }
 
-        if (text.getContent() instanceof LiteralTextContent content) {
-            if (content.string().contains(cha)) {
-                return true;
+    public static boolean isPrefixedWith(Icon icon, Text text) {
+        try {
+            Text iconText = text.getSiblings().get(0).getSiblings().get(0);
+            if (iconText.getContent() instanceof LiteralTextContent content) {
+                return content.string().equals("" + UnicodeIconsStore.INSTANCE.getCharacterFor(icon));
             }
-        }
-
-        for (Text sibling : text.getSiblings()) {
-            if (textContainsIcon(sibling, icon)) {
-                return true;
-            }
+        } catch (IndexOutOfBoundsException ignored) {
         }
 
         return false;
