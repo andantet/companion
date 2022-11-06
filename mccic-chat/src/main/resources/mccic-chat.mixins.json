@@ -6,7 +6,10 @@
   "mixins": [
     "MutableTextAccessor"
   ],
-  "client": [],
+  "client": [
+    "client.ChatHudLineVisibleMixin",
+    "client.ChatHudMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

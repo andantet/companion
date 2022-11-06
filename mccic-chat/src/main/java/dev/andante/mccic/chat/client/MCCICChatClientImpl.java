@@ -1,9 +1,5 @@
 package dev.andante.mccic.chat.client;
 
-import com.mojang.authlib.GameProfile;
-import dev.andante.mccic.api.client.event.MCCIChatEvent;
-import dev.andante.mccic.api.event.EventResult;
-import dev.andante.mccic.api.util.TextQuery;
 import dev.andante.mccic.chat.MCCICChat;
 import dev.andante.mccic.chat.client.config.ChatClientConfig;
 import dev.andante.mccic.chat.client.config.ChatConfigScreen;
@@ -13,8 +9,6 @@ import dev.andante.mccic.config.client.command.MCCICConfigCommand;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.Session;
 import net.minecraft.text.*;
 
 import java.util.regex.Matcher;
@@ -26,31 +20,6 @@ public final class MCCICChatClientImpl implements MCCICChat, ClientModInitialize
     public void onInitializeClient() {
         ClientConfigRegistry.INSTANCE.registerAndLoad(ChatClientConfig.CONFIG_HOLDER, ChatConfigScreen::new);
         MCCICConfigCommand.registerNewConfig(ID, ChatConfigScreen::new);
-        MCCIChatEvent.EVENT.register(this::onChat);
-    }
-
-    private EventResult onChat(MCCIChatEvent.Context context) {
-        ChatClientConfig config = ChatClientConfig.getConfig();
-
-        if (config.mentions()) {
-            Text message = context.message();
-            MinecraftClient client = MinecraftClient.getInstance();
-            Session session = client.getSession();
-            GameProfile profile = session.getProfile();
-            String profileName = profile.getName();
-
-            Pattern pattern = Pattern.compile("(.*)(" + profileName + ")(.*)", Pattern.CASE_INSENSITIVE);
-            TextQuery.findTexts(message, text -> {
-                if (text.getContent() instanceof LiteralTextContent content) {
-                    String raw = content.string();
-                    return pattern.matcher(raw).find();
-                }
-
-                return false;
-            }).forEach(query -> replaceAndHighlightRegex(query.getResult(), pattern, config.mentionsColor()));
-        }
-
-        return EventResult.pass();
     }
 
     /**

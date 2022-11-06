@@ -8,6 +8,11 @@
   "custom": {
     "modmenu": {
       "parent": "mccic"
+    },
+    "loom:injected_interfaces": {
+      "net/minecraft/client/gui/hud/ChatHudLine\u0024Visible": [
+        "dev/andante/mccic/chat/client/ChatHudLineVisibleAccess"
+      ]
     }
   },
   "depends": {
