@@ -8,7 +8,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.util.StringIdentifiable;
 
 @Environment(EnvType.CLIENT)
-public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfterDeath, HITWSoundOnOtherDeath hitwSoundOnOtherDeath) {
+public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfterDeath, float sfxVolume, HITWSoundOnOtherDeath hitwSoundOnOtherDeath) {
     public static final Codec<MusicClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             MusicClientConfig defaultConfig = createDefaultConfig();
@@ -19,6 +19,9 @@ public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfte
                 Codec.FLOAT.fieldOf("game_music_volume_after_death")
                            .orElse(defaultConfig.gameMusicVolumeAfterDeath())
                            .forGetter(MusicClientConfig::gameMusicVolumeAfterDeath),
+                Codec.FLOAT.fieldOf("sfx_volume")
+                           .orElse(defaultConfig.sfxVolume())
+                           .forGetter(MusicClientConfig::sfxVolume),
                 StringIdentifiable.createCodec(HITWSoundOnOtherDeath::values)
                                   .fieldOf("hitw_sound_on_other_death")
                                   .orElse(defaultConfig.hitwSoundOnOtherDeath())
@@ -34,6 +37,6 @@ public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfte
     }
 
     public static MusicClientConfig createDefaultConfig() {
-        return new MusicClientConfig(0.5F, 0.25F, HITWSoundOnOtherDeath.OFF);
+        return new MusicClientConfig(0.5F, 0.25F, 1.0F, HITWSoundOnOtherDeath.OFF);
     }
 }

@@ -61,7 +61,7 @@ public class GameSoundManager {
                 }
 
                 if (state == GameState.POST_ROUND_SELF) {
-                    this.soundManager.play(PositionedSoundInstance.master(new SoundEvent(MCCICSounds.EARLY_ELIMINATION), 1.0f, 1.0f), 7);
+                    this.soundManager.play(PositionedSoundInstance.master(new SoundEvent(MCCICSounds.EARLY_ELIMINATION), 1.0f, MusicClientConfig.getConfig().sfxVolume()), 7);
                 }
             }
         }
