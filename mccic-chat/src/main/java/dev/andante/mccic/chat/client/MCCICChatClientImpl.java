@@ -39,15 +39,15 @@ public final class MCCICChatClientImpl implements MCCICChat, ClientModInitialize
             GameProfile profile = session.getProfile();
             String profileName = profile.getName();
 
-            String regex = "(.*)" + profileName + "(.*)";
+            Pattern pattern = Pattern.compile("(.*)(" + profileName + ")(.*)", Pattern.CASE_INSENSITIVE);
             TextQuery.findTexts(message, text -> {
                 if (text.getContent() instanceof LiteralTextContent content) {
                     String raw = content.string();
-                    return raw.matches(regex);
+                    return pattern.matcher(raw).find();
                 }
 
                 return false;
-            }).forEach(query -> replaceAndHighlightRegex(query.getResult(), regex, profileName, config.mentionsColor()));
+            }).forEach(query -> replaceAndHighlightRegex(query.getResult(), pattern, config.mentionsColor()));
         }
 
         return EventResult.pass();
@@ -63,22 +63,23 @@ public final class MCCICChatClientImpl implements MCCICChat, ClientModInitialize
      *     <pre>{}[siblings={*Jeff*, Bill, Grant}]</pre>
      * </p>
      *
-     * @param regex must contain at least 2 captured groups
+     * @param pattern must contain at least 3 captured groups - 1: before, 2: replacement, 3: after
      */
-    public static Text replaceAndHighlightRegex(Text text, String regex, String replacement, int color) {
+    public static Text replaceAndHighlightRegex(Text text, Pattern pattern, int color) {
         if (text instanceof MutableText mutable && text.getContent() instanceof LiteralTextContent content) {
             String raw = content.string();
-            Matcher matcher = Pattern.compile(regex).matcher(raw);
+            Matcher matcher = pattern.matcher(raw);
             if (matcher.matches()) {
                 ((MutableTextAccessor) mutable).setContent(TextContent.EMPTY);
 
                 String before = matcher.group(1);
-                String after = matcher.group(2);
+                String replacement = matcher.group(2);
+                String after = matcher.group(3);
 
                 MutableText modified = Text.empty();
-                modified.append(replaceAndHighlightRegex(Text.literal(before), regex, replacement, color));
+                modified.append(replaceAndHighlightRegex(Text.literal(before), pattern, color));
                 modified.append(Text.literal(replacement).fillStyle(Style.EMPTY.withColor(color)));
-                modified.append(replaceAndHighlightRegex(Text.literal(after), regex, replacement, color));
+                modified.append(replaceAndHighlightRegex(Text.literal(after), pattern, color));
                 mutable.getSiblings().add(0, modified);
             }
         }
