@@ -8,7 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record ChatClientConfig(boolean mentions, int mentionsColor) {
+public record ChatClientConfig(boolean mentions, int mentionsColor, boolean hideHitwDeathMessages, boolean hideTgttosDeathMessages) {
     public static final Codec<ChatClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             ChatClientConfig defaultConfig = createDefaultConfig();
@@ -18,7 +18,13 @@ public record ChatClientConfig(boolean mentions, int mentionsColor) {
                           .forGetter(ChatClientConfig::mentions),
                 Codec.INT.fieldOf("mentions_color")
                           .orElse(defaultConfig.mentionsColor())
-                          .forGetter(ChatClientConfig::mentionsColor)
+                          .forGetter(ChatClientConfig::mentionsColor),
+                Codec.BOOL.fieldOf("hide_hitw_death_messages")
+                          .orElse(defaultConfig.hideHitwDeathMessages())
+                          .forGetter(ChatClientConfig::hideHitwDeathMessages),
+                Codec.BOOL.fieldOf("hide_tgttos_death_messages")
+                          .orElse(defaultConfig.hideTgttosDeathMessages())
+                          .forGetter(ChatClientConfig::hideTgttosDeathMessages)
             ).apply(instance, ChatClientConfig::new);
         }
     );
@@ -30,6 +36,6 @@ public record ChatClientConfig(boolean mentions, int mentionsColor) {
     }
 
     public static ChatClientConfig createDefaultConfig() {
-        return new ChatClientConfig(false, 0xE7FF54);
+        return new ChatClientConfig(false, 0xE7FF54, false, false);
     }
 }
