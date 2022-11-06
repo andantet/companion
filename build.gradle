@@ -1,3 +1,6 @@
+//file:noinspection ForeignDelegate
+//file:noinspection DependencyNotationArgument
+
 buildscript {
   dependencies {
     classpath 'org.kohsuke:github-api:1.135'
@@ -23,6 +26,11 @@ logger.lifecycle("Building MCCIC: " + version)
 
 /* Versioning & Dependencies */
 
+
+import com.modrinth.minotaur.dependencies.DependencyType
+import com.modrinth.minotaur.dependencies.ModDependency
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 import org.apache.commons.codec.digest.DigestUtils
 
 def getSubprojectVersion(project) {
@@ -106,7 +114,7 @@ allprojects {
 
   apply plugin: 'maven-publish'
 
-  tasks.withType(GenerateModuleMetadata) {
+  tasks.withType(GenerateModuleMetadata).configureEach {
     enabled = false
   }
 
@@ -176,9 +184,25 @@ allprojects {
     filesMatching("fabric.mod.json") {
       expand "version": project.version
     }
+
+    doLast {
+      println("Minifying json")
+      def start = System.currentTimeMillis()
+      def minif = 0
+      def bytes = 0
+      fileTree(dir: outputs.files.asPath, include: '**/*.json').each {
+        File file = it
+        minif++
+        def oldLength = file.length()
+        file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
+        bytes = oldLength - file.length()
+      }
+      def ms = System.currentTimeMillis() - start
+      println("Minified $minif json files. Saved $bytes bytes. Took $ms ms.")
+    }
   }
 
-  tasks.withType(AbstractArchiveTask) {
+  tasks.withType(AbstractArchiveTask).configureEach {
     preserveFileTimestamps = false
     reproducibleFileOrder = true
   }
@@ -280,7 +304,7 @@ dependencies {
 remapJar {
   afterEvaluate {
     subprojects.each {
-      nestedJars.from project("${it.path}").tasks.getByName("remapJar")
+      nestedJars.from project("${it.path}").tasks.named("remapJar")
     }
   }
 }
@@ -291,8 +315,7 @@ def VER_NAME = "[$project.major_version] $project.mod_name $project.version"
 def CHANGELOG = new File("./gradle", "CHANGELOG.md").text
 def SUPPORTED_VERSIONS = Arrays.asList(project.supported_versions.split(','))
 
-import org.kohsuke.github.*
-task github(dependsOn: build) {
+tasks.register('github') {
   onlyIf { ENV.GITHUB_TOKEN }
   doLast {
     def github = GitHub.connectUsingOAuth(ENV.GITHUB_TOKEN)
@@ -307,7 +330,10 @@ task github(dependsOn: build) {
   }
 }
 
-import com.modrinth.minotaur.dependencies.*
+
+import org.kohsuke.github.GHReleaseBuilder
+import org.kohsuke.github.GitHub
+
 if (ENV.MODRINTH_TOKEN) modrinth {
   token = ENV.MODRINTH_TOKEN
   projectId = project.modrinth_id
@@ -320,4 +346,6 @@ if (ENV.MODRINTH_TOKEN) modrinth {
   dependencies = [ new ModDependency("P7dR8mSH", DependencyType.REQUIRED) ]
 }
 
-task releaseVersion(dependsOn: [ build, 'github', 'modrinth' ])
+tasks.register('releaseVersion').configure {
+  dependsOn(build, 'github', 'modrinth')
+}
