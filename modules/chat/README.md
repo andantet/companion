@@ -28,3 +28,25 @@ Only available in the config JSON.
 **Default:** `#E7FF54` (`15204180`)
 
 </details>
+
+<details>
+
+<summary>Hide Hole in the Wall Death Messages </summary>
+
+Hides Hole in the Wall death messages.
+
+**Type:** boolean\
+**Default:** false
+
+</details>
+
+<details>
+
+<summary>Hide To Get to the Other Side Death Messages </summary>
+
+Hides To Get to the Other Side death messages.
+
+**Type:** boolean\
+**Default:** false
+
+</details>
