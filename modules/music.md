@@ -10,7 +10,7 @@ description: 'Implements event music for MCC: Island games and lobbies.'
 
 <summary>Game Music Volume</summary>
 
-The volume of game music.
+The volume of MCCI: Companion game music.
 
 **Type:** float\
 **Default:** 0.5
@@ -21,10 +21,21 @@ The volume of game music.
 
 <summary>Game Music Volume (After Death)</summary>
 
-The volume of game music, when played after you die in a game.
+The volume of MCCI: Companion game music, when played after you die in a game.
 
 **Type:** float\
 **Default:** 0.25
+
+</details>
+
+<details>
+
+<summary>SFX Volume</summary>
+
+The volume of MCCI: Companion additional sound effects.
+
+**Type:** float\
+**Default:** 1.0
 
 </details>
 
