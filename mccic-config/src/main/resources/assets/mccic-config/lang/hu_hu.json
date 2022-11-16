@@ -1,0 +1,10 @@
+{
+  "ui.mccic-config.config": "MCC Island: Companion - Konfiguráció",
+  "ui.mccic-config.config.other_config_location.line0": "Egyéb konfigurációk",
+  "ui.mccic-config.config.other_config_location.line1": "megtalálhatóak parancsokon keresztül vagy a Mod menüben.",
+  "ui.mccic-config.reload": "Újratöltve %s!",
+  "ui.mccic-config.reload.tooltip": "Újratöltés lemezről (Összes)",
+  "text.mccic-config.reload_config.title": "MCCI: Companion konfiguráció újratöltve!",
+  "text.mccic-config.reload_config.description": "A konfiguráció sikeresen újra lett töltve a lemezről",
+  "gui.mccic-config.save": "Alkalmazás és Mentés"
+}
