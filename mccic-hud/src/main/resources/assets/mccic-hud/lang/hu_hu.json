@@ -1,5 +1,5 @@
 {
-  "ui.mccic-hud.config": "MCCI: Companion Config - HUD",
+  "ui.mccic-hud.config": "MCCI: Companion Konfiguráció - HUD",
   "config.mccic-hud.hud_mode.default": "Alapérték",
   "config.mccic-hud.hud_mode.disabled": "Kikapcsolva",
   "config.mccic-hud.hud_mode.custom": "Egyéni",
