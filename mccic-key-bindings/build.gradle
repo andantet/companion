@@ -1,0 +1,6 @@
+archivesBaseName = 'mccic-key-bindings'
+version = getSubprojectVersion(project)
+
+moduleDependencies(project, [
+        'mccic-api'
+])

@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "mccic-key-bindings",
+  "name": "MCCI: Companion (Key Bindings)",
+  "version": "${version}",
+  "description": "Adds key bindings for various MCC: Island functionality.",
+  "icon": "assets/mccic/textures/icon.png",
+  "custom": {
+    "modmenu": {
+      "parent": "mccic"
+    }
+  },
+  "depends": {
+    "mccic-api": "*",
+    "mccic-config": "*"
+  },
+  "entrypoints": {
+    "client": [ "dev.andante.mccic.keybindings.client.MCCICKeyBindingsClientImpl" ]
+  }
+}
