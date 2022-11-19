@@ -1,5 +1,7 @@
 package dev.andante.mccic.debug.client;
 
+import com.mojang.brigadier.CommandDispatcher;
+import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
 import dev.andante.mccic.api.client.tracker.GameTracker;
@@ -14,17 +16,27 @@ import dev.andante.mccic.debug.client.config.DebugConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.ClickEvent;
 import net.minecraft.text.LiteralTextContent;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 import java.util.OptionalInt;
+
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 @Environment(EnvType.CLIENT)
 public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitializer {
@@ -36,6 +48,31 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
         HudRenderCallback.EVENT.register(this::onHudRender);
         MCCIChatEvent.EVENT.register(this::onChatMessage);
         MCCISoundPlayEvent.EVENT.register(this::onSoundPlay);
+        ClientCommandRegistrationCallback.EVENT.register(this::registerCommands);
+    }
+
+    private void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
+        dispatcher.register(literal(MOD_ID + ":chatrawactionbar").executes(context -> {
+            Text text = ClientHelper.getActionBarText();
+            if (text != null) {
+                String str = ClientHelper.getActionBarText().toString();
+                context.getSource().sendFeedback(Text.literal(StringUtils.truncate(str, 200) + "...").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str)).withUnderline(true)));
+                return 1;
+            }
+
+            throw new IllegalStateException("No action bar present");
+        }));
+
+        dispatcher.register(literal(MOD_ID + ":chatunicodes").executes(context -> {
+            UnicodeIconsStore.INSTANCE.getData().ifPresent(data -> {
+                MinecraftClient client = MinecraftClient.getInstance();
+                ClientPlayerEntity player = client.player;
+                for (UnicodeIconsStore.CharPair pair : data.chars()) {
+                    player.sendMessage(Text.literal(pair.key() + ": ").append(Text.literal("" + pair.cha()).setStyle(Style.EMPTY.withFont(new Identifier("mcc", "icon")))));
+                }
+            });
+            return 1;
+        }));
     }
 
     private void onHudRender(MatrixStack matrices, float tickDelta) {

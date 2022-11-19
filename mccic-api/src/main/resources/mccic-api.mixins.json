@@ -14,6 +14,7 @@
     "client.SoundSystemMixin",
     "client.SystemToastMixin",
     "client.access.BossBarHudAccessor",
+    "client.access.InGameHudAccessor",
     "client.access.SystemToastAccessor",
     "client.access.SystemToastTypeAccessor"
   ],

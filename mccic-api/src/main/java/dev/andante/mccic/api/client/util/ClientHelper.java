@@ -3,6 +3,7 @@ package dev.andante.mccic.api.client.util;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.andante.mccic.api.mixin.client.access.BossBarHudAccessor;
+import dev.andante.mccic.api.mixin.client.access.InGameHudAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -13,6 +14,8 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
@@ -28,6 +31,11 @@ public interface ClientHelper {
 
     static Stream<ClientBossBar> getBossBarStream() {
         return getBossBars().values().stream();
+    }
+
+    @Nullable
+    static Text getActionBarText() {
+        return ((InGameHudAccessor) MinecraftClient.getInstance().inGameHud).getOverlayMessage();
     }
 
     static void drawOpaqueBlack(int x1, int y1, int x2, int y2) {

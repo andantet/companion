@@ -49,6 +49,10 @@ public class UnicodeIconsStore {
         return TextQuery.findText(text, ".*" + INSTANCE.getCharacterFor(icon) + ".*").isPresent();
     }
 
+    public static boolean doesTextContainIconExact(Text text, Icon icon) {
+        return TextQuery.findText(text, "" + INSTANCE.getCharacterFor(icon)).isPresent();
+    }
+
     public static boolean isPrefixedWith(Icon icon, Text text) {
         try {
             Text iconText = text.getSiblings().get(0).getSiblings().get(0);
@@ -129,7 +133,9 @@ public class UnicodeIconsStore {
         DEATH("death"),
         QUEST_BOOK("quest_book"),
         ACHIEVEMENT("achievement"),
-        INFINIBAG("infinibag");
+        INFINIBAG("infinibag"),
+        CHAT_LOCAL("chat_local"),
+        CHAT_PARTY("chat_party");
 
         private final String key;
 
