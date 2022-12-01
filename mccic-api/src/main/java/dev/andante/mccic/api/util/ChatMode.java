@@ -4,7 +4,8 @@ import net.minecraft.util.StringIdentifiable;
 
 public enum ChatMode implements StringIdentifiable {
     LOCAL("local"),
-    PARTY("party");
+    PARTY("party"),
+    TEAM("team");
 
     private final String id;
 
@@ -14,11 +15,6 @@ public enum ChatMode implements StringIdentifiable {
 
     public String getId() {
         return this.id;
-    }
-
-    public ChatMode next() {
-        ChatMode[] values = values();
-        return values[(this.ordinal() + 1) % values.length];
     }
 
     @Override

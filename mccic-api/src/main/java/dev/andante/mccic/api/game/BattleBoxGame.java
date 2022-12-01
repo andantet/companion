@@ -10,4 +10,9 @@ public class BattleBoxGame extends Game {
     public List<String> getScoreboardNames() {
         return List.of("BATTLE BOX");
     }
+
+    @Override
+    public boolean hasTeamChat() {
+        return true;
+    }
 }

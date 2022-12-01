@@ -31,6 +31,10 @@ public abstract class Game implements StringIdentifiable {
 
     public abstract List<String> getScoreboardNames();
 
+    public boolean hasTeamChat() {
+        return false;
+    }
+
     @Override
     public String asString() {
         return GameRegistry.INSTANCE.getId(this);

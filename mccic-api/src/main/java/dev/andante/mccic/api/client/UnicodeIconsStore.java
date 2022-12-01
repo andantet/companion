@@ -132,10 +132,9 @@ public class UnicodeIconsStore {
     public enum Icon {
         DEATH("death"),
         QUEST_BOOK("quest_book"),
-        ACHIEVEMENT("achievement"),
-        INFINIBAG("infinibag"),
         CHAT_LOCAL("chat_local"),
-        CHAT_PARTY("chat_party");
+        CHAT_PARTY("chat_party"),
+        CHAT_TEAM("chat_team");
 
         private final String key;
 

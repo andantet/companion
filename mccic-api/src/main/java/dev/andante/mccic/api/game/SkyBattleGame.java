@@ -10,4 +10,9 @@ public class SkyBattleGame extends Game {
     public List<String> getScoreboardNames() {
         return List.of("SKY BATTLE");
     }
+
+    @Override
+    public boolean hasTeamChat() {
+        return true;
+    }
 }
