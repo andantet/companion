@@ -81,8 +81,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
             for (String name : ClientHelper.getScoreboardPlayerNames().orElse(Collections.emptyList())) {
                 Team team = scoreboard.getPlayerTeam(name);
                 MutableText text = team == null ? Text.literal(name) : team.decorateName(Text.literal(name));
-                String tstr = text.toString();
-                String str = tstr.substring(0, tstr.length() - 2);
+                String str = text.toString();
                 context.getSource().sendFeedback(text.setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(StringUtils.truncate(str, 100) + "...").formatted(Formatting.UNDERLINE)))));
             }
             return 1;
