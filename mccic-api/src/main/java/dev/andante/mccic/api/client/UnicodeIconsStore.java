@@ -134,7 +134,8 @@ public class UnicodeIconsStore {
         QUEST_BOOK("quest_book"),
         CHAT_LOCAL("chat_local"),
         CHAT_PARTY("chat_party"),
-        CHAT_TEAM("chat_team");
+        CHAT_TEAM("chat_team"),
+        CROWN("crown");
 
         private final String key;
 

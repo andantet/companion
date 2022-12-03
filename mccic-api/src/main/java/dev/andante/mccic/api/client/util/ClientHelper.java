@@ -43,7 +43,11 @@ public interface ClientHelper {
     static Optional<Scoreboard> getScoreboard() {
         MinecraftClient client = MinecraftClient.getInstance();
         ClientPlayerEntity player = client.player;
-        return Optional.ofNullable(player.getScoreboard());
+        return player == null ? Optional.empty() : Optional.ofNullable(player.getScoreboard());
+    }
+
+    static Scoreboard getScoreboardOrThrow() {
+        return getScoreboard().orElseThrow(() -> new IllegalStateException("Scoreboard is not present when expected"));
     }
 
     static Optional<ScoreboardObjective> getSidebarObjective() {
@@ -56,7 +60,7 @@ public interface ClientHelper {
 
     static Optional<List<String>> getScoreboardPlayerNames() {
         return getSidebarObjective().map(objective -> {
-            Scoreboard scoreboard = getScoreboard().orElseThrow(() -> new IllegalStateException("Scoreboard should be present as objective was present"));
+            Scoreboard scoreboard = getScoreboardOrThrow();
             return scoreboard.getAllPlayerScores(objective)
                              .stream()
                              .sorted(ScoreboardPlayerScore.COMPARATOR.reversed())

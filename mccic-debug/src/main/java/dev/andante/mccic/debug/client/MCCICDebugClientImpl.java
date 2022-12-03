@@ -5,6 +5,8 @@ import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
 import dev.andante.mccic.api.client.tracker.GameTracker;
+import dev.andante.mccic.api.client.tracker.PartyTracker;
+import dev.andante.mccic.api.client.tracker.PartyTracker.PartyMember;
 import dev.andante.mccic.api.client.tracker.QueueTracker;
 import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.event.EventResult;
@@ -37,6 +39,7 @@ import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -83,6 +86,14 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
                 MutableText text = team == null ? Text.literal(name) : team.decorateName(Text.literal(name));
                 String str = text.toString();
                 context.getSource().sendFeedback(text.setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(StringUtils.truncate(str, 100) + "...").formatted(Formatting.UNDERLINE)))));
+            }
+            return 1;
+        }));
+
+        dispatcher.register(literal(MOD_ID + ":chat_party_instance").executes(context -> {
+            List<PartyMember> members = PartyTracker.INSTANCE.getMembers();
+            for (PartyMember member : members) {
+                context.getSource().sendFeedback(Text.of("- " + member.name() + ", " + (member.online() ? "online" : "offline") + ", " + (member.leader() ? "leader" : "member")));
             }
             return 1;
         }));

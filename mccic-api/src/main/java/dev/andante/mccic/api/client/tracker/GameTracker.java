@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 /**
- * Tracks game active data.
+ * Tracks active game data.
  */
 @Environment(EnvType.CLIENT)
 public class GameTracker {

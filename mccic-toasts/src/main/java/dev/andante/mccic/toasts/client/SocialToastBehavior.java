@@ -1,5 +1,6 @@
 package dev.andante.mccic.toasts.client;
 
+import dev.andante.mccic.api.util.TextQuery;
 import dev.andante.mccic.toasts.client.toast.SocialToast.EventType;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,9 +16,6 @@ import java.util.regex.Pattern;
 
 @Environment(EnvType.CLIENT)
 public class SocialToastBehavior {
-    @RegExp
-    public static final String USERNAME_REGEX = "^[a-zA-Z0-9_]{2,16}";
-
     private final Pattern pattern;
     private final String backupUsername;
     private final BooleanSupplier condition;
@@ -31,7 +29,7 @@ public class SocialToastBehavior {
     }
 
     public static SocialToastBehavior create(@RegExp String pattern, String backupUsername, BooleanSupplier condition, EventType... eventTypes) {
-        return new SocialToastBehavior(Pattern.compile(pattern.formatted("(%s)".formatted(USERNAME_REGEX))), backupUsername, condition, eventTypes);
+        return new SocialToastBehavior(Pattern.compile(pattern.formatted("(%s)".formatted(TextQuery.USERNAME_REGEX))), backupUsername, condition, eventTypes);
     }
 
     public static SocialToastBehavior create(@RegExp String pattern, BooleanSupplier condition, EventType... eventTypes) {
@@ -39,7 +37,7 @@ public class SocialToastBehavior {
     }
 
     public static SocialToastBehavior createUncaptured(@RegExp String pattern, BooleanSupplier condition, EventType... eventTypes) {
-        return new SocialToastBehavior(Pattern.compile(pattern.formatted(USERNAME_REGEX)), "", condition, eventTypes);
+        return new SocialToastBehavior(Pattern.compile(pattern.formatted(TextQuery.USERNAME_REGEX)), "", condition, eventTypes);
     }
 
     public static String getClientUsername() {

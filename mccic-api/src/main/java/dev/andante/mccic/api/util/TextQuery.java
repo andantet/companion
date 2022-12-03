@@ -13,6 +13,9 @@ import java.util.function.Predicate;
  * Finds the first deep sibling of a {@link Text} thats {@link LiteralTextContent} matches {@code pattern}.
  */
 public record TextQuery(List<Text> siblings, int index) {
+    @RegExp
+    public static final String USERNAME_REGEX = "^[a-zA-Z0-9_]{2,16}";
+
     public static List<TextQuery> findTexts(Text text, Predicate<Text> predicate, List<Text> pastSiblings, int pastIndex) {
         List<TextQuery> queries = new ArrayList<>();
 
