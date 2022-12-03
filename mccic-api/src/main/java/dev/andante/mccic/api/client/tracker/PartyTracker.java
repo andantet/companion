@@ -77,7 +77,11 @@ public class PartyTracker {
                                         }
 
                                         this.instance = new PartyInstance(members);
+                                    } else {
+                                        this.instance = null;
                                     }
+                                } else {
+                                    this.instance = null;
                                 }
                             });
             }
