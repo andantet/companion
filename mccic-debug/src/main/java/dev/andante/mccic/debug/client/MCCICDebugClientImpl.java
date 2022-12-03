@@ -20,11 +20,12 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.Style;
@@ -33,6 +34,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -52,7 +54,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
     }
 
     private void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
-        dispatcher.register(literal(MOD_ID + ":chatrawactionbar").executes(context -> {
+        dispatcher.register(literal(MOD_ID + ":chat_raw_action_bar").executes(context -> {
             Text text = ClientHelper.getActionBarText();
             if (text != null) {
                 String str = ClientHelper.getActionBarText().toString();
@@ -63,14 +65,26 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
             throw new IllegalStateException("No action bar present");
         }));
 
-        dispatcher.register(literal(MOD_ID + ":chatunicodes").executes(context -> {
+        dispatcher.register(literal(MOD_ID + ":chat_unicodes").executes(context -> {
             UnicodeIconsStore.INSTANCE.getData().ifPresent(data -> {
-                MinecraftClient client = MinecraftClient.getInstance();
-                ClientPlayerEntity player = client.player;
                 for (UnicodeIconsStore.CharPair pair : data.chars()) {
-                    player.sendMessage(Text.literal(pair.key() + ": ").append(Text.literal("" + pair.cha()).setStyle(Style.EMPTY.withFont(new Identifier("mcc", "icon")))));
+                    context.getSource().sendFeedback(Text.literal(pair.key() + ": ").append(Text.literal("" + pair.cha()).setStyle(Style.EMPTY.withFont(new Identifier("mcc", "icon")))));
                 }
             });
+            return 1;
+        }));
+
+        dispatcher.register(literal(MOD_ID + ":chat_sidebar_names").executes(context -> {
+            Scoreboard scoreboard = ClientHelper.getScoreboard().orElse(null);
+            for (String name : ClientHelper.getScoreboardPlayerNames().orElse(Collections.emptyList())) {
+                Team team = scoreboard.getPlayerTeam(name);
+                context.getSource().sendFeedback(team == null ? Text.literal(name) : team.decorateName(Text.literal(name)));
+            }
+
+            for (String name : ClientHelper.getScoreboardPlayerNames().orElse(Collections.emptyList())) {
+                Team team = scoreboard.getPlayerTeam(name);
+                context.getSource().sendFeedback(Text.of((team == null ? Text.literal(name) : team.decorateName(Text.empty())).toString()));
+            }
             return 1;
         }));
     }

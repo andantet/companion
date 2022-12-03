@@ -15,6 +15,7 @@ public class DebugConfigScreen extends AbstractConfigScreen<DebugClientConfig> {
     public final SimpleOption<Boolean> chatAllSoundsOption;
     public final SimpleOption<Boolean> rawChatOption;
     public final SimpleOption<Boolean> displayNameSuffixOption;
+    public final SimpleOption<Boolean> unpinServerResourcePacksOption;
 
     public DebugConfigScreen(Screen parent) {
         super(MCCICDebug.MOD_ID, parent, DebugClientConfig.CONFIG_HOLDER);
@@ -22,16 +23,17 @@ public class DebugConfigScreen extends AbstractConfigScreen<DebugClientConfig> {
         this.chatAllSoundsOption = this.ofBoolean("chat_all_sounds", DebugClientConfig::chatAllSounds);
         this.rawChatOption = this.ofBoolean("raw_chat", DebugClientConfig::rawChat);
         this.displayNameSuffixOption = this.ofBoolean("display_name_suffix", DebugClientConfig::displayNameSuffix);
+        this.unpinServerResourcePacksOption = this.ofBoolean("unpin_server_resource_packs", DebugClientConfig::unpinServerResourcePacks);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.debugHudOption, this.chatAllSoundsOption, this.rawChatOption, this.displayNameSuffixOption);
+        return List.of(this.debugHudOption, this.chatAllSoundsOption, this.rawChatOption, this.displayNameSuffixOption, this.unpinServerResourcePacksOption);
     }
 
     @Override
     public DebugClientConfig createConfig() {
-        return new DebugClientConfig(this.debugHudOption.getValue(), this.chatAllSoundsOption.getValue(), this.rawChatOption.getValue(), this.displayNameSuffixOption.getValue());
+        return new DebugClientConfig(this.debugHudOption.getValue(), this.chatAllSoundsOption.getValue(), this.rawChatOption.getValue(), this.displayNameSuffixOption.getValue(), this.unpinServerResourcePacksOption.getValue());
     }
 
     @Override

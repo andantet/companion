@@ -10,13 +10,10 @@ import dev.andante.mccic.api.game.GameState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.boss.BossBar;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.Text;
 import net.minecraft.util.TypedActionResult;
 
@@ -94,10 +91,9 @@ public class GameTracker {
      * @return whether a game is present
      */
     protected boolean updateGame() {
-        Scoreboard scoreboard = this.client.player.getScoreboard();
-        ScoreboardObjective objective = scoreboard.getObjectiveForSlot(1);
-        if (objective != null) {
-            String name = objective.getDisplayName().getString();
+        Text text = ClientHelper.getSidebarTitle().orElse(null);
+        if (text != null) {
+            String name = text.getString();
             if (name.contains(MCCI_PREFIX)) {
                 String id = name.substring(MCCI_PREFIX.length());
                 TypedActionResult<Game> result = GameRegistry.INSTANCE.fromScoreboard(id);
@@ -190,10 +186,6 @@ public class GameTracker {
      * an IP address ending in <code>mccisland.net</code>.
      */
     public boolean isOnServer() {
-        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            return true;
-        }
-
         ServerInfo server = this.client.getCurrentServerEntry();
         if (server != null) {
             return server.address.endsWith("mccisland.net");

@@ -3,5 +3,6 @@
   "config.mccic-debug.debug_hud": "Debug HUD",
   "config.mccic-debug.chat_all_sounds": "Chat All Sounds",
   "config.mccic-debug.raw_chat": "Raw Chat",
-  "config.mccic-debug.display_name_suffix": "Display Name Suffix"
+  "config.mccic-debug.display_name_suffix": "Display Name Suffix",
+  "config.mccic-debug.unpin_server_resource_packs": "Unpin Server Resource Packs"
 }

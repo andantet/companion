@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 @FunctionalInterface
 public interface MCCIChatEvent {
     /**
-     * Invoked before a chat message is added to chat.
+     * Invoked before a chat message is added to chat on MCC: Island.
      */
     Event<MCCIChatEvent> EVENT = EventFactory.createArrayBacked(MCCIChatEvent.class, callbacks -> context -> {
         boolean cancels = false;

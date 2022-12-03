@@ -28,7 +28,7 @@ public class ToastsConfigScreen extends AbstractConfigScreen<ToastsClientConfig>
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.friendsOption, this.partiesOption, this.questsOption, this.achievementsOption, this.eventAnnouncementsOption);
+        return List.of(this.friendsOption, this.partiesOption, this.questsOption, this.eventAnnouncementsOption);
     }
 
     @Override

@@ -113,7 +113,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
             }
         }
 
-        if (config.achievements()) {
+        /*if (config.achievements()) {
             OptionalInt opt = matchAndGrabIndex(message, raw, ACHIEVEMENT_UNLOCKED_TEXT, Icon.ACHIEVEMENT);
             if (opt.isPresent()) {
                 int sub = opt.getAsInt();
@@ -124,7 +124,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
                 ).add();
                 return EventResult.cancel();
             }
-        }
+        }*/
 
         return EventResult.pass();
     }

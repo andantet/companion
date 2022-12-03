@@ -5,7 +5,6 @@
   "package": "dev.andante.mccic.test.mixin",
   "mixins": [],
   "client": [
-    "client.ClientBuiltinResourcePackProviderMixin",
     "client.SoundSystemMixin"
   ],
   "injectors": {
