@@ -27,7 +27,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralTextContent;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -56,9 +58,9 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
     private void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
         dispatcher.register(literal(MOD_ID + ":chat_raw_action_bar").executes(context -> {
             Text text = ClientHelper.getActionBarText();
-            if (text != null) {
-                String str = ClientHelper.getActionBarText().toString();
-                context.getSource().sendFeedback(Text.literal(StringUtils.truncate(str, 200) + "...").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str)).withUnderline(true)));
+            if (text instanceof MutableText mutable) {
+                String str = text.toString();
+                context.getSource().sendFeedback(mutable.setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(StringUtils.truncate(str, 100) + "...").formatted(Formatting.UNDERLINE)))));
                 return 1;
             }
 
@@ -78,12 +80,9 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
             Scoreboard scoreboard = ClientHelper.getScoreboard().orElse(null);
             for (String name : ClientHelper.getScoreboardPlayerNames().orElse(Collections.emptyList())) {
                 Team team = scoreboard.getPlayerTeam(name);
-                context.getSource().sendFeedback(team == null ? Text.literal(name) : team.decorateName(Text.literal(name)));
-            }
-
-            for (String name : ClientHelper.getScoreboardPlayerNames().orElse(Collections.emptyList())) {
-                Team team = scoreboard.getPlayerTeam(name);
-                context.getSource().sendFeedback(Text.of((team == null ? Text.literal(name) : team.decorateName(Text.empty())).toString()));
+                MutableText text = team == null ? Text.literal(name) : team.decorateName(Text.literal(name));
+                String str = text.getString();
+                context.getSource().sendFeedback(text.setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(StringUtils.truncate(str, 100) + "...").formatted(Formatting.UNDERLINE)))));
             }
             return 1;
         }));
