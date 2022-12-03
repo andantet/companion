@@ -93,7 +93,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
         dispatcher.register(literal(MOD_ID + ":chat_party_instance").executes(context -> {
             List<PartyMember> members = PartyTracker.INSTANCE.getMembers();
             for (PartyMember member : members) {
-                context.getSource().sendFeedback(Text.of("- " + member.name() + ", " + (member.online() ? "online" : "offline") + ", " + (member.leader() ? "leader" : "member")));
+                context.getSource().sendFeedback(Text.of("- " + member.name() + ", " + member.status()));
             }
             return 1;
         }));

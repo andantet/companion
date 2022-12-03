@@ -2,6 +2,7 @@ package dev.andante.mccic.api.client.tracker;
 
 import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
+import dev.andante.mccic.api.client.tracker.PartyTracker.PartyMember.Status;
 import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.util.TextQuery;
 import net.fabricmc.api.EnvType;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Tracks active party data.
@@ -32,49 +34,55 @@ public class PartyTracker {
     }
 
     private void tick(MinecraftClient client) {
-        this.instance = null;
-
-        if (GameTracker.INSTANCE.isOnServer()) {
-            ClientHelper.getScoreboard()
-                        .flatMap(scoreboard -> ClientHelper.getScoreboardPlayerNames()
-                                                           .map(names -> names.stream()
-                                                                              .map(scoreboard::getPlayerTeam)
-                                                                              .map(team -> team.decorateName(Text.empty()))
-                                                                              .toList()
-                                                           )
-                        )
-                        .ifPresent(names -> {
-                            String expectedParty = names.get(1).getString();
-                            if (expectedParty.contains("PARTY:")) {
-                                List<PartyMember> members = new ArrayList<>();
-                                boolean foundLeader = false;
-                                for (int i = 0; i < 4; i++) {
-                                    int index = 2 + i;
-                                    if (index < names.size()) {
-                                        MutableText text = names.get(2 + i);
-                                        TextQuery query = TextQuery.findText(text, TextQuery.USERNAME_REGEX).orElse(null);
-                                        if (query != null) {
-                                            Text result = query.getResult();
-                                            TextColor color = result.getStyle().getColor();
-                                            String colorName = color == null ? Formatting.WHITE.getName() : color.getName();
-                                            boolean online = !colorName.equals(Formatting.DARK_GRAY.getName());
-                                            boolean leader = !foundLeader && UnicodeIconsStore.doesTextContainIconExact(text, Icon.CROWN);
-                                            members.add(new PartyMember(result.getString(), online, leader));
-
-                                            if (leader) {
-                                                foundLeader = true;
+        GameTracker gameTracker = GameTracker.INSTANCE;
+        if (gameTracker.isOnServer()) {
+            if (!gameTracker.isInGame()) {
+                ClientHelper.getScoreboard()
+                            .flatMap(scoreboard -> ClientHelper.getScoreboardPlayerNames()
+                                                               .map(names -> names.stream()
+                                                                                  .map(scoreboard::getPlayerTeam)
+                                                                                  .map(team -> team.decorateName(Text.empty()))
+                                                                                  .toList()
+                                                               )
+                            )
+                            .ifPresent(names -> {
+                                int size = names.size();
+                                if (size > 1) {
+                                    String expectedParty = names.get(1).getString();
+                                    if (expectedParty.contains("PARTY:")) {
+                                        List<PartyMember> members = new ArrayList<>();
+                                        for (int i = 0; i < 4; i++) {
+                                            int index = 2 + i;
+                                            if (index < size) {
+                                                MutableText text = names.get(2 + i);
+                                                TextQuery query = TextQuery.findText(text, TextQuery.USERNAME_REGEX).orElse(null);
+                                                if (query != null) {
+                                                    Text result = query.getResult();
+                                                    TextColor color = result.getStyle().getColor();
+                                                    String colorName = color == null ? Formatting.WHITE.getName() : color.getName();
+                                                    members.add(new PartyMember(result.getString(),
+                                                                                TextQuery.findText(text, "\\+").isPresent()
+                                                                                        ? Status.INVITED
+                                                                                        : !colorName.equals(Formatting.DARK_GRAY.getName())
+                                                                                            ? UnicodeIconsStore.doesTextContainIconExact(text, Icon.CROWN) ? Status.LEADER : Status.ONLINE
+                                                                                            : Status.OFFLINE
+                                                                )
+                                                    );
+                                                } else {
+                                                    break;
+                                                }
+                                            } else {
+                                                break;
                                             }
-                                        } else {
-                                            break;
                                         }
-                                    } else {
-                                        break;
+
+                                        this.instance = new PartyInstance(members);
                                     }
                                 }
-
-                                this.instance = new PartyInstance(members);
-                            }
-                        });
+                            });
+            }
+        } else {
+            this.instance = null;
         }
     }
 
@@ -108,11 +116,18 @@ public class PartyTracker {
     }
 
     /**
+     * @return the offline members of the party, or an empty list if the client player is not in a party
+     */
+    public List<PartyMember> getOfflineMembers() {
+        return this.getMembers().stream().filter(Predicate.not(PartyMember::isOnline)).toList();
+    }
+
+    /**
      * An instance of a party.
      */
     public record PartyInstance(List<PartyMember> members) {
         public PartyMember getLeader() {
-            return this.members.stream().filter(PartyMember::leader).findAny().orElse(new PartyMember("", true, true));
+            return this.members.stream().filter(PartyMember::isLeader).findAny().orElse(new PartyMember("", Status.LEADER));
         }
 
         public int getSize() {
@@ -128,6 +143,20 @@ public class PartyTracker {
     /**
      * A member of a party.
      */
-    public record PartyMember(String name, boolean online, boolean leader) {
+    public record PartyMember(String name, Status status) {
+        public boolean isLeader() {
+            return this.status == Status.LEADER;
+        }
+
+        public boolean isOnline() {
+            return this.status != Status.OFFLINE && this.status != Status.INVITED;
+        }
+
+        public enum Status {
+            ONLINE,
+            OFFLINE,
+            INVITED,
+            LEADER
+        }
     }
 }

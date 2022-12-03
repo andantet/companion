@@ -1,6 +1,9 @@
 {
   "menu.mccic-qol.confirmDisconnect": "Are you sure you want to disconnect?",
 
+  "text.mccic-qol.party_not_found": "You are not in a party.",
+  "text.mccic-qol.no_offline_party_members": "There are no offline party members.",
+
   "ui.mccic-qol.config": "MCCI: Companion Config - Quality of Life",
   "config.mccic-qol.confirm_disconnect_mode": "Confirm Disconnect Mode",
   "config.mccic-qol.confirm_disconnect_mode.off": "Off",
