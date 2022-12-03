@@ -60,7 +60,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
             Text text = ClientHelper.getActionBarText();
             if (text instanceof MutableText mutable) {
                 String str = text.toString();
-                context.getSource().sendFeedback(mutable.setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(StringUtils.truncate(str, 100) + "...").formatted(Formatting.UNDERLINE)))));
+                context.getSource().sendFeedback(mutable.copy().setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(StringUtils.truncate(str, 100) + "...").formatted(Formatting.UNDERLINE)))));
                 return 1;
             }
 
@@ -81,7 +81,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
             for (String name : ClientHelper.getScoreboardPlayerNames().orElse(Collections.emptyList())) {
                 Team team = scoreboard.getPlayerTeam(name);
                 MutableText text = team == null ? Text.literal(name) : team.decorateName(Text.literal(name));
-                String str = text.getString();
+                String str = text.toString();
                 context.getSource().sendFeedback(text.setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, str)).withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal(StringUtils.truncate(str, 100) + "...").formatted(Formatting.UNDERLINE)))));
             }
             return 1;
