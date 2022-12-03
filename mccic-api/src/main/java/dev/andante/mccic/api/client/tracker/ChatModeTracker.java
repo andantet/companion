@@ -34,6 +34,7 @@ public class ChatModeTracker {
     );
 
     public static final Map<ChatMode, BooleanSupplier> CHAT_MODE_PREDICATES = Map.of(
+            ChatMode.PARTY, PartyTracker.INSTANCE::isInParty,
             ChatMode.TEAM, () -> GameTracker.INSTANCE.getGame().filter(Game::hasTeamChat).isPresent()
     );
 
@@ -45,6 +46,8 @@ public class ChatModeTracker {
     }
 
     private void tick(MinecraftClient client) {
+        this.chatMode = ChatMode.LOCAL;
+
         Text text = ClientHelper.getActionBarText();
         if (text != null) {
             for (Icon icon : CHAT_MODE_ICONS.keySet()) {
@@ -53,8 +56,6 @@ public class ChatModeTracker {
                     break;
                 }
             }
-        } else {
-            this.chatMode = ChatMode.LOCAL;
         }
     }
 
