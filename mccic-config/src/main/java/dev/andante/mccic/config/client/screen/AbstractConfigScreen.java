@@ -190,6 +190,10 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         return this.ofBoolean(id, valueGetter, tooltipFactory, v -> {});
     }
 
+    public SimpleOption<Boolean> ofBooleanTooltip(String id, Function<T, Boolean> valueGetter) {
+        return this.ofBoolean(id, valueGetter, SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey(id + ".tooltip"))));
+    }
+
     public SimpleOption<Boolean> ofBoolean(String id, Function<T, Boolean> valueGetter, TooltipFactoryGetter<Boolean> tooltipFactory, Consumer<Boolean> changeCallback) {
         SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(id), tooltipFactory, valueGetter.apply(this.getDefaultConfig()), changeCallback);
         option.setValue(valueGetter.apply(this.getConfig()));

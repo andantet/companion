@@ -19,6 +19,8 @@ public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
     public final SimpleOption<Float> musicVolumeAfterDeathOption;
     public final SimpleOption<Float> sfxVolumeOption;
     public final SimpleOption<HITWSoundOnOtherDeath> hitwSoundOnOtherDeathOption;
+    public final SimpleOption<Boolean> stopMusicOnDeathOption;
+    public final SimpleOption<Boolean> stopMusicOnChickenHitOption;
 
     public MusicConfigScreen(Screen parent) {
         super(MCCICMusic.MOD_ID, parent, MusicClientConfig.CONFIG_HOLDER);
@@ -36,16 +38,18 @@ public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
                 }
             }
         );
+        this.stopMusicOnDeathOption = this.ofBooleanTooltip("stop_music_on_death", MusicClientConfig::stopMusicOnDeath);
+        this.stopMusicOnChickenHitOption = this.ofBooleanTooltip("stop_music_on_chicken_hit", MusicClientConfig::stopMusicOnChickenHit);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.musicVolumeOption, this.musicVolumeAfterDeathOption, this.sfxVolumeOption, this.hitwSoundOnOtherDeathOption);
+        return List.of(this.musicVolumeOption, this.musicVolumeAfterDeathOption, this.sfxVolumeOption, this.hitwSoundOnOtherDeathOption, this.stopMusicOnDeathOption, this.stopMusicOnChickenHitOption);
     }
 
     @Override
     public MusicClientConfig createConfig() {
-        return new MusicClientConfig(this.musicVolumeOption.getValue(), this.musicVolumeAfterDeathOption.getValue(), this.sfxVolumeOption.getValue(), this.hitwSoundOnOtherDeathOption.getValue());
+        return new MusicClientConfig(this.musicVolumeOption.getValue(), this.musicVolumeAfterDeathOption.getValue(), this.sfxVolumeOption.getValue(), this.hitwSoundOnOtherDeathOption.getValue(), this.stopMusicOnDeathOption.getValue(), this.stopMusicOnChickenHitOption.getValue());
     }
 
     @Override

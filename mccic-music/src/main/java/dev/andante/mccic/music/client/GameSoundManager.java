@@ -4,6 +4,7 @@ import dev.andante.mccic.api.client.event.*;
 import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.game.GameRegistry;
 import dev.andante.mccic.api.game.GameState;
+import dev.andante.mccic.api.game.Games;
 import dev.andante.mccic.music.MCCICMusic;
 import dev.andante.mccic.music.MCCICSounds;
 import dev.andante.mccic.music.client.config.MusicClientConfig;
@@ -57,7 +58,11 @@ public class GameSoundManager {
             case ACTIVE -> this.playCurrent(MusicClientConfig::gameMusicVolume);
             case POST_ROUND_SELF, POST_ROUND, POST_GAME -> {
                 if (this.lastSound != null) {
-                    this.soundManager.stop(this.lastSound);
+                    MusicClientConfig config = MusicClientConfig.getConfig();
+                    boolean stop = !(this.gameTracker.getGame().orElse(null) == Games.TGTTOS && state == GameState.POST_ROUND_SELF && config.stopMusicOnChickenHit());
+                    if (stop) {
+                        this.soundManager.stop(this.lastSound);
+                    }
                 }
 
                 if (state == GameState.POST_ROUND_SELF) {
@@ -68,12 +73,16 @@ public class GameSoundManager {
     }
 
     protected void onDeathScreen(DeathScreen screen) {
-        this.soundManager.stop(this.lastSound);
+        if (MusicClientConfig.getConfig().stopMusicOnDeath()) {
+            this.soundManager.stop(this.lastSound);
+        }
     }
 
     protected void onRespawn(ClientPlayerEntity player) {
-        if (!this.gameTracker.getGameState().ends()) {
-            this.playCurrent(MusicClientConfig::gameMusicVolumeAfterDeath);
+        if (MusicClientConfig.getConfig().stopMusicOnDeath()) {
+            if (!this.gameTracker.getGameState().ends()) {
+                this.playCurrent(MusicClientConfig::gameMusicVolumeAfterDeath);
+            }
         }
     }
 
