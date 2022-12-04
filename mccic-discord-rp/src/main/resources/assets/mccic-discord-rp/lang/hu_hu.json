@@ -1,0 +1,19 @@
+{
+  "ui.mccic-discord-rp.config": "MCCI: Companion Konfiguráció - Discord Státusz",
+  "text.mccic-discord-rp.idle": "Lazítás a szigeten",
+  "text.mccic-discord-rp.queue": "Várólistán",
+  "text.mccic-discord-rp.queue.players": "Várólistán (%s/%s)",
+  "text.mccic-discord-rp.queue.quickplay": "Gyorsjáték",
+  "text.mccic-discord-rp.state.active": "Kör folyamatban",
+  "text.mccic-discord-rp.state.waiting_for_game": "A játék kezdődik",
+  "text.mccic-discord-rp.state.post_round_self": "Várakozás a többi játékosra",
+  "text.mccic-discord-rp.state.post_round": "Kör Vége!",
+  "text.mccic-discord-rp.state.post_game": "Játék Vége!",
+  "text.mccic-discord-rp.state.none": "Betöltés",
+
+  "config.mccic-discord-rp.enabled": "Bekapcsolva",
+  "config.mccic-discord-rp.display_game": "Játék megjelenítése",
+  "config.mccic-discord-rp.display_game_time": "Játékidő megjelenítése",
+  "config.mccic-discord-rp.display_game_state": "Játékállapot megjelenítése",
+  "config.mccic-discord-rp.display_queue": "Várólista állapotának megjelenítése"
+}

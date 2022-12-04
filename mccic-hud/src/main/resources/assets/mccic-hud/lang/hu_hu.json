@@ -1,0 +1,16 @@
+{
+  "ui.mccic-hud.config": "MCCI: Companion Konfiguráció - HUD",
+  "config.mccic-hud.hud_mode.default": "Alapérték",
+  "config.mccic-hud.hud_mode.disabled": "Kikapcsolva",
+  "config.mccic-hud.hud_mode.custom": "Egyéni",
+  "config.mccic-hud.hud_position.top": "Fent",
+  "config.mccic-hud.hud_position.left": "Balra",
+  "config.mccic-hud.hud_position.disabled": "Kikapcsolva",
+  "config.mccic-hud.enabled": "Egyéni HUD",
+  "config.mccic-hud.timer_position": "Időzítő Pozíciója",
+  "config.mccic-hud.queue_position": "Várólista Pozíciója",
+  "text.mccic-hud.hud.game.quickplay": "GYORSJÁTÉK",
+  "text.mccic-hud.hud.time": "TELEPORTÁLÁS %s EKKOR %s!",
+  "text.mccic-hud.hud.time.in_queue": "VÁRÓLISTÁN",
+  "text.mccic-hud.hud.time.teleported": "ELTELEPORTÁLVA!"
+}

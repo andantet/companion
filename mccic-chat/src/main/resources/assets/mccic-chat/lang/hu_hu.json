@@ -1,0 +1,7 @@
+{
+  "ui.mccic-chat.config": "MCCI: Companion Konfiguráció - Chat",
+  "config.mccic-chat.mentions": "Megemlítések",
+  "config.mccic-chat.mentions_color": "Megemlítések Színe",
+  "config.mccic-chat.hide_hitw_death_messages": "Hole in the Wall Halálüzenetek Elrejtése",
+  "config.mccic-chat.hide_tgttos_death_messages": "To Get to the Other Side Halálüzenetek Elrejtése"
+}
