@@ -48,7 +48,7 @@ public class GameSoundManager {
 
     private void onSoundPlay(MCCISoundPlayEvent.Context context) {
         Identifier id = context.getSoundFileIdentifier();
-        if (id.equals(OVERTIME_MUSIC_ID)) {
+        if (id.equals(OVERTIME_MUSIC_ID) && this.lastSound != null) {
             this.soundManager.stop(this.lastSound);
         }
     }
@@ -56,17 +56,18 @@ public class GameSoundManager {
     protected void onStateUpdate(GameState state, GameState oldState) {
         switch (state) {
             case ACTIVE -> this.playCurrent(MusicClientConfig::gameMusicVolume);
-            case POST_ROUND_SELF, POST_ROUND, POST_GAME -> {
+            case POST_ROUND_SELF -> {
                 if (this.lastSound != null) {
-                    MusicClientConfig config = MusicClientConfig.getConfig();
-                    boolean stop = this.gameTracker.getGame().orElse(null) != Games.TGTTOS || state != GameState.POST_ROUND_SELF || config.stopMusicOnChickenHit();
-                    if (stop) {
+                    if (this.gameTracker.getGame().orElse(null) != Games.TGTTOS || MusicClientConfig.getConfig().stopMusicOnChickenHit()) {
                         this.soundManager.stop(this.lastSound);
                     }
                 }
 
-                if (state == GameState.POST_ROUND_SELF) {
-                    this.soundManager.play(PositionedSoundInstance.master(new SoundEvent(MCCICSounds.EARLY_ELIMINATION), 1.0f, MusicClientConfig.getConfig().sfxVolume()), 7);
+                this.soundManager.play(PositionedSoundInstance.master(new SoundEvent(MCCICSounds.EARLY_ELIMINATION), 1.0f, MusicClientConfig.getConfig().sfxVolume()), 7);
+            }
+            case POST_ROUND, POST_GAME -> {
+                if (this.lastSound != null) {
+                    this.soundManager.stop(this.lastSound);
                 }
             }
         }
