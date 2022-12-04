@@ -59,7 +59,7 @@ public class GameSoundManager {
             case POST_ROUND_SELF, POST_ROUND, POST_GAME -> {
                 if (this.lastSound != null) {
                     MusicClientConfig config = MusicClientConfig.getConfig();
-                    boolean stop = !(this.gameTracker.getGame().orElse(null) == Games.TGTTOS && state == GameState.POST_ROUND_SELF && config.stopMusicOnChickenHit());
+                    boolean stop = this.gameTracker.getGame().orElse(null) != Games.TGTTOS || state != GameState.POST_ROUND_SELF || config.stopMusicOnChickenHit();
                     if (stop) {
                         this.soundManager.stop(this.lastSound);
                     }
