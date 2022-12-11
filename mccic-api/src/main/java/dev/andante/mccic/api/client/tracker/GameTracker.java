@@ -41,6 +41,7 @@ public class GameTracker {
         this.state = GameState.NONE;
 
         ClientTickEvents.END_WORLD_TICK.register(this::onWorldTick);
+        MCCIGameEvents.TIMER_UPDATE.register(this::onTimeUpdate);
         MCCIChatEvent.EVENT.register(this::onChatMessage);
     }
 
@@ -53,34 +54,36 @@ public class GameTracker {
         this.updateState();
     }
 
+    protected void onTimeUpdate(int time, int lastTime) {
+        if (this.state == GameState.WAITING_FOR_GAME && lastTime == 1) {
+            this.setState(GameState.ACTIVE);
+        }
+    }
+
     protected EventResult onChatMessage(MCCIChatEvent.Context context) {
         GameState oldState = this.state;
 
         String raw = context.getRaw();
         if (raw.startsWith("[")) {
             if (raw.endsWith(" started!")) {
-                this.state = GameState.ACTIVE;
+                this.setState(GameState.ACTIVE);
             } else if (raw.endsWith(" over!")) {
-                this.state = raw.contains("Round") ? GameState.POST_ROUND : GameState.POST_GAME;
+                this.setState(raw.contains("Round") ? GameState.POST_ROUND : GameState.POST_GAME);
             } else if (raw.contains("you were eliminated")) {
-                this.state = GameState.POST_ROUND_SELF;
+                this.setState(GameState.POST_ROUND_SELF);
             } else if (raw.contains("you finished the round and came")) {
-                this.state = GameState.POST_ROUND_SELF;
+                this.setState(GameState.POST_ROUND_SELF);
             } else if (raw.contains("you didn't finish the round!")) {
-                this.state = GameState.POST_ROUND_SELF;
+                this.setState(GameState.POST_ROUND_SELF);
             } else if (raw.contains("Team, you won Round")) {
-                this.state = GameState.POST_ROUND;
+                this.setState(GameState.POST_ROUND);
             } else if (raw.contains("you won Round")) {
-                this.state = GameState.POST_ROUND_SELF;
+                this.setState(GameState.POST_ROUND_SELF);
             } else if (raw.contains("Team, you lost Round")) {
-                this.state = GameState.POST_ROUND;
+                this.setState(GameState.POST_ROUND);
             } else if (raw.contains("you lost Round")) {
-                this.state = GameState.POST_ROUND_SELF;
+                this.setState(GameState.POST_ROUND_SELF);
             }
-        }
-
-        if (this.state != oldState) {
-            MCCIGameEvents.STATE_UPDATE.invoker().onStateUpdate(this.state, oldState);
         }
 
         return EventResult.pass();
@@ -153,15 +156,11 @@ public class GameTracker {
         GameState oldState = this.state;
 
         if (this.game == null) {
-            this.state = GameState.NONE;
+            this.setState(GameState.NONE);
         } else {
             if (this.state == GameState.NONE) {
-                this.state = GameState.WAITING_FOR_GAME;
+                this.setState(GameState.WAITING_FOR_GAME);
             }
-        }
-
-        if (this.state != oldState) {
-            MCCIGameEvents.STATE_UPDATE.invoker().onStateUpdate(this.state, oldState);
         }
     }
 
@@ -171,6 +170,13 @@ public class GameTracker {
 
     public GameState getGameState() {
         return this.state;
+    }
+
+    protected void setState(GameState state) {
+        if (state != this.state) {
+            MCCIGameEvents.STATE_UPDATE.invoker().onStateUpdate(state, this.state);
+            this.state = state;
+        }
     }
 
     public OptionalInt getTime() {
