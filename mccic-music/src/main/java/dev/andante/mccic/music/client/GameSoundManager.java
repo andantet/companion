@@ -11,14 +11,12 @@ import dev.andante.mccic.music.client.config.MusicClientConfig;
 import dev.andante.mccic.music.client.sound.VolumeAdjustableSoundInstance;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.DeathScreen;
-import net.minecraft.client.network.ClientLoginNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.sound.SoundManager;
-import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 
@@ -35,21 +33,20 @@ public class GameSoundManager {
     public GameSoundManager(GameTracker gameTracker) {
         this.gameTracker = gameTracker;
 
-        MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
+        ClientTickEvents.START_CLIENT_TICK.register(this::tick);
         MCCISoundPlayEvent.EVENT.register(this::onSoundPlay);
         MCCIGameEvents.STATE_UPDATE.register(this::onStateUpdate);
         MCCIClientRespawnEvent.EVENT.register(this::onRespawn);
-        MCCIClientDeathScreenEvent.EVENT.register(this::onDeathScreen);
     }
 
-    protected void onClientLoginHello(ClientLoginNetworkHandler handler, LoginHelloS2CPacket packet) {
-        this.soundManager = MinecraftClient.getInstance().getSoundManager();
+    private void tick(MinecraftClient client) {
+        this.soundManager = client.getSoundManager();
     }
 
     private void onSoundPlay(MCCISoundPlayEvent.Context context) {
         Identifier id = context.getSoundFileIdentifier();
-        if (id.equals(OVERTIME_MUSIC_ID) && this.lastSound != null) {
-            this.soundManager.stop(this.lastSound);
+        if (id.equals(OVERTIME_MUSIC_ID)) {
+            this.stopLastSound();
         }
     }
 
@@ -57,25 +54,23 @@ public class GameSoundManager {
         switch (state) {
             case ACTIVE -> this.playCurrent(MusicClientConfig::gameMusicVolume);
             case POST_ROUND_SELF -> {
-                if (this.lastSound != null) {
-                    if (this.gameTracker.getGame().orElse(null) != Games.TGTTOS || MusicClientConfig.getConfig().stopMusicOnChickenHit()) {
-                        this.soundManager.stop(this.lastSound);
+                MusicClientConfig config = MusicClientConfig.getConfig();
+
+                if (this.gameTracker.getGame().orElse(null) == Games.TGTTOS) {
+                    if (config.stopMusicOnChickenHit()) {
+                        this.stopLastSound();
+                    }
+                } else {
+                    if (config.stopMusicOnDeath()) {
+                        this.stopLastSound();
                     }
                 }
 
-                this.soundManager.play(PositionedSoundInstance.master(new SoundEvent(MCCICSounds.EARLY_ELIMINATION), 1.0f, MusicClientConfig.getConfig().sfxVolume()), 7);
+                this.soundManager.play(PositionedSoundInstance.master(SoundEvent.of(MCCICSounds.EARLY_ELIMINATION), 1.0f, config.sfxVolume()), 7);
             }
             case POST_ROUND, POST_GAME -> {
-                if (this.lastSound != null) {
-                    this.soundManager.stop(this.lastSound);
-                }
+                this.stopLastSound();
             }
-        }
-    }
-
-    protected void onDeathScreen(DeathScreen screen) {
-        if (MusicClientConfig.getConfig().stopMusicOnDeath()) {
-            this.soundManager.stop(this.lastSound);
         }
     }
 
@@ -91,9 +86,15 @@ public class GameSoundManager {
         this.gameTracker.getGame().ifPresent(game -> {
             Identifier id = new Identifier(MCCICMusic.MOD_ID, "game.%s".formatted(GameRegistry.INSTANCE.getId(game)));
             SoundInstance sound = new VolumeAdjustableSoundInstance(id, () -> volume.apply(MusicClientConfig.getConfig()));
-            this.soundManager.stop(this.lastSound);
+            this.stopLastSound();
             this.lastSound = sound;
             this.soundManager.play(sound);
         });
+    }
+
+    public void stopLastSound() {
+        if (this.lastSound != null) {
+            this.soundManager.stop(this.lastSound);
+        }
     }
 }
