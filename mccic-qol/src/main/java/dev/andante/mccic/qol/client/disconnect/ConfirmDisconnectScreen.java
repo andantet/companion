@@ -41,8 +41,8 @@ public class ConfirmDisconnectScreen extends Screen {
     protected void init() {
         int x = (this.width / 2) - (BOX_WIDTH / 2);
         int y = (this.height / 2) - BOX_HEIGHT;
-        this.addDrawableChild(new ButtonWidget(x, y, BOX_WIDTH, BOX_HEIGHT, DISCONNECT_TEXT, pressAction));
-        this.addDrawableChild(new ButtonWidget(x, y + BOX_HEIGHT + (BOX_HEIGHT / 4) + 5 + 6, BOX_WIDTH, BOX_HEIGHT, CANCEL_TEXT, button -> this.close()));
+        this.addDrawableChild(ButtonWidget.builder(DISCONNECT_TEXT, pressAction).dimensions(x, y, BOX_WIDTH, BOX_HEIGHT).build());
+        this.addDrawableChild(ButtonWidget.builder(CANCEL_TEXT, button -> this.close()).dimensions(x, y + BOX_HEIGHT + (BOX_HEIGHT / 4) + 5 + 6, BOX_WIDTH, BOX_HEIGHT).build());
     }
 
     @Override

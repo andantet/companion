@@ -3,10 +3,10 @@ package dev.andante.mccic.debug.mixin.client;
 import dev.andante.mccic.debug.client.config.DebugClientConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.resource.ClientBuiltinResourcePackProvider;
+import net.minecraft.client.resource.ServerResourcePackProvider;
 import net.minecraft.resource.ResourcePackProfile;
 import net.minecraft.resource.ResourcePackSource;
-import net.minecraft.resource.metadata.PackResourceMetadata;
+import net.minecraft.resource.ResourceType;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,8 +19,8 @@ import java.io.File;
 import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
-@Mixin(ClientBuiltinResourcePackProvider.class)
-public class ClientBuiltinResourcePackProviderMixin {
+@Mixin(ServerResourcePackProvider.class)
+public class ServerResourcePackProviderMixin {
     @Shadow private @Nullable ResourcePackProfile serverContainer;
 
     @Inject(
@@ -32,9 +32,9 @@ public class ClientBuiltinResourcePackProviderMixin {
             ),
             locals = LocalCapture.CAPTURE_FAILHARD
     )
-    private void onLoadServerPack(File packZip, ResourcePackSource packSource, CallbackInfoReturnable<CompletableFuture<Void>> cir, PackResourceMetadata meta) {
+    private void onLoadServerPack(File packZip, ResourcePackSource packSource, CallbackInfoReturnable<CompletableFuture<Void>> cir, ResourcePackProfile.PackFactory packFactory, ResourcePackProfile.Metadata metadata) {
         if (DebugClientConfig.getConfig().unpinServerResourcePacks()) {
-            this.serverContainer = new ResourcePackProfile(this.serverContainer.getName(), false, this.serverContainer::createResourcePack, this.serverContainer.getDisplayName(), this.serverContainer.getDescription(), this.serverContainer.getCompatibility(), this.serverContainer.getInitialPosition(), false, this.serverContainer.getSource());
+            this.serverContainer = ResourcePackProfile.of(this.serverContainer.getName(), this.serverContainer.getDisplayName(), false, packFactory, metadata, ResourceType.CLIENT_RESOURCES, this.serverContainer.getInitialPosition(), false, this.serverContainer.getSource());
         }
     }
 }

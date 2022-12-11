@@ -5,7 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.sound.Sound;
 import net.minecraft.client.sound.SoundManager;
-import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,7 +28,7 @@ public class SoundManagerMixin {
         ),
         cancellable = true
     )
-    private static void onIsSoundResourcePresent(Sound sound, Identifier id, ResourceManager resourceManager, CallbackInfoReturnable<Boolean> cir) {
+    private static void onIsSoundResourcePresent(Sound sound, Identifier id, ResourceFactory resourceFactory, CallbackInfoReturnable<Boolean> cir) {
         if (id.getNamespace().startsWith(MCCIC.MOD_ID)) {
             cir.setReturnValue(false);
         }

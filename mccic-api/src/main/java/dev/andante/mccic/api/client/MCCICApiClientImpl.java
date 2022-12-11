@@ -14,7 +14,7 @@ import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 
-@SuppressWarnings("UnstableApiUsage")
+@SuppressWarnings("deprecation")
 @Environment(EnvType.CLIENT)
 public final class MCCICApiClientImpl implements MCCICApi, ClientModInitializer {
     @Override

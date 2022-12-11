@@ -66,7 +66,7 @@ public class ChatModeTracker {
     public ChatMode switchToNext(MinecraftClient client) {
         ClientPlayerEntity player = client.player;
         ChatMode next = this.getNext(this.chatMode);
-        player.sendCommand("chat %s".formatted(next.getId()), null);
+        player.networkHandler.sendCommand("chat %s".formatted(next.getId()));
         return next;
     }
 

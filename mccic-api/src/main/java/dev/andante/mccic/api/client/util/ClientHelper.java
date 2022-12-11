@@ -75,7 +75,7 @@ public interface ClientHelper {
     }
 
     static void drawOpaqueBlack(int x1, int y1, int x2, int y2) {
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         RenderSystem.disableTexture();
         RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();

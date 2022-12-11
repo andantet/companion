@@ -6,7 +6,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.SimpleOption;
-import net.minecraft.client.option.SimpleOption.TooltipFactoryGetter;
+import net.minecraft.client.option.SimpleOption.TooltipFactory;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
         this.emptySlotHighlightsFixOption = this.ofBoolean("empty_slot_highlights_fix", QoLClientConfig::emptySlotHighlightsFix);
         this.extendedFrustumsOption = this.ofBoolean("extended_frustums", QoLClientConfig::extendedFrustums, SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey("extended_frustums.tooltip"))));
 
-        TooltipFactoryGetter<Boolean> autoHitboxTooltip = SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey("auto_hitbox.tooltip")));
+        TooltipFactory<Boolean> autoHitboxTooltip = SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey("auto_hitbox.tooltip")));
         this.autoHitboxSkyBattleOption = this.ofBoolean("auto_hitbox_sky_battle", QoLClientConfig::autoHitboxSkyBattle, autoHitboxTooltip);
         this.autoHitboxBattleBoxOption = this.ofBoolean("auto_hitbox_battle_box", QoLClientConfig::autoHitboxBattleBox, autoHitboxTooltip);
     }

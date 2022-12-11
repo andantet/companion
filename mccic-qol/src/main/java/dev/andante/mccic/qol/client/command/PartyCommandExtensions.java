@@ -48,7 +48,7 @@ public interface PartyCommandExtensions {
         } else {
             ClientPlayerEntity player = context.getSource().getPlayer();
             for (PartyMember member : members) {
-                player.sendCommand("party kick %s".formatted(member.name()), null);
+                player.networkHandler.sendCommand("party kick %s".formatted(member.name()));
             }
         }
 

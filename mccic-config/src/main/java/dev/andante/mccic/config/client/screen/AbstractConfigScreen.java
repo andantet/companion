@@ -12,13 +12,13 @@ import dev.andante.mccic.config.mixin.client.GameOptionsInvoker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.option.VideoOptionsScreen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
-import net.minecraft.client.option.SimpleOption.TooltipFactoryGetter;
+import net.minecraft.client.option.SimpleOption.TooltipFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
@@ -79,18 +79,19 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         this.addSelectableChild(this.list);
 
         // back button
-        this.addDrawableChild(new ButtonWidget(
-            (int) ((this.width / 2f) - (BACK_BUTTON_WIDTH / 2f)), this.height - 60,
-            BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT, this.hasConfiguration ? SAVE_TEXT : ScreenTexts.BACK, this::onBackButton
-        ));
+        this.addDrawableChild(ButtonWidget.builder(this.hasConfiguration ? SAVE_TEXT : ScreenTexts.BACK, this::onBackButton).dimensions(
+                (int) ((this.width / 2f) - (BACK_BUTTON_WIDTH / 2f)), this.height - 60,
+                BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT
+        ).build());
 
         // reload button
         if (!this.hasConfiguration) {
-            this.addDrawableChild(new TexturedButtonWidget(
+            ButtonWidget widget = this.addDrawableChild(new TexturedButtonWidget(
                 10, this.height - 10 - SQUARE_BUTTON_SIZE, SQUARE_BUTTON_SIZE, SQUARE_BUTTON_SIZE, 0, 0, SQUARE_BUTTON_SIZE,
                 GameTracker.INSTANCE.isOnServer() ? RELOAD_ICONS_TEXTURE_MCCI : RELOAD_ICONS_TEXTURE,
-                32, 64, this::onReloadButton, this::renderReloadTooltip, RELOAD_TOOLTIP_TEXT
+                32, 64, this::onReloadButton, RELOAD_TOOLTIP_TEXT
             ));
+            widget.setTooltip(Tooltip.of(RELOAD_TOOLTIP_TEXT));
         }
     }
 
@@ -116,10 +117,6 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         this.configHolder.load();
     }
 
-    protected void renderReloadTooltip(ButtonWidget button, MatrixStack matrices, int mouseX, int mouseY) {
-        this.renderTooltip(matrices, RELOAD_TOOLTIP_TEXT, mouseX, mouseY);
-    }
-
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         // background
@@ -135,7 +132,6 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         // options
         if (!this.list.children().isEmpty()) {
             this.list.render(matrices, mouseX, mouseY, delta);
-            this.renderOrderedTooltip(matrices, VideoOptionsScreen.getHoveredButtonTooltip(this.list, mouseX, mouseY), mouseX, mouseY);
         }
     }
 
@@ -169,7 +165,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         return this.ofEnum(id, fromId, values, valueGetter, SimpleOption.emptyTooltip(), v -> {});
     }
 
-    public <E extends Enum<E> & TranslatableOption> SimpleOption<E> ofEnum(String id, Function<Integer, E> fromId, E[] values, Function<T, E> valueGetter, TooltipFactoryGetter<E> tooltipFactory, Consumer<E> changeCallback) {
+    public <E extends Enum<E> & TranslatableOption> SimpleOption<E> ofEnum(String id, Function<Integer, E> fromId, E[] values, Function<T, E> valueGetter, TooltipFactory<E> tooltipFactory, Consumer<E> changeCallback) {
         SimpleOption<E> option = new SimpleOption<>(
             createConfigTranslationKey(id),
             tooltipFactory, SimpleOption.enumValueText(),
@@ -186,7 +182,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         return this.ofBoolean(id, valueGetter, SimpleOption.emptyTooltip(), v -> {});
     }
 
-    public SimpleOption<Boolean> ofBoolean(String id, Function<T, Boolean> valueGetter, TooltipFactoryGetter<Boolean> tooltipFactory) {
+    public SimpleOption<Boolean> ofBoolean(String id, Function<T, Boolean> valueGetter, TooltipFactory<Boolean> tooltipFactory) {
         return this.ofBoolean(id, valueGetter, tooltipFactory, v -> {});
     }
 
@@ -194,7 +190,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         return this.ofBoolean(id, valueGetter, SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey(id + ".tooltip"))));
     }
 
-    public SimpleOption<Boolean> ofBoolean(String id, Function<T, Boolean> valueGetter, TooltipFactoryGetter<Boolean> tooltipFactory, Consumer<Boolean> changeCallback) {
+    public SimpleOption<Boolean> ofBoolean(String id, Function<T, Boolean> valueGetter, TooltipFactory<Boolean> tooltipFactory, Consumer<Boolean> changeCallback) {
         SimpleOption<Boolean> option = SimpleOption.ofBoolean(createConfigTranslationKey(id), tooltipFactory, valueGetter.apply(this.getDefaultConfig()), changeCallback);
         option.setValue(valueGetter.apply(this.getConfig()));
         return option;

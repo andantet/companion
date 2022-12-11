@@ -5,8 +5,8 @@
   "package": "dev.andante.mccic.debug.mixin",
   "mixins": [],
   "client": [
-    "client.ClientBuiltinResourcePackProviderMixin",
-    "client.PlayerEntityMixin"
+    "client.PlayerEntityMixin",
+    "client.ServerResourcePackProviderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

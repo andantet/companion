@@ -25,13 +25,13 @@ public abstract class GameMenuScreenMixin extends Screen {
      * Replace disconnect {@link PressAction} with {@link ConfirmDisconnectScreen} when on MCC: Island.
      */
     @ModifyArg(
-        method = "initWidgets",
-        at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/widget/ButtonWidget;<init>(IIIILnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V",
-            ordinal = 8
-        ),
-        index = 5
+            method = "initWidgets",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/widget/ButtonWidget;builder(Lnet/minecraft/text/Text;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)Lnet/minecraft/client/gui/widget/ButtonWidget$Builder;",
+                    ordinal = 1
+            ),
+            index = 1
     )
     private PressAction onDisconnectButtonPressAction(PressAction pressAction) {
         ConfirmDisconnectMode mode = QoLClientConfig.getConfig().confirmDisconnectMode();

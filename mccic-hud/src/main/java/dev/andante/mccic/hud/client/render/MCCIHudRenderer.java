@@ -28,6 +28,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.ToIntFunction;
 
+@SuppressWarnings("FieldCanBeLocal")
 @Environment(EnvType.CLIENT)
 public class MCCIHudRenderer extends DrawableHelper {
     public static final MCCIHudRenderer INSTANCE = new MCCIHudRenderer();
