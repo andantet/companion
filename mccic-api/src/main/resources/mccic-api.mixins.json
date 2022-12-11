@@ -9,7 +9,6 @@
     "client.ClientLoginNetworkHandlerMixin",
     "client.ClientPlayerEntityMixin",
     "client.ClientPlayNetworkHandlerMixin",
-    "client.DeathScreenMixin",
     "client.SoundManagerMixin",
     "client.SoundSystemMixin",
     "client.SystemToastMixin",
