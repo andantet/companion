@@ -19,6 +19,7 @@ import net.minecraft.util.TypedActionResult;
 
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.function.Predicate;
 
 /**
  * Tracks active game data.
@@ -27,8 +28,10 @@ import java.util.OptionalInt;
 public class GameTracker {
     public static final GameTracker INSTANCE = new GameTracker();
 
-    private static final String TIME_IDENTIFIER = ":";
-    private static final String MCCI_PREFIX = "MCCI: ";
+    public static final String TIME_IDENTIFIER = ":";
+    public static final String MCCI_PREFIX = "MCCI: ";
+
+    public static final String MCC_ISLAND_ROOT_IP = "mccisland.net";
 
     private final MinecraftClient client;
 
@@ -192,9 +195,13 @@ public class GameTracker {
      * an IP address ending in <code>mccisland.net</code>.
      */
     public boolean isOnServer() {
+        return this.isOnServer(s -> s.endsWith(MCC_ISLAND_ROOT_IP));
+    }
+
+    public boolean isOnServer(Predicate<String> predicate) {
         ServerInfo server = this.client.getCurrentServerEntry();
         if (server != null) {
-            return server.address.endsWith("mccisland.net");
+            return predicate.test(server.address);
         }
 
         return false;

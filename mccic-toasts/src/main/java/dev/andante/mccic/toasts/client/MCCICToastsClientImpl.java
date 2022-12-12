@@ -2,8 +2,8 @@ package dev.andante.mccic.toasts.client;
 
 import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
+import dev.andante.mccic.api.client.event.ClientLoginSuccessEvent;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
-import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
 import dev.andante.mccic.api.client.toast.AdaptableIconToast;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.api.mccapi.EventApiHook;
@@ -18,11 +18,15 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
+import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.TimeZone;
 import java.util.function.BooleanSupplier;
 
 @Environment(EnvType.CLIENT)
@@ -67,7 +71,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         MCCICConfigCommand.registerNewConfig(ID, ToastsConfigScreen::new);
 
         MCCIChatEvent.EVENT.register(this::onChatEvent);
-        MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
+        ClientLoginSuccessEvent.EVENT.register(this::onClientLogin);
     }
 
     public EventResult onChatEvent(MCCIChatEvent.Context context) {
@@ -135,7 +139,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
             : OptionalInt.empty();
     }
 
-    private void onClientLoginHello(ClientLoginNetworkHandler handler, LoginHelloS2CPacket packet) {
+    private void onClientLogin(ClientLoginNetworkHandler handler, LoginSuccessS2CPacket packet) {
         if (ToastsClientConfig.getConfig().eventAnnouncements()) {
             EventApiHook api = EventApiHook.INSTANCE;
             api.retrieve();

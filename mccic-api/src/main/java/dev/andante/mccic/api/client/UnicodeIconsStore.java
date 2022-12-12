@@ -8,13 +8,13 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.ListCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
-import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
+import dev.andante.mccic.api.client.event.ClientLoginSuccessEvent;
 import dev.andante.mccic.api.util.JsonHelper;
 import dev.andante.mccic.api.util.TextQuery;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
+import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class UnicodeIconsStore {
             throw new RuntimeException(exception);
         }
 
-        MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
+        ClientLoginSuccessEvent.EVENT.register(this::onClientLogin);
     }
 
     public static boolean doesTextContainIcon(Text text, Icon icon) {
@@ -65,7 +65,7 @@ public class UnicodeIconsStore {
         return false;
     }
 
-    protected void onClientLoginHello(ClientLoginNetworkHandler handler, LoginHelloS2CPacket packet) {
+    protected void onClientLogin(ClientLoginNetworkHandler handler, LoginSuccessS2CPacket packet) {
         this.retrieve();
     }
 

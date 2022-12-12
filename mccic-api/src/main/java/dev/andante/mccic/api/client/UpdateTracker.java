@@ -8,7 +8,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.MCCICApi;
-import dev.andante.mccic.api.client.event.MCCIClientLoginHelloEvent;
+import dev.andante.mccic.api.client.event.ClientLoginSuccessEvent;
 import dev.andante.mccic.api.client.toast.AdaptableIconToast;
 import dev.andante.mccic.api.util.JsonHelper;
 import net.fabricmc.api.EnvType;
@@ -19,7 +19,7 @@ import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
 import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.network.packet.s2c.login.LoginHelloS2CPacket;
+import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -50,10 +50,10 @@ public class UpdateTracker {
             throw new RuntimeException(exception);
         }
 
-        MCCIClientLoginHelloEvent.EVENT.register(this::onClientLoginHello);
+        ClientLoginSuccessEvent.EVENT.register(this::onClientLogin);
     }
 
-    protected void onClientLoginHello(ClientLoginNetworkHandler handler, LoginHelloS2CPacket packet) {
+    protected void onClientLogin(ClientLoginNetworkHandler handler, LoginSuccessS2CPacket packet) {
         this.retrieve();
 
         Optional<UpdateTracker.Data> maybeData = this.getData();

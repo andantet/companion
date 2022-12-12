@@ -16,7 +16,7 @@ plugins {
   id 'fabric-loom' version '1.0-SNAPSHOT' apply false
   id 'org.ajoberstar.grgit' version '5.0.0'
   id 'com.matthewprenger.cursegradle' version '1.4.0'
-  /*id 'com.modrinth.minotaur' version '2.4.5'*/
+  id 'com.modrinth.minotaur' version '2.4.5'
 }
 
 def ENV = System.getenv()
@@ -27,11 +27,12 @@ logger.lifecycle("Building MCCIC: " + version)
 /* Versioning & Dependencies */
 
 
-/*import com.modrinth.minotaur.dependencies.DependencyType
-import com.modrinth.minotaur.dependencies.ModDependency*/
+import com.modrinth.minotaur.dependencies.DependencyType
+import com.modrinth.minotaur.dependencies.ModDependency
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.commons.codec.digest.DigestUtils
+import org.kohsuke.github.GHReleaseBuilder
 
 def getSubprojectVersion(project) {
   def version = project.properties["${project.name}-version"]
@@ -331,10 +332,9 @@ tasks.register('github') {
 }
 
 
-import org.kohsuke.github.GHReleaseBuilder
 import org.kohsuke.github.GitHub
 
-/*if (ENV.MODRINTH_TOKEN) modrinth {
+if (ENV.MODRINTH_TOKEN) modrinth {
   token = ENV.MODRINTH_TOKEN
   projectId = project.modrinth_id
   versionNumber = version
@@ -344,7 +344,7 @@ import org.kohsuke.github.GitHub
   uploadFile = remapJar
   gameVersions = SUPPORTED_VERSIONS
   dependencies = [ new ModDependency("P7dR8mSH", DependencyType.REQUIRED) ]
-}*/
+}
 
 tasks.register('releaseVersion').configure {
   dependsOn(build, 'github', 'modrinth')
