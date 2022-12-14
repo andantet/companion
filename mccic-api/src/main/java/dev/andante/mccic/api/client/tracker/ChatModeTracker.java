@@ -72,7 +72,7 @@ public class ChatModeTracker {
 
     public ChatMode getNext(ChatMode mode) {
         List<ChatMode> values = this.getAvailableModes();
-        return values.get((mode.ordinal() + 1) % values.size());
+        return values.get((values.indexOf(mode) + 1) % values.size());
     }
 
     public List<ChatMode> getAvailableModes() {
