@@ -346,5 +346,5 @@ if (ENV.MODRINTH_TOKEN) modrinth {
 }
 
 tasks.register('releaseVersion').configure {
-  dependsOn(build, 'github', 'modrinth')
+  dependsOn(build, 'modrinth', 'github')
 }
