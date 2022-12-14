@@ -4,18 +4,19 @@ import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameRegistry;
 import dev.andante.mccic.api.util.TextQuery;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.boss.BossBar;
-import net.minecraft.text.Text;
-import org.intellij.lang.annotations.RegExp;
-
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.boss.BossBar;
+import net.minecraft.text.Text;
+import org.intellij.lang.annotations.RegExp;
 
 /**
  * Tracks active queue data.
@@ -150,5 +151,13 @@ public class QueueTracker {
      */
     public boolean isGameStarting() {
         return this.getTime().isPresent();
+    }
+
+    public boolean leaveQueue() {
+        if (game == null) return false;
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        if (player == null) return false;
+        player.networkHandler.sendCommand("leavequeue");
+        return true;
     }
 }

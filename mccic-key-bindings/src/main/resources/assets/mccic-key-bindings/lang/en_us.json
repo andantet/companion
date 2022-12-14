@@ -1,5 +1,7 @@
 {
   "ui.mccic-key-bindings.config": "MCCI: Companion Config - Key Bindings",
   "key.category.mccic-key-bindings": "MCCI: Companion (Key Bindings)",
-  "key.mccic-key-bindings.toggle_chat_mode": "Toggle Chat Mode"
+  "key.mccic-key-bindings.toggle_chat_mode": "Toggle Chat Mode",
+  "key.mccic-key-bindings.leave_queue": "Leave Queue",
+  "ui.mccic-key-bindings.not_in_queue": "You are not in a queue!"
 }
