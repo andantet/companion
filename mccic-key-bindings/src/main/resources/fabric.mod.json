@@ -14,6 +14,9 @@
     "mccic-api": "*",
     "mccic-config": "*"
   },
+  "suggests": {
+    "mccic-toasts": "*"
+  },
   "entrypoints": {
     "client": [ "dev.andante.mccic.keybindings.client.MCCICKeyBindingsClientImpl" ]
   }
