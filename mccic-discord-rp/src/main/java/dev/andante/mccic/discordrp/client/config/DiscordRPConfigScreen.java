@@ -17,6 +17,7 @@ public class DiscordRPConfigScreen extends AbstractConfigScreen<DiscordRPClientC
     public final SimpleOption<Boolean> displayGameStateOption;
     public final SimpleOption<Boolean> displayGameArtOption;
     public final SimpleOption<Boolean> displayQueueOption;
+    public final SimpleOption<Boolean> displayPartyOption;
 
     public DiscordRPConfigScreen(Screen parent) {
         super(MCCICDiscordRP.MOD_ID, parent, DiscordRPClientConfig.CONFIG_HOLDER);
@@ -26,17 +27,18 @@ public class DiscordRPConfigScreen extends AbstractConfigScreen<DiscordRPClientC
         this.displayGameStateOption = this.ofBoolean("display_game_state", DiscordRPClientConfig::displayGameState);
         this.displayGameArtOption = this.ofBooleanTooltip("display_game_art", DiscordRPClientConfig::displayGameArt);
         this.displayQueueOption = this.ofBoolean("display_queue", DiscordRPClientConfig::displayQueue);
+        this.displayPartyOption = this.ofBoolean("display_party", DiscordRPClientConfig::displayParty);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.enabledOption, this.displayGameOption, this.displayGameTimeOption, this.displayGameStateOption, this.displayGameArtOption, this.displayQueueOption);
+        return List.of(this.enabledOption, this.displayGameOption, this.displayGameTimeOption, this.displayGameStateOption, this.displayGameArtOption, this.displayQueueOption, this.displayPartyOption);
     }
 
     @Override
     public DiscordRPClientConfig createConfig() {
         DiscordRPClientConfig defaultConfig = DiscordRPClientConfig.createDefaultConfig();
-        return new DiscordRPClientConfig(defaultConfig.clientId(), this.enabledOption.getValue(), this.displayGameOption.getValue(), this.displayGameTimeOption.getValue(), this.displayGameStateOption.getValue(), this.displayGameArtOption.getValue(), this.displayQueueOption.getValue());
+        return new DiscordRPClientConfig(defaultConfig.clientId(), this.enabledOption.getValue(), this.displayGameOption.getValue(), this.displayGameTimeOption.getValue(), this.displayGameStateOption.getValue(), this.displayGameArtOption.getValue(), this.displayQueueOption.getValue(), this.displayPartyOption.getValue());
     }
 
     @Override

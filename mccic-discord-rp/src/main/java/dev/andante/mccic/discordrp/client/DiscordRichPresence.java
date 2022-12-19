@@ -8,6 +8,7 @@ import com.jagrosh.discordipc.entities.pipe.PipeStatus;
 import com.mojang.logging.LogUtils;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.tracker.GameTracker;
+import dev.andante.mccic.api.client.tracker.PartyTracker;
 import dev.andante.mccic.api.client.tracker.QueueTracker;
 import dev.andante.mccic.api.client.tracker.QueueType;
 import dev.andante.mccic.api.game.Game;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import java.time.OffsetDateTime;
 import java.util.Locale;
 import java.util.OptionalInt;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +37,8 @@ public class DiscordRichPresence {
     public static final String IDLE_TEXT = "text.%s.idle".formatted(MCCICDiscordRP.MOD_ID);
     public static final String GAME_TEXT = "text.%s.game_display".formatted(MCCICDiscordRP.MOD_ID);
     public static final String LARGE_IMAGE_TEXT = "text.%s.large_image_text".formatted(MCCICDiscordRP.MOD_ID);
+
+    public static final UUID PARTY_UUID = UUID.randomUUID();
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -105,6 +109,11 @@ public class DiscordRichPresence {
             }
         }
 
+        PartyTracker partyTracker = PartyTracker.INSTANCE;
+        if (partyTracker.isInParty()) {
+            builder.setupParty(partyTracker);
+        }
+
         this.discord.sendRichPresence(builder.build());
     }
 
@@ -155,18 +164,22 @@ public class DiscordRichPresence {
         public void setupGame(GameTracker tracker, Game game) {
             String name = game.getDisplayString();
             this.setImagesForGame(game, name);
-            builder.setDetails(name);
+            this.builder.setDetails(name);
 
             if (this.config.displayGameState()) {
                 GameState state = tracker.getGameState();
-                builder.setState(I18n.translate("text.%s.state.%s".formatted(MCCICDiscordRP.MOD_ID, state.name().toLowerCase(Locale.ROOT))));
+                this.builder.setState(I18n.translate("text.%s.state.%s".formatted(MCCICDiscordRP.MOD_ID, state.name().toLowerCase(Locale.ROOT))));
             } else {
-                builder.setState(null);
+                this.builder.setState(null);
             }
 
             if (this.config.displayGameTime()) {
                 this.setEndTimestampIfPresent(tracker.getTime());
             }
+        }
+
+        public void setupParty(PartyTracker tracker) {
+            this.builder.setParty(String.valueOf(PARTY_UUID), tracker.getSize(), 4);
         }
 
         @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
