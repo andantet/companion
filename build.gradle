@@ -317,6 +317,7 @@ def SUPPORTED_VERSIONS = Arrays.asList(project.supported_versions.split(','))
 
 tasks.register('github') {
   onlyIf { ENV.GITHUB_TOKEN }
+  dependsOn(build)
   doLast {
     def github = GitHub.connectUsingOAuth(ENV.GITHUB_TOKEN)
     def repository = github.getRepository(project.github_repository)
