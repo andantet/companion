@@ -26,7 +26,7 @@ public class QoLConfigScreen extends AbstractConfigScreen<QoLClientConfig> {
         this.confirmDisconnectModeOption = this.ofEnum("confirm_disconnect_mode", ConfirmDisconnectMode::byId, ConfirmDisconnectMode.values(), QoLClientConfig::confirmDisconnectMode);
         this.glowingModeOption = this.ofEnum("glowing_mode", GlowingMode::byId, GlowingMode.values(), QoLClientConfig::glowingMode);
         this.emptySlotHighlightsFixOption = this.ofBoolean("empty_slot_highlights_fix", QoLClientConfig::emptySlotHighlightsFix);
-        this.extendedFrustumsOption = this.ofBoolean("extended_frustums", QoLClientConfig::extendedFrustums, SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey("extended_frustums.tooltip"))));
+        this.extendedFrustumsOption = this.ofBooleanTooltip("extended_frustums", QoLClientConfig::extendedFrustums);
 
         TooltipFactory<Boolean> autoHitboxTooltip = SimpleOption.constantTooltip(Text.translatable(this.createConfigTranslationKey("auto_hitbox.tooltip")));
         this.autoHitboxSkyBattleOption = this.ofBoolean("auto_hitbox_sky_battle", QoLClientConfig::autoHitboxSkyBattle, autoHitboxTooltip);

@@ -189,17 +189,16 @@ allprojects {
     doLast {
       println("Minifying json")
       def start = System.currentTimeMillis()
-      def minif = 0
+      def minified = 0
       def bytes = 0
       fileTree(dir: outputs.files.asPath, include: '**/*.json').each {
-        File file = it
-        minif++
-        def oldLength = file.length()
-        file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
-        bytes = oldLength - file.length()
+        def oldLength = it.length()
+        it.text = JsonOutput.toJson(new JsonSlurper().parse(it))
+        bytes += oldLength - it.length()
+        minified++
       }
       def ms = System.currentTimeMillis() - start
-      println("Minified $minif json files. Saved $bytes bytes. Took $ms ms.")
+      println("Minified $minified json files. Saved $bytes bytes. Took $ms ms.")
     }
   }
 
@@ -318,6 +317,7 @@ def SUPPORTED_VERSIONS = Arrays.asList(project.supported_versions.split(','))
 
 tasks.register('github') {
   onlyIf { ENV.GITHUB_TOKEN }
+  dependsOn(build)
   doLast {
     def github = GitHub.connectUsingOAuth(ENV.GITHUB_TOKEN)
     def repository = github.getRepository(project.github_repository)
@@ -347,5 +347,5 @@ if (ENV.MODRINTH_TOKEN) modrinth {
 }
 
 tasks.register('releaseVersion').configure {
-  dependsOn(build, 'github', 'modrinth')
+  dependsOn(build, 'modrinth', 'github')
 }

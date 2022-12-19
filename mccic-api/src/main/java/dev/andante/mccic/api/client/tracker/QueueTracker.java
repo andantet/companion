@@ -106,7 +106,7 @@ public class QueueTracker {
         TextQuery.findText(text, TIME_REGEX).ifPresentOrElse(query -> {
             Text result = query.getResult();
             String raw = result.getString();
-            Matcher matcher = Pattern.compile(TIME_REGEX).matcher(raw);
+            Matcher matcher = TIME_PATTERN.matcher(raw);
             if (matcher.matches()) {
                 this.time = Integer.parseInt(matcher.group(1));
             } else {
@@ -159,5 +159,9 @@ public class QueueTracker {
         if (player == null) return false;
         player.networkHandler.sendCommand("leavequeue");
         return true;
+    }
+  
+    public boolean isInQueue() {
+        return this.queueType != QueueType.NONE;
     }
 }

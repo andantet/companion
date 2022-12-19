@@ -17,5 +17,8 @@
   "config.mccic-discord-rp.display_game": "Display Game",
   "config.mccic-discord-rp.display_game_time": "Display Game Time",
   "config.mccic-discord-rp.display_game_state": "Display Game State",
-  "config.mccic-discord-rp.display_queue": "Display Queue Status"
+  "config.mccic-discord-rp.display_game_art": "Display Game Art",
+  "config.mccic-discord-rp.display_game_art.tooltip": "ON: Display the game's art as the large image and no small image; OFF: Display the MCC: Island logo as the large image and the game's icon as the small image.",
+  "config.mccic-discord-rp.display_queue": "Display Queue Status",
+  "config.mccic-discord-rp.display_party": "Display Party"
 }

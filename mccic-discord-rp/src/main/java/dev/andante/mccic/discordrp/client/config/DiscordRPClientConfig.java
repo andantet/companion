@@ -9,7 +9,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record DiscordRPClientConfig(long clientId, boolean enabled, boolean displayGame, boolean displayGameTime, boolean displayGameState, boolean displayQueue) {
+public record DiscordRPClientConfig(long clientId, boolean enabled, boolean displayGame, boolean displayGameTime, boolean displayGameState, boolean displayGameArt, boolean displayQueue, boolean displayParty) {
     public static final Codec<DiscordRPClientConfig> CODEC = RecordCodecBuilder.create(
             instance -> {
                 ConfigCodecBuilder<DiscordRPClientConfig> builder = new ConfigCodecBuilder<>(DiscordRPClientConfig.createDefaultConfig());
@@ -19,7 +19,9 @@ public record DiscordRPClientConfig(long clientId, boolean enabled, boolean disp
                         builder.createBool("display_game", DiscordRPClientConfig::displayGame),
                         builder.createBool("display_game_time", DiscordRPClientConfig::displayGameTime),
                         builder.createBool("display_game_state", DiscordRPClientConfig::displayGameState),
-                        builder.createBool("display_queue", DiscordRPClientConfig::displayQueue)
+                        builder.createBool("display_game_art", DiscordRPClientConfig::displayGameArt),
+                        builder.createBool("display_queue", DiscordRPClientConfig::displayQueue),
+                        builder.createBool("display_party", DiscordRPClientConfig::displayParty)
                 ).apply(instance, DiscordRPClientConfig::new);
             }
     );
@@ -31,6 +33,6 @@ public record DiscordRPClientConfig(long clientId, boolean enabled, boolean disp
     }
 
     public static DiscordRPClientConfig createDefaultConfig() {
-        return new DiscordRPClientConfig(1026937264309284935L, true, true, true, true, true);
+        return new DiscordRPClientConfig(1026937264309284935L, true, true, true, true, false, true, true);
     }
 }
