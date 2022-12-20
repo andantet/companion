@@ -4,6 +4,7 @@ import dev.andante.mccic.api.client.event.MCCIClientRespawnEvent;
 import dev.andante.mccic.api.client.event.MCCIGameEvents;
 import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
 import dev.andante.mccic.api.client.tracker.GameTracker;
+import dev.andante.mccic.api.client.tracker.QueueTracker;
 import dev.andante.mccic.api.client.util.SoundFactory;
 import dev.andante.mccic.api.game.GameRegistry;
 import dev.andante.mccic.api.game.GameState;
@@ -36,16 +37,16 @@ public class GameSoundManager {
     private SoundManager soundManager;
 
     private SoundInstance lastSound;
-    private long lastOvertimeIntroAt;
+    private long fadeOutStartTick;
 
-    public static final Identifier OVERTIME_INTRO_MUSIC_ID = new Identifier("mcc", "games.global.music.overtime_intro_music");
+    public static final Identifier OVERTIME_INTRO_MUSIC_ID = new Identifier("mcc", "ui.queue_teleport");
     public static final Identifier OVERTIME_LOOP_MUSIC_ID = new Identifier("mcc", "games.global.music.overtime_loop_music");
 
     public static final GameSoundManager INSTANCE = new GameSoundManager(GameTracker.INSTANCE);
 
     public GameSoundManager(GameTracker gameTracker) {
         this.gameTracker = gameTracker;
-        this.lastOvertimeIntroAt = -1;
+        this.fadeOutStartTick = -1;
 
         ClientTickEvents.START_CLIENT_TICK.register(this::tick);
         MCCISoundPlayEvent.EVENT.register(this::onSoundPlay);
@@ -57,17 +58,9 @@ public class GameSoundManager {
         this.client = client;
         this.soundManager = client.getSoundManager();
 
-        MusicClientConfig config = MusicClientConfig.getConfig();
-        if (config.transitionToOvertime()) {
-            if (this.lastOvertimeIntroAt != -1 && this.client.world != null) {
-                long time = this.client.world.getTime();
-                if (time - this.lastOvertimeIntroAt >= config.overtimeTransitionTicks()) {
-                    this.lastOvertimeIntroAt = -1;
-                    this.stopLastSound();
-                }
-            }
-        } else {
-            this.lastOvertimeIntroAt = -1;
+        if (this.fadeOutStartTick != -1 && this.getFadeModifier() == 0.0F) {
+            this.stopLastSound();
+            this.fadeOutStartTick = -1;
         }
     }
 
@@ -75,14 +68,16 @@ public class GameSoundManager {
         Identifier id = context.getSoundFileIdentifier();
         if (MusicClientConfig.getConfig().transitionToOvertime()) {
              if (id.equals(OVERTIME_INTRO_MUSIC_ID)) {
-                if (this.client.world != null) {
-                    this.lastOvertimeIntroAt = this.client.world.getTime();
-                }
+                 this.tryFadeOut();
             }
         } else {
             if (id.equals(OVERTIME_LOOP_MUSIC_ID)) {
                 this.stopLastSound();
             }
+        }
+
+        if (this.gameTracker.isInGame() && QueueTracker.INSTANCE.getTime().orElse(-1) == 1) {
+            this.tryFadeOut();
         }
     }
 
@@ -126,18 +121,24 @@ public class GameSoundManager {
         });
     }
 
-    private float calculateVolume(Function<MusicClientConfig, Float> volumeFunction) {
-        MusicClientConfig config = MusicClientConfig.getConfig();
-        float volume = volumeFunction.apply(config);
-
-        if (this.lastOvertimeIntroAt != -1 && this.client.world != null) {
-            long time = this.client.world.getTime();
-            long diff = time - this.lastOvertimeIntroAt;
-            float mod = 1.0F - (Math.min(1.0F, (float) diff / config.overtimeTransitionTicks()));
-            return volume * mod;
+    public float getFadeModifier() {
+        if (this.client.world == null || this.fadeOutStartTick == -1) {
+            return 1.0F;
         }
 
-        return volume;
+        long time = this.client.world.getTime();
+        long diff = time - this.fadeOutStartTick;
+        return 1.0F - (Math.min(1.0F, (float) diff / MusicClientConfig.getConfig().transitionTicks()));
+    }
+
+    public float calculateVolume(Function<MusicClientConfig, Float> volumeFunction) {
+        return volumeFunction.apply(MusicClientConfig.getConfig()) * this.getFadeModifier();
+    }
+
+    public void tryFadeOut() {
+        if (this.fadeOutStartTick == -1 && this.client.world != null) {
+            this.fadeOutStartTick = this.client.world.getTime();
+        }
     }
 
     public void stopLastSound() {
