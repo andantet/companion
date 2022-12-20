@@ -14,5 +14,7 @@
   "config.mccic-music.stop_music_on_death": "Stop Music on Death",
   "config.mccic-music.stop_music_on_death.tooltip": "Whether or not the music is stopped on death in certain game modes. The music will resume on respawn.",
   "config.mccic-music.stop_music_on_chicken_hit": "Stop Music on Chicken Hit",
-  "config.mccic-music.stop_music_on_chicken_hit.tooltip": "Whether or not the music is stopped when whacking a chicken in TGTTOS."
+  "config.mccic-music.stop_music_on_chicken_hit.tooltip": "Whether or not the music is stopped when whacking a chicken in TGTTOS.",
+  "config.mccic-music.transition_to_overtime": "Transition to Overtime",
+  "config.mccic-music.transition_to_overtime.tooltip": "Whether or not the music transitions to the overtime music near the end of a game round. Disable if server lag is causing this to sound off."
 }

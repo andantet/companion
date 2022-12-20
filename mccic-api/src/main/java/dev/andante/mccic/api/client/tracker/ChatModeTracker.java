@@ -63,16 +63,27 @@ public class ChatModeTracker {
         return this.chatMode;
     }
 
-    public ChatMode switchToNext(MinecraftClient client) {
-        ClientPlayerEntity player = client.player;
-        ChatMode next = this.getNext(this.chatMode);
-        player.networkHandler.sendCommand("chat %s".formatted(next.getId()));
-        return next;
+    public boolean switchTo(MinecraftClient client, ChatMode mode) {
+        if (mode != this.chatMode) {
+            ClientPlayerEntity player = client.player;
+            player.networkHandler.sendCommand("chat %s".formatted(mode.getId()));
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean switchToNext(MinecraftClient client) {
+        return this.switchTo(client, this.getNext());
     }
 
     public ChatMode getNext(ChatMode mode) {
         List<ChatMode> values = this.getAvailableModes();
         return values.get((values.indexOf(mode) + 1) % values.size());
+    }
+
+    public ChatMode getNext() {
+        return this.getNext(this.chatMode);
     }
 
     public List<ChatMode> getAvailableModes() {

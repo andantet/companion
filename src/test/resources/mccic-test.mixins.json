@@ -5,6 +5,7 @@
   "package": "dev.andante.mccic.test.mixin",
   "mixins": [],
   "client": [
+    "client.ClientPlayNetworkHandlerMixin",
     "client.SoundSystemMixin"
   ],
   "injectors": {

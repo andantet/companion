@@ -1,9 +1,9 @@
 package dev.andante.mccic.music.client.config;
 
+import dev.andante.mccic.api.sound.MCCICSounds;
 import dev.andante.mccic.api.util.EnumHelper;
 import dev.andante.mccic.config.EnumOption;
 import dev.andante.mccic.music.MCCICMusic;
-import dev.andante.mccic.music.MCCICSounds;
 import net.minecraft.util.Identifier;
 
 import java.util.Locale;

@@ -1,27 +1,4 @@
 {
-  "early_elimination": {
-    "sounds": [
-      "mcc:games.global.early_elimination"
-    ]
-  },
-  "team_eliminated": {
-    "sounds": [
-      "mcc:games.global.objective.team_eliminated"
-    ]
-  },
-
-  "score.big_coins": {
-    "sounds": [
-      "mcc:games.global.score.big_coins"
-    ]
-  },
-
-  "score.acquired": {
-    "sounds": [
-      "mcc:games.global.score.acquired"
-    ]
-  },
-
   "game.hole_in_the_wall": {
     "sounds": [
       {

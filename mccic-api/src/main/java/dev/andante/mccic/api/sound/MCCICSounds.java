@@ -1,5 +1,6 @@
-package dev.andante.mccic.music;
+package dev.andante.mccic.api.sound;
 
+import dev.andante.mccic.api.MCCIC;
 import net.minecraft.util.Identifier;
 
 public interface MCCICSounds {
@@ -7,8 +8,9 @@ public interface MCCICSounds {
     Identifier TEAM_ELIMINATED = create("team_eliminated");
     Identifier SCORE_BIG_COINS = create("score.big_coins");
     Identifier SCORE_ACQUIRED = create("score.acquired");
+    Identifier UI_CLICK_NORMAL = create("ui.click_normal");
 
     static Identifier create(String id) {
-        return new Identifier("mccic-music", id);
+        return new Identifier(MCCIC.MOD_ID, id);
     }
 }

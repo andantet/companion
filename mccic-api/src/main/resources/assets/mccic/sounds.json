@@ -1,0 +1,30 @@
+{
+  "early_elimination": {
+    "sounds": [
+      "mcc:games.global.early_elimination"
+    ]
+  },
+  "team_eliminated": {
+    "sounds": [
+      "mcc:games.global.objective.team_eliminated"
+    ]
+  },
+  "score.big_coins": {
+    "sounds": [
+      "mcc:games.global.score.big_coins"
+    ]
+  },
+  "score.acquired": {
+    "sounds": [
+      "mcc:games.global.score.acquired"
+    ]
+  },
+
+  "ui.click_normal": {
+    "sounds": [
+      "mcc:ui.click_normal.1",
+      "mcc:ui.click_normal.2",
+      "mcc:ui.click_normal.3"
+    ]
+  }
+}

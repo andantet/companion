@@ -1,5 +1,6 @@
 {
   "ui.mccic-key-bindings.config": "MCCI: Companion Config - Key Bindings",
   "key.category.mccic-key-bindings": "MCCI: Companion (Key Bindings)",
-  "key.mccic-key-bindings.toggle_chat_mode": "Toggle Chat Mode"
+  "key.mccic-key-bindings.toggle_chat_mode": "Toggle Chat Mode",
+  "text.mccic-key-bindings.toggle_chat_mode.no_chat_modes_available": "Cannot toggle chat mode! There are no other chat modes available."
 }
