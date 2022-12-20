@@ -11,12 +11,14 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
+    public final SimpleOption<Boolean> mccicLoadingScreenOption;
     public final SimpleOption<Boolean> enabledOption;
     public final SimpleOption<HudPosition> timerPositionOption;
     public final SimpleOption<HudPosition> queuePositionOption;
 
     public HudConfigScreen(Screen parent) {
         super(MCCICHud.MOD_ID, parent, HudClientConfig.CONFIG_HOLDER);
+        this.mccicLoadingScreenOption = this.ofBooleanTooltip("mccic_loading_screen", HudClientConfig::mccicLoadingScreen);
         this.enabledOption = this.ofBoolean("enabled", HudClientConfig::enabled);
         this.timerPositionOption = this.ofEnum("timer_position", HudPosition::byId, HudPosition.values(), HudClientConfig::timerPosition);
         this.queuePositionOption = this.ofEnum("queue_position", HudPosition::byId, HudPosition.values(), HudClientConfig::queuePosition);
@@ -24,12 +26,12 @@ public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.enabledOption, this.timerPositionOption, this.queuePositionOption);
+        return List.of(this.mccicLoadingScreenOption, this.enabledOption, this.timerPositionOption, this.queuePositionOption);
     }
 
     @Override
     public HudClientConfig createConfig() {
-        return new HudClientConfig(this.enabledOption.getValue(), this.timerPositionOption.getValue(), this.queuePositionOption.getValue());
+        return new HudClientConfig(this.mccicLoadingScreenOption.getValue(), this.enabledOption.getValue(), this.timerPositionOption.getValue(), this.queuePositionOption.getValue());
     }
 
     @Override

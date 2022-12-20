@@ -10,11 +10,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record HudClientConfig(boolean enabled, HudPosition timerPosition, HudPosition queuePosition) {
+public record HudClientConfig(boolean mccicLoadingScreen, boolean enabled, HudPosition timerPosition, HudPosition queuePosition) {
     public static final Codec<HudClientConfig> CODEC = RecordCodecBuilder.create(
             instance -> {
                 ConfigCodecBuilder<HudClientConfig> builder = new ConfigCodecBuilder<>(HudClientConfig.createDefaultConfig());
                 return instance.group(
+                        builder.createBool("mccic_loading_screen", HudClientConfig::mccicLoadingScreen),
                         builder.createBool("enabled", HudClientConfig::enabled),
                         builder.createEnum("timer_position", HudPosition::values, HudClientConfig::timerPosition),
                         builder.createEnum("queue_position", HudPosition::values, HudClientConfig::queuePosition)
@@ -29,6 +30,6 @@ public record HudClientConfig(boolean enabled, HudPosition timerPosition, HudPos
     }
 
     public static HudClientConfig createDefaultConfig() {
-        return new HudClientConfig(false, HudPosition.TOP, HudPosition.TOP);
+        return new HudClientConfig(true, false, HudPosition.TOP, HudPosition.TOP);
     }
 }

@@ -6,7 +6,8 @@
   "mixins": [],
   "client": [
     "client.BossBarHudMixin",
-    "client.InGameHudMixin"
+    "client.InGameHudMixin",
+    "client.SplashOverlayMixin"
   ],
   "injectors": {
     "defaultRequire": 1
