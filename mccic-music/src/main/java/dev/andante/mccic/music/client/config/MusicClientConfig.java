@@ -8,7 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfterDeath, float sfxVolume, HITWSoundOnOtherDeath hitwSoundOnOtherDeath, boolean stopMusicOnDeath, boolean stopMusicOnChickenHit, boolean transitionToOvertime, int transitionTicks) {
+public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfterDeath, float sfxVolume, HITWSoundOnOtherDeath hitwSoundOnOtherDeath, boolean stopMusicOnDeath, boolean stopMusicOnChickenHit, boolean transitionToOvertime, int transitionTicks, int queueTransitionSecond) {
     public static final Codec<MusicClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             ConfigCodecBuilder<MusicClientConfig> builder = new ConfigCodecBuilder<>(MusicClientConfig.createDefaultConfig());
@@ -20,7 +20,8 @@ public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfte
                 builder.createBool("stop_music_on_death", MusicClientConfig::stopMusicOnDeath),
                 builder.createBool("stop_music_on_chicken_hit", MusicClientConfig::stopMusicOnChickenHit),
                 builder.createBool("transition_to_overtime", MusicClientConfig::transitionToOvertime),
-                builder.createInt("transition_ticks", MusicClientConfig::transitionTicks)
+                builder.createInt("transition_ticks", MusicClientConfig::transitionTicks),
+                builder.createInt("queue_transition_second", MusicClientConfig::queueTransitionSecond)
             ).apply(instance, MusicClientConfig::new);
         }
     );
@@ -32,6 +33,6 @@ public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfte
     }
 
     public static MusicClientConfig createDefaultConfig() {
-        return new MusicClientConfig(0.5F, 0.25F, 1.0F, HITWSoundOnOtherDeath.OFF, true, false, true, 2 * 20);
+        return new MusicClientConfig(0.5F, 0.25F, 1.0F, HITWSoundOnOtherDeath.OFF, true, false, true, 2 * 20, 3);
     }
 }

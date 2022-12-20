@@ -33,11 +33,10 @@ import java.util.function.Function;
 public class GameSoundManager {
     private final GameTracker gameTracker;
 
-    private MinecraftClient client;
     private SoundManager soundManager;
 
     private SoundInstance lastSound;
-    private long fadeOutStartTick;
+    private FadeOut fadeOut;
 
     public static final Identifier OVERTIME_INTRO_MUSIC_ID = new Identifier("mcc", "ui.queue_teleport");
     public static final Identifier OVERTIME_LOOP_MUSIC_ID = new Identifier("mcc", "games.global.music.overtime_loop_music");
@@ -46,7 +45,6 @@ public class GameSoundManager {
 
     public GameSoundManager(GameTracker gameTracker) {
         this.gameTracker = gameTracker;
-        this.fadeOutStartTick = -1;
 
         ClientTickEvents.START_CLIENT_TICK.register(this::tick);
         MCCISoundPlayEvent.EVENT.register(this::onSoundPlay);
@@ -55,18 +53,23 @@ public class GameSoundManager {
     }
 
     private void tick(MinecraftClient client) {
-        this.client = client;
         this.soundManager = client.getSoundManager();
 
-        if (this.fadeOutStartTick != -1 && this.getFadeModifier() == 0.0F) {
-            this.stopLastSound();
-            this.fadeOutStartTick = -1;
+        if (this.fadeOut != null) {
+            this.fadeOut.tick();
+
+            if (this.fadeOut.isFinished()) {
+                this.fadeOut = null;
+                this.stopLastSound();
+            }
         }
     }
 
     private void onSoundPlay(MCCISoundPlayEvent.Context context) {
+        MusicClientConfig config = MusicClientConfig.getConfig();
+
         Identifier id = context.getSoundFileIdentifier();
-        if (MusicClientConfig.getConfig().transitionToOvertime()) {
+        if (config.transitionToOvertime()) {
              if (id.equals(OVERTIME_INTRO_MUSIC_ID)) {
                  this.tryFadeOut();
             }
@@ -76,7 +79,7 @@ public class GameSoundManager {
             }
         }
 
-        if (this.gameTracker.isInGame() && QueueTracker.INSTANCE.getTime().orElse(-1) == 1) {
+        if (this.gameTracker.isInGame() && QueueTracker.INSTANCE.getTime().orElse(-1) == config.queueTransitionSecond()) {
             this.tryFadeOut();
         }
     }
@@ -121,23 +124,17 @@ public class GameSoundManager {
         });
     }
 
-    public float getFadeModifier() {
-        if (this.client.world == null || this.fadeOutStartTick == -1) {
-            return 1.0F;
-        }
-
-        long time = this.client.world.getTime();
-        long diff = time - this.fadeOutStartTick;
-        return 1.0F - (Math.min(1.0F, (float) diff / MusicClientConfig.getConfig().transitionTicks()));
+    public float calculateVolume(Function<MusicClientConfig, Float> volumeFunction) {
+        return volumeFunction.apply(MusicClientConfig.getConfig()) * this.getVolumeModifier();
     }
 
-    public float calculateVolume(Function<MusicClientConfig, Float> volumeFunction) {
-        return volumeFunction.apply(MusicClientConfig.getConfig()) * this.getFadeModifier();
+    public float getVolumeModifier() {
+        return this.fadeOut == null ? 1.0F : this.fadeOut.getModifier();
     }
 
     public void tryFadeOut() {
-        if (this.fadeOutStartTick == -1 && this.client.world != null) {
-            this.fadeOutStartTick = this.client.world.getTime();
+        if (this.fadeOut == null) {
+            this.fadeOut = new FadeOut(MusicClientConfig.getConfig().transitionTicks());
         }
     }
 
@@ -152,6 +149,27 @@ public class GameSoundManager {
         float pitch = (deathSoundConfig.hasRandomPitch() ? random.nextFloat() * 0.17F : 0.0F) + 1.0F;
         for (Identifier sound : deathSoundConfig.getSounds()) {
             this.soundManager.play(SoundFactory.create(sound, SoundCategory.MASTER, volume, pitch));
+        }
+    }
+
+    public static class FadeOut {
+        private final int max;
+        private int tick;
+
+        public FadeOut(int ticks) {
+            this.max = ticks;
+        }
+
+        public void tick() {
+            this.tick++;
+        }
+
+        public boolean isFinished() {
+            return this.tick >= this.max;
+        }
+
+        public float getModifier() {
+            return 1.0F - ((float) this.tick / this.max);
         }
     }
 }
