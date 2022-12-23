@@ -147,6 +147,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     }
 
     protected void saveConfig() {
+        this.configHolder.load();
         this.configHolder.set(this.createConfig());
         this.configHolder.save();
     }
