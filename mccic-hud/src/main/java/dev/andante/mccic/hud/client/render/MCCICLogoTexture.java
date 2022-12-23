@@ -40,16 +40,16 @@ public class MCCICLogoTexture extends ResourceTexture {
                 ResourceTexture.TextureData textureData;
                 try {
                     textureData = new ResourceTexture.TextureData(new TextureResourceMetadata(true, true), NativeImage.read(stream));
-                } catch (Throwable var8) {
+                } catch (Throwable throwable) {
                     if (stream != null) {
                         try {
                             stream.close();
                         } catch (Throwable var7) {
-                            var8.addSuppressed(var7);
+                            throwable.addSuppressed(var7);
                         }
                     }
 
-                    throw var8;
+                    throw throwable;
                 }
 
                 if (stream != null) {
@@ -57,8 +57,8 @@ public class MCCICLogoTexture extends ResourceTexture {
                 }
 
                 return textureData;
-            } catch (IOException var9) {
-                return new ResourceTexture.TextureData(var9);
+            } catch (IOException exception) {
+                return new ResourceTexture.TextureData(exception);
             }
         }
     }

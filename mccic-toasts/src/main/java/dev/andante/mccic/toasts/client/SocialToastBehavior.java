@@ -1,5 +1,6 @@
 package dev.andante.mccic.toasts.client;
 
+import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.util.TextQuery;
 import dev.andante.mccic.toasts.client.toast.SocialToast.EventType;
 import net.fabricmc.api.EnvType;
@@ -41,7 +42,7 @@ public class SocialToastBehavior {
     }
 
     public static String getClientUsername() {
-        return MinecraftClient.getInstance().getSession().getUsername();
+        return ClientHelper.getFromClient(MinecraftClient::getSession).getUsername();
     }
 
     public Optional<String> matchAndRetrieveUsername(String str) {

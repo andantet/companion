@@ -1,6 +1,7 @@
 package dev.andante.mccic.qol.mixin.client;
 
 import dev.andante.mccic.api.client.tracker.GameTracker;
+import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.api.game.Games;
@@ -50,7 +51,7 @@ public abstract class EntityRenderDispatcherMixin {
             Game game = maybeGame.get();
             QoLClientConfig config = QoLClientConfig.getConfig();
             if ((game == Games.SKY_BATTLE && config.autoHitboxSkyBattle()) || (game == Games.BATTLE_BOX && config.autoHitboxBattleBox())) {
-                if (!this.renderHitboxes && !entity.isInvisible() && !MinecraftClient.getInstance().hasReducedDebugInfo()) {
+                if (!this.renderHitboxes && !entity.isInvisible() && !ClientHelper.getFromClient(MinecraftClient::hasReducedDebugInfo)) {
                     renderHitbox(matrices, vertices.getBuffer(RenderLayer.getLines()), entity, tickDelta);
                 }
             }

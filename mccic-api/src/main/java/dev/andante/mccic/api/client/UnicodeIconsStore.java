@@ -135,7 +135,8 @@ public class UnicodeIconsStore {
         CHAT_LOCAL("chat_local"),
         CHAT_PARTY("chat_party"),
         CHAT_TEAM("chat_team"),
-        CROWN("crown");
+        CROWN("crown"),
+        FADE("fade");
 
         private final String key;
 

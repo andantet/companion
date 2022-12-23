@@ -10,5 +10,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Environment(EnvType.CLIENT)
 @Mixin(InGameHud.class)
 public interface InGameHudAccessor {
+    @Accessor Text getTitle();
+    @Accessor Text getSubtitle();
     @Accessor Text getOverlayMessage();
+    @Accessor int getTitleFadeInTicks();
 }

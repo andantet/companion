@@ -3,22 +3,26 @@ package dev.andante.mccic.api.client.util;
 import com.mojang.blaze3d.platform.GlStateManager.DstFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SrcFactor;
 import com.mojang.blaze3d.systems.RenderSystem;
+import dev.andante.mccic.api.client.UnicodeIconsStore;
+import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
 import dev.andante.mccic.api.mixin.client.access.BossBarHudAccessor;
 import dev.andante.mccic.api.mixin.client.access.InGameHudAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.BossBarHud;
 import net.minecraft.client.gui.hud.ClientBossBar;
+import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
+import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,24 +30,59 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 @Environment(EnvType.CLIENT)
 public interface ClientHelper {
+    static <T> T getFromClient(Function<MinecraftClient, T> function) {
+        return function.apply(MinecraftClient.getInstance());
+    }
+
+    static <T> Optional<T> getFromClientPlayer(Function<ClientPlayerEntity, T> function) {
+        ClientPlayerEntity player = getFromClient(client -> client.player);
+        return player == null ? Optional.empty() : Optional.of(function.apply(player));
+    }
+
+    static <T> T getFromInGameHud(Function<InGameHud, T> function) {
+        return function.apply(getFromClient(client -> client.inGameHud));
+    }
+
+    static <T> T getFromInGameHudAccessed(Function<InGameHudAccessor, T> function) {
+        return getFromInGameHud(hud -> function.apply((InGameHudAccessor) hud));
+    }
+
     static Map<UUID, ClientBossBar> getBossBars() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        BossBarHud hud = client.inGameHud.getBossBarHud();
-        return ((BossBarHudAccessor) hud).getBossBars();
+        return getFromInGameHud(hud -> ((BossBarHudAccessor) hud.getBossBarHud()).getBossBars());
     }
 
     static Stream<ClientBossBar> getBossBarStream() {
         return getBossBars().values().stream();
     }
 
+    static Optional<Text> getTitle() {
+        return Optional.ofNullable(getFromInGameHudAccessed(InGameHudAccessor::getTitle));
+    }
+
+    static Optional<Text> getSubtitle() {
+        return Optional.ofNullable(getFromInGameHudAccessed(InGameHudAccessor::getSubtitle));
+    }
+
+    static int getTitleFadeTicks() {
+        return getFromInGameHudAccessed(InGameHudAccessor::getTitleFadeInTicks);
+    }
+
+    static boolean isFading() {
+        return getTitle().map(Text::getContent)
+                         .filter(LiteralTextContent.class::isInstance)
+                         .map(LiteralTextContent.class::cast)
+                         .map(LiteralTextContent::string)
+                         .filter(s -> s.equals("" + UnicodeIconsStore.INSTANCE.getCharacterFor(Icon.FADE)))
+                         .isPresent();
+    }
+
     static Optional<Scoreboard> getScoreboard() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        ClientPlayerEntity player = client.player;
-        return player == null ? Optional.empty() : Optional.ofNullable(player.getScoreboard());
+        return getFromClientPlayer(PlayerEntity::getScoreboard);
     }
 
     static Scoreboard getScoreboardOrThrow() {
@@ -71,7 +110,7 @@ public interface ClientHelper {
 
     @Nullable
     static Text getActionBarText() {
-        return ((InGameHudAccessor) MinecraftClient.getInstance().inGameHud).getOverlayMessage();
+        return getFromInGameHudAccessed(InGameHudAccessor::getOverlayMessage);
     }
 
     static void drawOpaqueBlack(int x1, int y1, int x2, int y2) {

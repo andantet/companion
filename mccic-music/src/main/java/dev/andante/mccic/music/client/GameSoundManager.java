@@ -4,7 +4,7 @@ import dev.andante.mccic.api.client.event.MCCIClientRespawnEvent;
 import dev.andante.mccic.api.client.event.MCCIGameEvents;
 import dev.andante.mccic.api.client.event.MCCISoundPlayEvent;
 import dev.andante.mccic.api.client.tracker.GameTracker;
-import dev.andante.mccic.api.client.tracker.QueueTracker;
+import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.client.util.SoundFactory;
 import dev.andante.mccic.api.game.GameRegistry;
 import dev.andante.mccic.api.game.GameState;
@@ -38,7 +38,7 @@ public class GameSoundManager {
     private SoundInstance lastSound;
     private FadeOut fadeOut;
 
-    public static final Identifier OVERTIME_INTRO_MUSIC_ID = new Identifier("mcc", "ui.queue_teleport");
+    public static final Identifier OVERTIME_INTRO_MUSIC_ID = new Identifier("mcc", "games.global.music.overtime_intro_music");
     public static final Identifier OVERTIME_LOOP_MUSIC_ID = new Identifier("mcc", "games.global.music.overtime_loop_music");
 
     public static final GameSoundManager INSTANCE = new GameSoundManager(GameTracker.INSTANCE);
@@ -71,7 +71,7 @@ public class GameSoundManager {
         Identifier id = context.getSoundFileIdentifier();
         if (config.transitionToOvertime()) {
              if (id.equals(OVERTIME_INTRO_MUSIC_ID)) {
-                 this.tryFadeOut();
+                 this.tryFadeOut(config.overtimeTransitionTicks());
             }
         } else {
             if (id.equals(OVERTIME_LOOP_MUSIC_ID)) {
@@ -79,8 +79,8 @@ public class GameSoundManager {
             }
         }
 
-        if (this.gameTracker.isInGame() && QueueTracker.INSTANCE.getTime().orElse(-1) == config.queueTransitionSecond()) {
-            this.tryFadeOut();
+        if (this.lastSound != null && ClientHelper.isFading()) {
+            this.tryFadeOut(config.fadeTransitionTicks());
         }
     }
 
@@ -132,15 +132,16 @@ public class GameSoundManager {
         return this.fadeOut == null ? 1.0F : this.fadeOut.getModifier();
     }
 
-    public void tryFadeOut() {
-        if (this.fadeOut == null) {
-            this.fadeOut = new FadeOut(MusicClientConfig.getConfig().transitionTicks());
+    public void tryFadeOut(int ticks) {
+        if (this.fadeOut == null && this.lastSound != null) {
+            this.fadeOut = new FadeOut(ticks);
         }
     }
 
     public void stopLastSound() {
         if (this.lastSound != null) {
             this.soundManager.stop(this.lastSound);
+            this.lastSound = null;
         }
     }
 
