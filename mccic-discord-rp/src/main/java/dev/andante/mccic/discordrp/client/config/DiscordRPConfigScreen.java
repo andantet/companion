@@ -37,8 +37,8 @@ public class DiscordRPConfigScreen extends AbstractConfigScreen<DiscordRPClientC
 
     @Override
     public DiscordRPClientConfig createConfig() {
-        DiscordRPClientConfig defaultConfig = this.getDefaultConfig();
-        return new DiscordRPClientConfig(defaultConfig.clientId(), this.enabledOption.getValue(), this.displayGameOption.getValue(), this.displayGameTimeOption.getValue(), this.displayGameStateOption.getValue(), this.displayGameArtOption.getValue(), this.displayQueueOption.getValue(), this.displayPartyOption.getValue());
+        DiscordRPClientConfig config = this.getConfig();
+        return new DiscordRPClientConfig(config.clientId(), this.enabledOption.getValue(), this.displayGameOption.getValue(), this.displayGameTimeOption.getValue(), this.displayGameStateOption.getValue(), this.displayGameArtOption.getValue(), this.displayQueueOption.getValue(), this.displayPartyOption.getValue());
     }
 
     @Override

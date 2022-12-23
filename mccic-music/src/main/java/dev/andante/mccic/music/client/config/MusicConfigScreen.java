@@ -51,8 +51,8 @@ public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
 
     @Override
     public MusicClientConfig createConfig() {
-        MusicClientConfig defaultConfig = this.getDefaultConfig();
-        return new MusicClientConfig(this.musicVolumeOption.getValue(), this.musicVolumeAfterDeathOption.getValue(), this.sfxVolumeOption.getValue(), this.hitwSoundOnOtherDeathOption.getValue(), this.stopMusicOnDeathOption.getValue(), this.stopMusicOnChickenHitOption.getValue(), this.transitionToOvertimeOption.getValue(), defaultConfig.overtimeTransitionTicks(), defaultConfig.fadeTransitionTicks());
+        MusicClientConfig config = this.getConfig();
+        return new MusicClientConfig(this.musicVolumeOption.getValue(), this.musicVolumeAfterDeathOption.getValue(), this.sfxVolumeOption.getValue(), this.hitwSoundOnOtherDeathOption.getValue(), this.stopMusicOnDeathOption.getValue(), this.stopMusicOnChickenHitOption.getValue(), this.transitionToOvertimeOption.getValue(), config.overtimeTransitionTicks(), config.fadeTransitionTicks());
     }
 
     @Override
