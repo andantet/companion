@@ -9,10 +9,12 @@ import com.mojang.serialization.codecs.ListCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.util.JsonHelper;
+import dev.andante.mccic.api.util.MCCIFont;
 import dev.andante.mccic.api.util.TextQuery;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.text.LiteralTextContent;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
 
@@ -48,6 +50,15 @@ public class UnicodeIconsStore {
 
     public static boolean doesTextContainIconExact(Text text, Icon icon) {
         return TextQuery.findText(text, "" + INSTANCE.getCharacterFor(icon)).isPresent();
+    }
+
+    public static boolean doesTextContainIconExactFont(Text text, Icon icon, MCCIFont font) {
+        return TextQuery.findText(text, "" + INSTANCE.getCharacterFor(icon))
+                        .map(TextQuery::getResult)
+                        .map(Text::getStyle)
+                        .map(Style::getFont)
+                        .filter(id -> font.getFont().equals(id))
+                        .isPresent();
     }
 
     public static boolean isPrefixedWith(Icon icon, Text text) {

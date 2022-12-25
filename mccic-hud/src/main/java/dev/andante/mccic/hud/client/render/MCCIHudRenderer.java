@@ -5,6 +5,7 @@ import dev.andante.mccic.api.client.tracker.QueueTracker;
 import dev.andante.mccic.api.client.tracker.QueueType;
 import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.game.Game;
+import dev.andante.mccic.api.util.MCCIFont;
 import dev.andante.mccic.config.ConfigHolder;
 import dev.andante.mccic.hud.MCCICHud;
 import dev.andante.mccic.hud.client.config.HudClientConfig;
@@ -19,7 +20,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 
 import java.util.ArrayList;
@@ -37,8 +37,7 @@ public class MCCIHudRenderer extends DrawableHelper {
         BORDER = 3,
         ELEMENT_SEPARATOR = (BORDER * 2) + 1;
 
-    public static final Identifier HUD_FONT = new Identifier("mcc", "hud");
-    public static final Style HUD_FONT_STYLE = Style.EMPTY.withFont(HUD_FONT);
+    public static final Style HUD_FONT_STYLE = Style.EMPTY.withFont(MCCIFont.HUD.getFont());
 
     public static final String
         HUD_GAME_QUICKPLAY_TEXT = "text.%s.hud.game.quickplay".formatted(MCCICHud.MOD_ID),
