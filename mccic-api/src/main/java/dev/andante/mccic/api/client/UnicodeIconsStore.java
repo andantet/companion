@@ -136,7 +136,15 @@ public class UnicodeIconsStore {
         CHAT_PARTY("chat_party"),
         CHAT_TEAM("chat_team"),
         CROWN("crown"),
-        FADE("fade");
+        FADE("fade"),
+        GUI_WARDROBE("gui_wardrobe"),
+        GUI_WARDROBE_EDITOR("gui_wardrobe_editor"),
+        GUI_WARDROBE_EDITOR_FULL("gui_wardrobe_editor_full"),
+        GUI_WARDROBE_EDITOR_COLORS_SWATCH("gui_wardrobe_editor_colors_swatch"),
+        GUI_WARDROBE_EDITOR_FULL_COLORS_FACTION("gui_wardrobe_editor_full_colors_faction"),
+        GUI_WARDROBE_EDITOR_COLORS_FACTION("gui_wardrobe_editor_colors_faction"),
+        GUI_WARDROBE_EDITOR_FULL_VARIANTS("gui_wardrobe_editor_full_variants"),
+        GUI_WARDROBE_EDITOR_VARIANTS("gui_wardrobe_editor_variants");
 
         private final String key;
 

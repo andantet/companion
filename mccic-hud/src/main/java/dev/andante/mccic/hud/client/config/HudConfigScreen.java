@@ -11,6 +11,7 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
+    public final SimpleOption<Boolean> playerPreviewInWardrobeOption;
     public final SimpleOption<Boolean> mccicLoadingScreenOption;
     public final SimpleOption<Boolean> enabledOption;
     public final SimpleOption<HudPosition> timerPositionOption;
@@ -18,6 +19,7 @@ public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
 
     public HudConfigScreen(Screen parent) {
         super(MCCICHud.MOD_ID, parent, HudClientConfig.CONFIG_HOLDER);
+        this.playerPreviewInWardrobeOption = this.ofBooleanTooltip("player_preview_in_wardrobe", HudClientConfig::playerPreviewInWardrobe);
         this.mccicLoadingScreenOption = this.ofBooleanTooltip("mccic_loading_screen", HudClientConfig::mccicLoadingScreen);
         this.enabledOption = this.ofBoolean("enabled", HudClientConfig::enabled);
         this.timerPositionOption = this.ofEnum("timer_position", HudPosition::byId, HudPosition.values(), HudClientConfig::timerPosition);
@@ -26,12 +28,12 @@ public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.mccicLoadingScreenOption, this.enabledOption, this.timerPositionOption, this.queuePositionOption);
+        return List.of(this.playerPreviewInWardrobeOption, this.mccicLoadingScreenOption, this.enabledOption, this.timerPositionOption, this.queuePositionOption);
     }
 
     @Override
     public HudClientConfig createConfig() {
-        return new HudClientConfig(this.mccicLoadingScreenOption.getValue(), this.enabledOption.getValue(), this.timerPositionOption.getValue(), this.queuePositionOption.getValue());
+        return new HudClientConfig(this.playerPreviewInWardrobeOption.getValue(), this.mccicLoadingScreenOption.getValue(), this.enabledOption.getValue(), this.timerPositionOption.getValue(), this.queuePositionOption.getValue());
     }
 
     @Override

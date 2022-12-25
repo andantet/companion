@@ -6,6 +6,8 @@
   "config.mccic-hud.hud_position.top": "Top",
   "config.mccic-hud.hud_position.left": "Left",
   "config.mccic-hud.hud_position.disabled": "Disabled",
+  "config.mccic-hud.player_preview_in_wardrobe": "Player Preview in Wardrobe",
+  "config.mccic-hud.player_preview_in_wardrobe.tooltip": "Whether to render a player preview in wardrobe menus.",
   "config.mccic-hud.mccic_loading_screen": "MCCIC Loading Screen",
   "config.mccic-hud.mccic_loading_screen.tooltip": "Replaces the loading screen with the MCCI: Companion logo when loading MCC: Island.",
   "config.mccic-hud.enabled": "Custom HUD",
