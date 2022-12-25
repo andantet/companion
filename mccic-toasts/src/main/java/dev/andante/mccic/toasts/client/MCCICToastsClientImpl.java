@@ -2,7 +2,7 @@ package dev.andante.mccic.toasts.client;
 
 import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
-import dev.andante.mccic.api.client.event.ClientLoginSuccessEvent;
+import dev.andante.mccic.api.client.event.MCCIClientGameJoinEvent;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.toast.AdaptableIconToast;
 import dev.andante.mccic.api.event.EventResult;
@@ -17,8 +17,8 @@ import dev.andante.mccic.toasts.client.toast.SocialToast.EventType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -71,7 +71,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         MCCICConfigCommand.registerNewConfig(ID, ToastsConfigScreen::new);
 
         MCCIChatEvent.EVENT.register(this::onChatEvent);
-        ClientLoginSuccessEvent.EVENT.register(this::onClientLogin);
+        MCCIClientGameJoinEvent.EVENT.register(this::onGameJoin);
     }
 
     public EventResult onChatEvent(MCCIChatEvent.Context context) {
@@ -139,7 +139,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
             : OptionalInt.empty();
     }
 
-    private void onClientLogin(ClientLoginNetworkHandler handler, LoginSuccessS2CPacket packet) {
+    private void onGameJoin(ClientPlayNetworkHandler handler, GameJoinS2CPacket packet) {
         if (ToastsClientConfig.getConfig().eventAnnouncements()) {
             EventApiHook api = EventApiHook.INSTANCE;
             api.retrieve();

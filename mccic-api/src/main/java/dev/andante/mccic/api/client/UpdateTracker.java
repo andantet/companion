@@ -8,7 +8,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.MCCICApi;
-import dev.andante.mccic.api.client.event.ClientLoginSuccessEvent;
+import dev.andante.mccic.api.client.event.MCCIClientGameJoinEvent;
 import dev.andante.mccic.api.client.toast.AdaptableIconToast;
 import dev.andante.mccic.api.util.JsonHelper;
 import net.fabricmc.api.EnvType;
@@ -18,9 +18,14 @@ import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
-import net.minecraft.client.network.ClientLoginNetworkHandler;
-import net.minecraft.network.packet.s2c.login.LoginSuccessS2CPacket;
+import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 
@@ -37,6 +42,10 @@ public class UpdateTracker {
 
     public static final String UPDATE_POPUP_TITLE = "text.%s.update_available.title".formatted(MCCICApi.MOD_ID);
     public static final String UPDATE_POPUP_DESCRIPTION = "text.%s.update_available.description".formatted(MCCICApi.MOD_ID);
+    public static final String UPDATE_VERSION = "text.%s.update_version".formatted(MCCICApi.MOD_ID);
+    public static final String UPDATE_MESSAGE = "text.%s.update_message".formatted(MCCICApi.MOD_ID);
+    public static final String UPDATE_MESSAGE_DOWNLOAD = "%s.download".formatted(UPDATE_MESSAGE);
+    public static final String UPDATE_MESSAGE_TOOLTIP = "%s.tooltip".formatted(UPDATE_MESSAGE);
 
     public static final Identifier UPDATE_TOAST_TEXTURE = new Identifier(MCCICApi.MOD_ID, "textures/gui/toasts/update.png");
 
@@ -50,15 +59,37 @@ public class UpdateTracker {
             throw new RuntimeException(exception);
         }
 
-        ClientLoginSuccessEvent.EVENT.register(this::onClientLogin);
+        MCCIClientGameJoinEvent.EVENT.register(this::onGameJoin);
     }
 
-    protected void onClientLogin(ClientLoginNetworkHandler handler, LoginSuccessS2CPacket packet) {
+    protected void onGameJoin(ClientPlayNetworkHandler handler, GameJoinS2CPacket packet) {
         this.retrieve();
 
-        Optional<UpdateTracker.Data> maybeData = this.getData();
-        if (maybeData.isPresent() && this.isUpdateAvailable()) {
-            new AdaptableIconToast(UPDATE_TOAST_TEXTURE, Text.translatable(UPDATE_POPUP_TITLE, data.latest()), Text.translatable(UPDATE_POPUP_DESCRIPTION)).add();
+        if (this.data != null && this.isUpdateAvailable()) {
+            this.data.createSemanticVersion().ifPresent(version -> {
+                FabricLoader loader = FabricLoader.getInstance();
+                Text updateVersion = Text.translatable(UPDATE_VERSION, "%s.%s.%s%s".formatted(
+                        version.getVersionComponent(0), version.getVersionComponent(1), version.getVersionComponent(2),
+                        version.getPrereleaseKey().map(s -> "-" + s).orElse("")), version.getBuildKey().orElseGet(MinecraftClient.getInstance()::getGameVersion)
+                );
+
+                new AdaptableIconToast(UPDATE_TOAST_TEXTURE, Text.translatable(UPDATE_POPUP_TITLE, updateVersion), Text.translatable(UPDATE_POPUP_DESCRIPTION)).add();
+
+                loader.getModContainer(MCCICApi.MOD_ID)
+                            .map(ModContainer::getMetadata)
+                            .map(ModMetadata::getContact)
+                            .flatMap(contacts -> contacts.get("download"))
+                            .map(s -> s.formatted(this.data.latest()))
+                            .ifPresent(downloadUrl -> {
+                                MinecraftClient client = MinecraftClient.getInstance();
+                                client.player.sendMessage(
+                                        Text.translatable(UPDATE_MESSAGE, updateVersion, Text.translatable(UPDATE_MESSAGE_DOWNLOAD).formatted(Formatting.BOLD, Formatting.UNDERLINE))
+                                            .styled(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable(UPDATE_MESSAGE_TOOLTIP).formatted(Formatting.GREEN)))
+                                                                  .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, downloadUrl)))
+                                            .formatted(Formatting.GREEN)
+                                );
+                            });
+            });
         }
     }
 
