@@ -13,27 +13,29 @@ import java.util.List;
 public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
     public final SimpleOption<Boolean> playerPreviewInWardrobeOption;
     public final SimpleOption<Boolean> mccicLoadingScreenOption;
-    public final SimpleOption<Boolean> enabledOption;
-    public final SimpleOption<HudPosition> timerPositionOption;
-    public final SimpleOption<HudPosition> queuePositionOption;
+    public final SimpleOption<Boolean> autoCloseBetaTestWarningOption;
+    public final SimpleOption<Boolean> hudEnabledOption;
+    public final SimpleOption<HudPosition> hudTimerPositionOption;
+    public final SimpleOption<HudPosition> hudQueuePositionOption;
 
     public HudConfigScreen(Screen parent) {
         super(MCCICHud.MOD_ID, parent, HudClientConfig.CONFIG_HOLDER);
         this.playerPreviewInWardrobeOption = this.ofBooleanTooltip("player_preview_in_wardrobe", HudClientConfig::playerPreviewInWardrobe);
         this.mccicLoadingScreenOption = this.ofBooleanTooltip("mccic_loading_screen", HudClientConfig::mccicLoadingScreen);
-        this.enabledOption = this.ofBoolean("enabled", HudClientConfig::enabled);
-        this.timerPositionOption = this.ofEnum("timer_position", HudPosition::byId, HudPosition.values(), HudClientConfig::timerPosition);
-        this.queuePositionOption = this.ofEnum("queue_position", HudPosition::byId, HudPosition.values(), HudClientConfig::queuePosition);
+        this.autoCloseBetaTestWarningOption = this.ofBooleanTooltip("auto_close_beta_test_warning", HudClientConfig::autoCloseBetaTestWarning);
+        this.hudEnabledOption = this.ofBoolean("hud_enabled", HudClientConfig::hudEnabled);
+        this.hudTimerPositionOption = this.ofEnum("hud_timer_position", HudPosition::byId, HudPosition.values(), HudClientConfig::hudTimerPosition);
+        this.hudQueuePositionOption = this.ofEnum("hud_queue_position", HudPosition::byId, HudPosition.values(), HudClientConfig::hudQueuePosition);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.playerPreviewInWardrobeOption, this.mccicLoadingScreenOption, this.enabledOption, this.timerPositionOption, this.queuePositionOption);
+        return List.of(this.playerPreviewInWardrobeOption, this.mccicLoadingScreenOption, this.autoCloseBetaTestWarningOption, this.hudEnabledOption, this.hudTimerPositionOption, this.hudQueuePositionOption);
     }
 
     @Override
     public HudClientConfig createConfig() {
-        return new HudClientConfig(this.playerPreviewInWardrobeOption.getValue(), this.mccicLoadingScreenOption.getValue(), this.enabledOption.getValue(), this.timerPositionOption.getValue(), this.queuePositionOption.getValue());
+        return new HudClientConfig(this.playerPreviewInWardrobeOption.getValue(), this.mccicLoadingScreenOption.getValue(), this.autoCloseBetaTestWarningOption.getValue(), this.hudEnabledOption.getValue(), this.hudTimerPositionOption.getValue(), this.hudQueuePositionOption.getValue());
     }
 
     @Override

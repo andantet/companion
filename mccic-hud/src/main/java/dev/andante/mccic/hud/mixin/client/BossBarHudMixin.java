@@ -18,7 +18,7 @@ public abstract class BossBarHudMixin extends DrawableHelper {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void onRender(MatrixStack matrices, CallbackInfo ci) {
         if (GameTracker.INSTANCE.isOnServer()) {
-            if (HudClientConfig.getConfig().enabled()) {
+            if (HudClientConfig.getConfig().hudEnabled()) {
                 ci.cancel();
             }
         }

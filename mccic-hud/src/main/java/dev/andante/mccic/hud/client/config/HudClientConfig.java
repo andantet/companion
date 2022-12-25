@@ -10,16 +10,17 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record HudClientConfig(boolean playerPreviewInWardrobe, boolean mccicLoadingScreen, boolean enabled, HudPosition timerPosition, HudPosition queuePosition) {
+public record HudClientConfig(boolean playerPreviewInWardrobe, boolean mccicLoadingScreen, boolean autoCloseBetaTestWarning, boolean hudEnabled, HudPosition hudTimerPosition, HudPosition hudQueuePosition) {
     public static final Codec<HudClientConfig> CODEC = RecordCodecBuilder.create(
             instance -> {
                 ConfigCodecBuilder<HudClientConfig> builder = new ConfigCodecBuilder<>(HudClientConfig.createDefaultConfig());
                 return instance.group(
                         builder.createBool("player_preview_in_wardrobe", HudClientConfig::playerPreviewInWardrobe),
                         builder.createBool("mccic_loading_screen", HudClientConfig::mccicLoadingScreen),
-                        builder.createBool("enabled", HudClientConfig::enabled),
-                        builder.createEnum("timer_position", HudPosition::values, HudClientConfig::timerPosition),
-                        builder.createEnum("queue_position", HudPosition::values, HudClientConfig::queuePosition)
+                        builder.createBool("auto_close_beta_test_warning", HudClientConfig::autoCloseBetaTestWarning),
+                        builder.createBool("hud_enabled", HudClientConfig::hudEnabled),
+                        builder.createEnum("hud_timer_position", HudPosition::values, HudClientConfig::hudTimerPosition),
+                        builder.createEnum("hud_queue_position", HudPosition::values, HudClientConfig::hudQueuePosition)
                 ).apply(instance, HudClientConfig::new);
             }
     );
@@ -31,6 +32,6 @@ public record HudClientConfig(boolean playerPreviewInWardrobe, boolean mccicLoad
     }
 
     public static HudClientConfig createDefaultConfig() {
-        return new HudClientConfig(true, true, false, HudPosition.TOP, HudPosition.TOP);
+        return new HudClientConfig(true, true, false, false, HudPosition.TOP, HudPosition.TOP);
     }
 }

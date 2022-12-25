@@ -144,7 +144,8 @@ public class UnicodeIconsStore {
         GUI_WARDROBE_EDITOR_FULL_COLORS_FACTION("gui_wardrobe_editor_full_colors_faction"),
         GUI_WARDROBE_EDITOR_COLORS_FACTION("gui_wardrobe_editor_colors_faction"),
         GUI_WARDROBE_EDITOR_FULL_VARIANTS("gui_wardrobe_editor_full_variants"),
-        GUI_WARDROBE_EDITOR_VARIANTS("gui_wardrobe_editor_variants");
+        GUI_WARDROBE_EDITOR_VARIANTS("gui_wardrobe_editor_variants"),
+        GUI_BETA_TEST_WARNING("gui_beta_test_warning");
 
         private final String key;
 

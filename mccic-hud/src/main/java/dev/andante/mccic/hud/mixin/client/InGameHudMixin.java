@@ -26,7 +26,7 @@ public class InGameHudMixin {
     private void onRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         if (GameTracker.INSTANCE.isOnServer()) {
             HudClientConfig config = HudClientConfig.getConfig();
-            if (config.enabled()) {
+            if (config.hudEnabled()) {
                 MCCIHudRenderer.INSTANCE.render(matrices, tickDelta, config);
             }
         }

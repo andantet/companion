@@ -65,8 +65,8 @@ public class MCCIHudRenderer extends DrawableHelper {
         this.leftElements.clear();
 
         HudClientConfig config = configHolder.get();
-        this.addElement(config.queuePosition(), new QueueElement());
-        this.addElement(config.timerPosition(), new TimeElement());
+        this.addElement(config.hudQueuePosition(), new QueueElement());
+        this.addElement(config.hudTimerPosition(), new TimeElement());
     }
 
     public void addElement(HudPosition position, Element element) {
@@ -198,7 +198,7 @@ public class MCCIHudRenderer extends DrawableHelper {
 
         @Override
         public boolean shouldCenterText() {
-            return HudClientConfig.getConfig().queuePosition() == HudPosition.TOP;
+            return HudClientConfig.getConfig().hudQueuePosition() == HudPosition.TOP;
         }
 
         @Override
