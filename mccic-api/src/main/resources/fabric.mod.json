@@ -27,8 +27,7 @@
   "contact": {
     "homepage": "https://mccic.andante.dev",
     "sources": "https://github.com/andantet/companion/tree/HEAD/mccic-api",
-    "issues": "https://github.com/andantet/companion/issues",
-    "download": "https://modrinth.com/mod/mccic/version/%s"
+    "issues": "https://github.com/andantet/companion/issues"
   },
 
   "custom": {

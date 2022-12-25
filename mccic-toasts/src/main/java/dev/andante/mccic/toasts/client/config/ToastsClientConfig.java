@@ -9,7 +9,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record ToastsClientConfig(boolean friends, boolean parties, boolean quests, boolean achievements, boolean eventAnnouncements) {
+public record ToastsClientConfig(boolean friends, boolean parties, boolean quests, boolean achievements, boolean eventAnnouncements, boolean updateNotifications) {
     public static final Codec<ToastsClientConfig> CODEC = RecordCodecBuilder.create(
             instance -> {
                 ConfigCodecBuilder<ToastsClientConfig> builder = new ConfigCodecBuilder<>(ToastsClientConfig.createDefaultConfig());
@@ -18,7 +18,8 @@ public record ToastsClientConfig(boolean friends, boolean parties, boolean quest
                         builder.createBool("parties", ToastsClientConfig::parties),
                         builder.createBool("quests", ToastsClientConfig::quests),
                         builder.createBool("achievements", ToastsClientConfig::achievements),
-                        builder.createBool("event_announcements", ToastsClientConfig::eventAnnouncements)
+                        builder.createBool("event_announcements", ToastsClientConfig::eventAnnouncements),
+                        builder.createBool("update_notifications", ToastsClientConfig::updateNotifications)
                 ).apply(instance, ToastsClientConfig::new);
             }
     );
@@ -30,6 +31,6 @@ public record ToastsClientConfig(boolean friends, boolean parties, boolean quest
     }
 
     public static ToastsClientConfig createDefaultConfig() {
-        return new ToastsClientConfig(true, true, true, true, true);
+        return new ToastsClientConfig(true, true, true, true, true, true);
     }
 }

@@ -1,13 +1,6 @@
 {
   "pack.mccic-api.american_date_format.meta.description": "Custom date formatting",
 
-  "text.mccic-api.update_available.title": "[MCCIC] Update available! (%s)",
-  "text.mccic-api.update_available.description": "Head to Modrinth to get the latest version",
-  "text.mccic-api.update_version": "%s for MC %s",
-  "text.mccic-api.update_message": "[MCCIC] An update is available (%s) %s",
-  "text.mccic-api.update_message.download": "Click here to download!",
-  "text.mccic-api.update_message.tooltip": "Click to Download (modrinth.com/...)",
-
   "mccic.game.hole_in_the_wall": "Hole in the Wall",
   "mccic.game.tgttos": "To Get to the Other Side",
   "mccic.game.sky_battle": "Sky Battle",

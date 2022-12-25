@@ -7,12 +7,22 @@
   "text.mccic-toasts.mcc_soon_popup.title": "MCC %s is soon!",
   "text.mccic-toasts.mcc_soon_popup.description": "The next event is on %s/%s @ %s%s %s!",
 
+  "text.mccic-toasts.update_available.title": "[MCCIC] Update available! (%s)",
+  "text.mccic-toasts.update_available.description": "Head to Modrinth to get the latest version",
+  "text.mccic-toasts.update_version": "%s for MC %s",
+  "text.mccic-toasts.update_message": "[MCCIC] An update is available (%s) %s",
+  "text.mccic-toasts.update_message.download": "Click here to download!",
+  "text.mccic-toasts.update_message.tooltip": "Click to Download (modrinth.com/...)",
+
   "ui.mccic-toasts.config": "MCCI: Companion Config - Toasts",
   "config.mccic-toasts.friends": "Friends",
   "config.mccic-toasts.parties": "Parties",
   "config.mccic-toasts.quests": "Quests",
   "config.mccic-toasts.achievements": "Achievements",
   "config.mccic-toasts.event_announcements": "Event Announcements",
+  "config.mccic-toasts.event_announcements.tooltip": "Get notified when the next MCC event is going to happen!",
+  "config.mccic-toasts.update_notifications": "Update Notifications",
+  "config.mccic-toasts.update_notifications.tooltip": "Get notified when MCCI: Companion updates.",
 
   "toast.mccic-toasts.type.friend_join": "Friend joined",
   "toast.mccic-toasts.type.friend_leave": "Friend left",

@@ -5,6 +5,9 @@
   "text.mccic-toasts.mcc_soon_popup.title": "MCC %s hamarosan!",
   "text.mccic-toasts.mcc_soon_popup.description": "A következő esemény ekkor kezdődik: %s/%s @ %s%s %s!",
 
+  "text.mccic-toasts.update_available.title": "[MCCIC] Frissítés elérhető! (%s)",
+  "text.mccic-toasts.update_available.description": "Irány a Modrinth a legfrissebb verzióért",
+
   "ui.mccic-toasts.config": "MCCI: Companion Konfiguráció - Toasts",
   "config.mccic-toasts.friends": "Barátok",
   "config.mccic-toasts.parties": "Partyk",

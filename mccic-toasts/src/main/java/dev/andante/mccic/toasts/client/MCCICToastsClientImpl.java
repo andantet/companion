@@ -1,7 +1,9 @@
 package dev.andante.mccic.toasts.client;
 
+import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
+import dev.andante.mccic.api.client.UpdateTracker;
 import dev.andante.mccic.api.client.event.MCCIClientGameJoinEvent;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
 import dev.andante.mccic.api.client.toast.AdaptableIconToast;
@@ -17,9 +19,16 @@ import dev.andante.mccic.toasts.client.toast.SocialToast.EventType;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.Calendar;
@@ -47,6 +56,16 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
     public static final BooleanSupplier
         FRIEND_CONFIG = () -> ToastsClientConfig.getConfig().friends(),
         PARTY_CONFIG = () -> ToastsClientConfig.getConfig().parties();
+
+    public static final String
+            UPDATE_POPUP_TITLE = "text.%s.update_available.title".formatted(MCCICToasts.MOD_ID),
+            UPDATE_POPUP_DESCRIPTION = "text.%s.update_available.description".formatted(MCCICToasts.MOD_ID),
+            UPDATE_VERSION = "text.%s.update_version".formatted(MCCICToasts.MOD_ID),
+            UPDATE_MESSAGE = "text.%s.update_message".formatted(MCCICToasts.MOD_ID),
+            UPDATE_MESSAGE_DOWNLOAD = "%s.download".formatted(UPDATE_MESSAGE),
+            UPDATE_MESSAGE_TOOLTIP = "%s.tooltip".formatted(UPDATE_MESSAGE);
+
+    public static final Identifier UPDATE_TOAST_TEXTURE = new Identifier(MCCICToasts.MOD_ID, "textures/gui/toasts/update.png");
 
     public static final List<SocialToastBehavior> SOCIAL_TOAST_BEHAVIORS = List.of(
         SocialToastBehavior.create("%s has come online!", FRIEND_CONFIG, EventType.FRIEND_JOIN),
@@ -140,7 +159,8 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
     }
 
     private void onGameJoin(ClientPlayNetworkHandler handler, GameJoinS2CPacket packet) {
-        if (ToastsClientConfig.getConfig().eventAnnouncements()) {
+        ToastsClientConfig config = ToastsClientConfig.getConfig();
+        if (config.eventAnnouncements()) {
             EventApiHook api = EventApiHook.INSTANCE;
             api.retrieve();
             if (api.isEventDateInFuture()) {
@@ -162,6 +182,38 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
                     });
                 });
             }
+        }
+
+        if (config.updateNotifications()) {
+            UpdateTracker updateTracker = UpdateTracker.INSTANCE;
+            updateTracker.getData().ifPresent(data -> {
+                if (updateTracker.isUpdateAvailable()) {
+                    data.createSemanticVersion().ifPresent(version -> {
+                        FabricLoader loader = FabricLoader.getInstance();
+                        Text updateVersion = Text.translatable(UPDATE_VERSION, "%s.%s.%s%s".formatted(
+                                version.getVersionComponent(0), version.getVersionComponent(1), version.getVersionComponent(2),
+                                version.getPrereleaseKey().map(s -> "-" + s).orElse("")), version.getBuildKey().orElseGet(MinecraftClient.getInstance()::getGameVersion)
+                        );
+
+                        new AdaptableIconToast(UPDATE_TOAST_TEXTURE, Text.translatable(UPDATE_POPUP_TITLE, updateVersion), Text.translatable(UPDATE_POPUP_DESCRIPTION)).add();
+
+                        loader.getModContainer(MCCIC.MOD_ID)
+                              .map(ModContainer::getMetadata)
+                              .map(ModMetadata::getContact)
+                              .flatMap(contacts -> contacts.get("update"))
+                              .map(s -> s.formatted(data.latest()))
+                              .ifPresent(downloadUrl -> {
+                                  MinecraftClient client = MinecraftClient.getInstance();
+                                  client.player.sendMessage(
+                                          Text.translatable(UPDATE_MESSAGE, updateVersion, Text.translatable(UPDATE_MESSAGE_DOWNLOAD).formatted(Formatting.BOLD, Formatting.UNDERLINE))
+                                              .styled(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable(UPDATE_MESSAGE_TOOLTIP).formatted(Formatting.GREEN)))
+                                                                    .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, downloadUrl)))
+                                              .formatted(Formatting.GREEN)
+                                  );
+                              });
+                    });
+                }
+            });
         }
     }
 }

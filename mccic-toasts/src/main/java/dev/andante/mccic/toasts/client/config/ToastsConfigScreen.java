@@ -16,6 +16,7 @@ public class ToastsConfigScreen extends AbstractConfigScreen<ToastsClientConfig>
     public final SimpleOption<Boolean> questsOption;
     public final SimpleOption<Boolean> achievementsOption;
     public final SimpleOption<Boolean> eventAnnouncementsOption;
+    public final SimpleOption<Boolean> updateNotificationsOption;
 
     public ToastsConfigScreen(Screen parent) {
         super(MCCICToasts.MOD_ID, parent, ToastsClientConfig.CONFIG_HOLDER);
@@ -23,17 +24,18 @@ public class ToastsConfigScreen extends AbstractConfigScreen<ToastsClientConfig>
         this.partiesOption = this.ofBoolean("parties", ToastsClientConfig::parties);
         this.questsOption = this.ofBoolean("quests", ToastsClientConfig::quests);
         this.achievementsOption = this.ofBoolean("achievements", ToastsClientConfig::achievements);
-        this.eventAnnouncementsOption = this.ofBoolean("event_announcements", ToastsClientConfig::eventAnnouncements);
+        this.eventAnnouncementsOption = this.ofBooleanTooltip("event_announcements", ToastsClientConfig::eventAnnouncements);
+        this.updateNotificationsOption = this.ofBooleanTooltip("update_notifications", ToastsClientConfig::updateNotifications);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.friendsOption, this.partiesOption, this.questsOption, this.eventAnnouncementsOption);
+        return List.of(this.friendsOption, this.partiesOption, this.questsOption, this.eventAnnouncementsOption, this.updateNotificationsOption);
     }
 
     @Override
     public ToastsClientConfig createConfig() {
-        return new ToastsClientConfig(this.friendsOption.getValue(), this.partiesOption.getValue(), this.questsOption.getValue(), this.achievementsOption.getValue(), this.eventAnnouncementsOption.getValue());
+        return new ToastsClientConfig(this.friendsOption.getValue(), this.partiesOption.getValue(), this.questsOption.getValue(), this.achievementsOption.getValue(), this.eventAnnouncementsOption.getValue(), this.updateNotificationsOption.getValue());
     }
 
     @Override

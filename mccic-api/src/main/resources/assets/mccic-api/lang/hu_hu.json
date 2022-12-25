@@ -1,6 +1,3 @@
 {
-  "pack.mccic-api.american_date_format.meta.description": "Egyéni dátumformázás",
-
-  "text.mccic-api.update_available.title": "[MCCIC] Frissítés elérhető! (%s)",
-  "text.mccic-api.update_available.description": "Irány a Modrinth a legfrissebb verzióért"
+  "pack.mccic-api.american_date_format.meta.description": "Egyéni dátumformázás"
 }

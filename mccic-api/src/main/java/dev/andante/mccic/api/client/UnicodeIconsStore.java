@@ -8,13 +8,10 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.ListCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
-import dev.andante.mccic.api.client.event.MCCIClientGameJoinEvent;
 import dev.andante.mccic.api.util.JsonHelper;
 import dev.andante.mccic.api.util.TextQuery;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.Text;
 import org.slf4j.Logger;
@@ -42,7 +39,7 @@ public class UnicodeIconsStore {
             throw new RuntimeException(exception);
         }
 
-        MCCIClientGameJoinEvent.EVENT.register(this::onGameJoin);
+        this.retrieve();
     }
 
     public static boolean doesTextContainIcon(Text text, Icon icon) {
@@ -63,10 +60,6 @@ public class UnicodeIconsStore {
         }
 
         return false;
-    }
-
-    protected void onGameJoin(ClientPlayNetworkHandler handler, GameJoinS2CPacket packet) {
-        this.retrieve();
     }
 
     /**
