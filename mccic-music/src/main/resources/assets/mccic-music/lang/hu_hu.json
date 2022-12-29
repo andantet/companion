@@ -3,12 +3,18 @@
   "config.mccic-music.game_music_volume": "Játékbeli Zene Hangereje",
   "config.mccic-music.game_music_volume_after_death": "Játékbeli Zene Hangereje (Halál Után)",
   "config.mccic-music.sfx_volume": "SFX Hangerő",
-  "config.mccic-music.hitw_sound_on_other_death": "Hole in the Wall Halál Hang",
-  "config.mccic-music.hitw_sound_on_other_death.tooltip": "A hang, amely akkor szól, amikor a többi játékos kiesik a Hole in the Wall játékban. Emulálja az esemény viselkedését. Ennek az opciónak a megváltoztatásával a hang előnézetbe kerül, csak akkor, ha az MCC: Island-en van.",
-  "config.mccic-music.hitw_sound_on_other_death.off": "KI",
+  "config.mccic-music.hitw_sound_on_other_death": "Hole in the Wall Halál Hangeffekt",
+  "config.mccic-music.hitw_sound_on_other_death.tooltip": "A hangeffekt, amely akkor szól, amikor a többi játékos kiesik a Hole in the Wall játékban. Utánozza az MC Championship esemény HITW játékának viselkedését. Ennek az opciónak a változtatgatásával meghallgathatod a hangeffekteket, csak akkor, ha az MCC: Island-en vagy fent.",
+  "config.mccic-music.hitw_sound_on_other_death.off": "Ki",
   "config.mccic-music.hitw_sound_on_other_death.team_eliminated": "Csapat Kiesett",
   "config.mccic-music.hitw_sound_on_other_death.early_elimination": "Korai Kiesés",
   "config.mccic-music.hitw_sound_on_other_death.score": "Pontszám",
   "config.mccic-music.hitw_sound_on_other_death.score_acquired": "Pontszám - Megszerezve",
-  "config.mccic-music.hitw_sound_on_other_death.score_big_coins": "Pontszám - Nagy Érmék"
+  "config.mccic-music.hitw_sound_on_other_death.score_big_coins": "Pontszám - Nagy Érmék",
+  "config.mccic-music.stop_music_on_death": "A Zene Leállítása Halálkor",
+  "config.mccic-music.stop_music_on_death.tooltip": "Azt dönti el, hogy bizonyos játékmódokban a zene leáll-e halál esetén. A zene újraéledéskor folytatódik.",
+  "config.mccic-music.stop_music_on_chicken_hit": "A Zene Leállítása a Csirke Megütésekor",
+  "config.mccic-music.stop_music_on_chicken_hit.tooltip": "Azt dönti el, hogy a zene megáll-e amikor a TGTTOS játékban megütsz egy csirkét.",
+  "config.mccic-music.transition_to_overtime": "Átmenet a Hosszabbításba",
+  "config.mccic-music.transition_to_overtime.tooltip": "Azt dönti el, hogy a zene átvált-e a hosszabbítás zenéjére a játékkör vége felé vagy sem. Tiltsa le, ha a szerver lag miatt rossz a hangzása."
 }

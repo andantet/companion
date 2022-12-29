@@ -1,0 +1,6 @@
+{
+  "ui.mccic-key-bindings.config": "MCCI: Companion Konfiguráció - Gyorsgombok",
+  "key.category.mccic-key-bindings": "MCCI: Companion (Gyorsgombok)",
+  "key.mccic-key-bindings.toggle_chat_mode": "Chat Mód közötti váltás",
+  "text.mccic-key-bindings.toggle_chat_mode.no_chat_modes_available": "Nem lehet váltani a Chat Módok között! Nincs másik elérhető Chat Mód."
+}

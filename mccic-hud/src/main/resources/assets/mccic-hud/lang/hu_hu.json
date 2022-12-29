@@ -6,11 +6,18 @@
   "config.mccic-hud.hud_position.top": "Fent",
   "config.mccic-hud.hud_position.left": "Balra",
   "config.mccic-hud.hud_position.disabled": "Kikapcsolva",
+  "config.mccic-hud.player_preview_in_wardrobe": "Játékos Előnézet a Kozmetikai menükben",
+  "config.mccic-hud.player_preview_in_wardrobe.tooltip": "A játékos előnézetének megjelenítése kozmetikai menükben.",
+  "config.mccic-hud.mccic_loading_screen": "MCCIC Betöltő Képernyő",
+  "config.mccic-hud.mccic_loading_screen.tooltip": "Az MCC: Island betöltésekor a betöltőképernyőt az MCCI: Companion logójával helyettesíti.",
+  "config.mccic-hud.auto_close_beta_test_warning": "Béta Teszt Figyelmeztetés Automatikus Bezárása",
+  "config.mccic-hud.auto_close_beta_test_warning.tooltip": "Azt dönti el, hogy Automatikusan bezárja-e a béta teszt figyelmeztetést a csatlakozáskor. Alapértelmezés szerint kikapcsolva.",
   "config.mccic-hud.hud_enabled": "Egyéni HUD",
   "config.mccic-hud.hud_timer_position": "Időzítő Pozíciója",
   "config.mccic-hud.hud_queue_position": "Várólista Pozíciója",
-  "text.mccic-hud.hud.game.quickplay": "GYORSJÁTÉK",
-  "text.mccic-hud.hud.time": "TELEPORTÁLÁS %s EKKOR %s!",
-  "text.mccic-hud.hud.time.in_queue": "VÁRÓLISTÁN",
-  "text.mccic-hud.hud.time.teleported": "ELTELEPORTÁLVA!"
+  "text.mccic-hud.hud.game.quickplay": "GYORSJATEK",
+  "text.mccic-hud.hud.time": "TELEPORTALAS %s %s MASODPERC MULVA!",
+  "text.mccic-hud.hud.time.in_queue": "VAROLISTAN",
+  "text.mccic-hud.hud.time.player_count": "(%s/%s)",
+  "text.mccic-hud.hud.time.teleported": "ELTELEPORTALVA!"
 }

@@ -1,7 +1,10 @@
 {
   "menu.mccic-qol.confirmDisconnect": "Biztos vagy benne, hogy ki szeretnél lépni?",
 
-  "ui.mccic-qol.config": "MCCI: Companion Konfiguráció - Életminőség",
+  "text.mccic-qol.party_not_found": "Nem vagy partyban.",
+  "text.mccic-qol.no_offline_party_members": "Nincsenek offline party tagok.",
+  
+  "ui.mccic-qol.config": "MCCI: Companion Konfiguráció - Játékminőség",
   "config.mccic-qol.confirm_disconnect_mode": "Kilépés Megerősítése",
   "config.mccic-qol.confirm_disconnect_mode.off": "Ki",
   "config.mccic-qol.confirm_disconnect_mode.in_game": "Játékban",
@@ -12,7 +15,7 @@
   "config.mccic-qol.glowing_mode.disabled_for_players": "Játékosok Számára Kikapcsolva",
   "config.mccic-qol.glowing_mode.no_shader": "Shader Nélkül",
   "config.mccic-qol.empty_slot_highlights_fix": "Üres Slot Kiemelés Javítása",
-  "config.mccic-qol.extended_frustums": "Kibővített Frustums",
+  "config.mccic-qol.extended_frustums": "Kibővített Csonkakúpok",
   "config.mccic-qol.extended_frustums.tooltip": "Kiterjeszti a páncélállványok, tárgykeretek és festmények láthatósági határoló dobozát, hogy kijavítsa a modellek kiürítési problémáit.",
   "config.mccic-qol.auto_hitbox_sky_battle": "Automata-Hitbox (Sky Battle)",
   "config.mccic-qol.auto_hitbox_battle_box": "Automata-Hitbox (Battle Box)",
