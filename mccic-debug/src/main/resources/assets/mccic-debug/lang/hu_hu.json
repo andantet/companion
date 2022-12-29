@@ -4,5 +4,5 @@
   "config.mccic-debug.chat_all_sounds": "Chat Összes Hang",
   "config.mccic-debug.raw_chat": "Nyers Chat",
   "config.mccic-debug.display_name_suffix": "Név Utótag Megjelenítése",
-  "config.mccic-debug.unpin_server_resource_packs": "Szerver Forráscsomagok Kitűzésének Megszüntetése",
+  "config.mccic-debug.unpin_server_resource_packs": "Szerver Forráscsomagok Kitűzésének Megszüntetése"
 }
