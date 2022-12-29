@@ -1,3 +1,8 @@
 {
   "pack.mccic-api.american_date_format.meta.description": "Egyéni dátumformázás"
+  
+  "mccic.game.hole_in_the_wall": "Hole in the Wall",
+  "mccic.game.tgttos": "To Get to the Other Side",
+  "mccic.game.sky_battle": "Sky Battle",
+  "mccic.game.battle_box": "Battle Box"
 }
