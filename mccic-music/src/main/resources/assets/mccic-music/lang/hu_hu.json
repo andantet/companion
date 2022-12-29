@@ -10,7 +10,7 @@
   "config.mccic-music.hitw_sound_on_other_death.early_elimination": "Korai Kiesés",
   "config.mccic-music.hitw_sound_on_other_death.score": "Pontszám",
   "config.mccic-music.hitw_sound_on_other_death.score_acquired": "Pontszám - Megszerezve",
-  "config.mccic-music.hitw_sound_on_other_death.score_big_coins": "Pontszám - Nagy Érmék"
+  "config.mccic-music.hitw_sound_on_other_death.score_big_coins": "Pontszám - Nagy Érmék",
   "config.mccic-music.stop_music_on_death": "A Zene Leállítása Halálkor",
   "config.mccic-music.stop_music_on_death.tooltip": "Azt dönti el, hogy bizonyos játékmódokban a zene leáll-e halál esetén. A zene újraéledéskor folytatódik.",
   "config.mccic-music.stop_music_on_chicken_hit": "A Zene Leállítása a Csirke Megütésekor",
