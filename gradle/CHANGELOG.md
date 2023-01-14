@@ -1,7 +1,5 @@
-CHANGELOG FOR 4.0.0-beta.27:
+CHANGELOG FOR 4.0.0-beta.28:
 
-* I broke the wardrobe
-* It is now fixed
-* Crisis averted
-
-(The API now has `MCCIFont` and `UnicodeIconsStore#doesTextContainIconExactFont`)
+* Fixed game end detection not working in the latest version of MCC: Island
+* Fixed where music fade checks are ran
+* Other tweaks and minor fixes
