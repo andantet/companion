@@ -12,6 +12,7 @@ import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.api.game.Game;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
+import dev.andante.mccic.config.client.command.MCCICConfigCommand;
 import dev.andante.mccic.debug.MCCICDebug;
 import dev.andante.mccic.debug.client.config.DebugClientConfig;
 import dev.andante.mccic.debug.client.config.DebugConfigScreen;
@@ -21,6 +22,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
@@ -52,6 +54,11 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
     @Override
     public void onInitializeClient() {
         ClientConfigRegistry.INSTANCE.registerAndLoad(DebugClientConfig.CONFIG_HOLDER, DebugConfigScreen::new);
+
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            MCCICConfigCommand.registerNewConfig(ID, DebugConfigScreen::new);
+        }
+
         HudRenderCallback.EVENT.register(this::onHudRender);
         MCCIChatEvent.EVENT.register(this::onChatMessage);
         MCCISoundPlayEvent.EVENT.register(this::onSoundPlay);
