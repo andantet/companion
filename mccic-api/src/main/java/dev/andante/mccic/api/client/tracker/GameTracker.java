@@ -16,6 +16,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.text.Text;
 import net.minecraft.util.TypedActionResult;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -64,13 +65,11 @@ public class GameTracker {
     }
 
     protected EventResult onChatMessage(MCCIChatEvent.Context context) {
-        GameState oldState = this.state;
-
         String raw = context.getRaw();
         if (raw.startsWith("[")) {
             if (raw.endsWith(" started!")) {
                 this.setState(GameState.ACTIVE);
-            } else if (raw.endsWith(" over!")) {
+            } else if (StringUtils.endsWithIgnoreCase(raw, " over!")) {
                 this.setState(raw.contains("Round") ? GameState.POST_ROUND : GameState.POST_GAME);
             } else if (raw.contains("you were eliminated")) {
                 this.setState(GameState.POST_ROUND_SELF);
@@ -156,8 +155,6 @@ public class GameTracker {
      * Executes general hard-coded updates for the current inferred game state.
      */
     protected void updateState() {
-        GameState oldState = this.state;
-
         if (this.game == null) {
             this.setState(GameState.NONE);
         } else {
