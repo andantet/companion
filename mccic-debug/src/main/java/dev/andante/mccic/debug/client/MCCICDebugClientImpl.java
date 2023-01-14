@@ -80,7 +80,8 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
         dispatcher.register(literal(MOD_ID + ":chat_unicodes").executes(context -> {
             UnicodeIconsStore.INSTANCE.getData().ifPresent(data -> {
                 for (UnicodeIconsStore.CharPair pair : data.chars()) {
-                    context.getSource().sendFeedback(Text.literal(pair.key() + ": ").append(Text.literal("" + pair.cha()).setStyle(Style.EMPTY.withFont(new Identifier("mcc", "icon")))));
+                    String key = pair.key();
+                    context.getSource().sendFeedback(Text.literal(pair.key() + ": ").append(Text.literal("" + pair.cha()).setStyle(Style.EMPTY.withFont(new Identifier("mcc", key.startsWith("gui") ? "gui" : "icon")))));
                 }
             });
             return 1;
