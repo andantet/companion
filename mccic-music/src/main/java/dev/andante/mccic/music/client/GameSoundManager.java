@@ -63,11 +63,14 @@ public class GameSoundManager {
                 this.stopLastSound();
             }
         }
+
+        if (this.lastSound != null && ClientHelper.isFading()) {
+            this.tryFadeOut(MusicClientConfig.getConfig().fadeTransitionTicks());
+        }
     }
 
     private void onSoundPlay(MCCISoundPlayEvent.Context context) {
         MusicClientConfig config = MusicClientConfig.getConfig();
-
         Identifier id = context.getSoundFileIdentifier();
         if (config.transitionToOvertime()) {
              if (id.equals(OVERTIME_INTRO_MUSIC_ID)) {
@@ -77,10 +80,6 @@ public class GameSoundManager {
             if (id.equals(OVERTIME_LOOP_MUSIC_ID)) {
                 this.stopLastSound();
             }
-        }
-
-        if (this.lastSound != null && ClientHelper.isFading()) {
-            this.tryFadeOut(config.fadeTransitionTicks());
         }
     }
 
