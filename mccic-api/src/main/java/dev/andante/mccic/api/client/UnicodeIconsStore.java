@@ -52,12 +52,12 @@ public class UnicodeIconsStore {
         return TextQuery.findText(text, "" + INSTANCE.getCharacterFor(icon)).isPresent();
     }
 
-    public static boolean doesTextContainIconExactFont(Text text, Icon icon, MCCIFont font) {
+    public static boolean doesTextContainIconExactFont(Text text, Icon icon) {
         return TextQuery.findText(text, "" + INSTANCE.getCharacterFor(icon))
                         .map(TextQuery::getResult)
                         .map(Text::getStyle)
                         .map(Style::getFont)
-                        .filter(id -> font.getFont().equals(id))
+                        .filter(id -> icon.getFont().getFont().equals(id))
                         .isPresent();
     }
 
@@ -134,31 +134,37 @@ public class UnicodeIconsStore {
     }
 
     public enum Icon {
-        DEATH("death"),
-        QUEST_BOOK("quest_book"),
-        CHAT_LOCAL("chat_local"),
-        CHAT_PARTY("chat_party"),
-        CHAT_TEAM("chat_team"),
-        CROWN("crown"),
-        FADE("fade"),
-        GUI_WARDROBE("gui_wardrobe"),
-        GUI_WARDROBE_EDITOR("gui_wardrobe_editor"),
-        GUI_WARDROBE_EDITOR_FULL("gui_wardrobe_editor_full"),
-        GUI_WARDROBE_EDITOR_COLORS_SWATCH("gui_wardrobe_editor_colors_swatch"),
-        GUI_WARDROBE_EDITOR_FULL_COLORS_FACTION("gui_wardrobe_editor_full_colors_faction"),
-        GUI_WARDROBE_EDITOR_COLORS_FACTION("gui_wardrobe_editor_colors_faction"),
-        GUI_WARDROBE_EDITOR_FULL_VARIANTS("gui_wardrobe_editor_full_variants"),
-        GUI_WARDROBE_EDITOR_VARIANTS("gui_wardrobe_editor_variants"),
-        GUI_BETA_TEST_WARNING("gui_beta_test_warning");
+        DEATH("death", MCCIFont.ICON),
+        QUEST_BOOK("quest_book", MCCIFont.ICON),
+        CHAT_LOCAL("chat_local", MCCIFont.ICON),
+        CHAT_PARTY("chat_party", MCCIFont.ICON),
+        CHAT_TEAM("chat_team", MCCIFont.ICON),
+        CROWN("crown", MCCIFont.ICON),
+        FADE("fade", MCCIFont.GUI),
+        GUI_WARDROBE("gui_wardrobe", MCCIFont.CHEST_BACKGROUNDS),
+        GUI_WARDROBE_EDITOR("gui_wardrobe_editor", MCCIFont.CHEST_BACKGROUNDS),
+        GUI_WARDROBE_EDITOR_FULL("gui_wardrobe_editor_full", MCCIFont.CHEST_BACKGROUNDS),
+        GUI_WARDROBE_EDITOR_COLORS_SWATCH("gui_wardrobe_editor_colors_swatch", MCCIFont.CHEST_BACKGROUNDS),
+        GUI_WARDROBE_EDITOR_FULL_COLORS_FACTION("gui_wardrobe_editor_full_colors_faction", MCCIFont.CHEST_BACKGROUNDS),
+        GUI_WARDROBE_EDITOR_COLORS_FACTION("gui_wardrobe_editor_colors_faction", MCCIFont.CHEST_BACKGROUNDS),
+        GUI_WARDROBE_EDITOR_FULL_VARIANTS("gui_wardrobe_editor_full_variants", MCCIFont.CHEST_BACKGROUNDS),
+        GUI_WARDROBE_EDITOR_VARIANTS("gui_wardrobe_editor_variants", MCCIFont.CHEST_BACKGROUNDS),
+        GUI_BETA_TEST_WARNING("gui_beta_test_warning", MCCIFont.CHEST_BACKGROUNDS);
 
         private final String key;
+        private final MCCIFont font;
 
-        Icon(String key) {
+        Icon(String key, MCCIFont font) {
             this.key = key;
+            this.font = font;
         }
 
         public String getKey() {
             return this.key;
+        }
+
+        public MCCIFont getFont() {
+            return this.font;
         }
     }
 }

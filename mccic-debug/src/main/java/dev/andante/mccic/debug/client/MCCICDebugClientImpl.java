@@ -37,7 +37,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collections;
@@ -79,9 +78,10 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
 
         dispatcher.register(literal(MOD_ID + ":chat_unicodes").executes(context -> {
             UnicodeIconsStore.INSTANCE.getData().ifPresent(data -> {
-                for (UnicodeIconsStore.CharPair pair : data.chars()) {
-                    String key = pair.key();
-                    context.getSource().sendFeedback(Text.literal(pair.key() + ": ").append(Text.literal("" + pair.cha()).setStyle(Style.EMPTY.withFont(new Identifier("mcc", key.startsWith("gui") ? "gui" : "icon")))));
+                for (UnicodeIconsStore.Icon icon : UnicodeIconsStore.Icon.values()) {
+                    String key = icon.getKey();
+                    char cha = data.getCharacterFor(key);
+                    context.getSource().sendFeedback(Text.literal(key + ": ").append(Text.literal(String.valueOf(cha)).setStyle(Style.EMPTY.withFont(icon.getFont().getFont()))));
                 }
             });
             return 1;

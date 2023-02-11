@@ -7,7 +7,9 @@ import net.minecraft.util.Identifier;
  */
 public enum MCCIFont {
     HUD("hud"),
-    GUI("gui");
+    GUI("gui"),
+    ICON("icon"),
+    CHEST_BACKGROUNDS("chest_backgrounds");
 
     private final String id;
     private final Identifier font;

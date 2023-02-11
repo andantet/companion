@@ -2,7 +2,6 @@ package dev.andante.mccic.hud.client;
 
 import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
-import dev.andante.mccic.api.util.MCCIFont;
 import dev.andante.mccic.api.util.TextQuery;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
@@ -32,7 +31,7 @@ public final class MCCICHudClientImpl implements MCCICHud, ClientModInitializer 
 
     private void afterScreenInit(MinecraftClient client, Screen screen, int scaledWidth, int scaledHeight) {
         Text title = screen.getTitle();
-        if (UnicodeIconsStore.doesTextContainIconExactFont(title, Icon.GUI_BETA_TEST_WARNING, MCCIFont.GUI)) {
+        if (UnicodeIconsStore.doesTextContainIconExactFont(title, Icon.GUI_BETA_TEST_WARNING)) {
             if (HudClientConfig.getConfig().autoCloseBetaTestWarning()) {
                 client.send(() -> client.player.closeHandledScreen());
             }
