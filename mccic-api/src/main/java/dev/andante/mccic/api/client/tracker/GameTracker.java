@@ -50,6 +50,10 @@ public class GameTracker {
     }
 
     protected void onWorldTick(ClientWorld world) {
+        if (!this.isOnServer()) {
+            return;
+        }
+
         if (!this.updateGame()) {
             this.game = null;
         }
@@ -132,8 +136,8 @@ public class GameTracker {
                             int index = name.indexOf(TIME_IDENTIFIER);
                             String rawMins = name.substring(index - 2, index);
                             String rawSecs = name.substring(index + 1, index + 3);
-                            int mins = Integer.parseInt(rawMins);
-                            int secs = Integer.parseInt(rawSecs);
+                            int mins = tryParseInt(rawMins);
+                            int secs = tryParseInt(rawSecs);
                             int time = (mins * 60) + secs;
 
                             if (time != lastTime) {
@@ -149,6 +153,15 @@ public class GameTracker {
 
             this.time = -1;
         }
+    }
+
+    private int tryParseInt(String str) {
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException ignored) {
+        }
+
+        return 0;
     }
 
     /**
