@@ -42,12 +42,12 @@ import java.util.function.BooleanSupplier;
 public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitializer {
     public static final Identifier
         QUEST_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/quest.png"),
-        ACHIEVEMENT_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/achievement.png"),
+        BADGE_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/badge.png"),
         EVENT_ANNOUNCEMENT_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/event_announcement.png");
 
     public static final String
         QUEST_COMPLETE_TEXT = "\\(.\\) Quest complete: ",
-        ACHIEVEMENT_UNLOCKED_TEXT = "\\(.\\) Achievement unlocked: \\[";
+        BADGE_UNLOCKED_TEXT = "\\(.\\) You achieved the \\[";
 
     public static final String
         MCC_SOON_POPUP_TITLE = "text.%s.mcc_soon_popup.title".formatted(MOD_ID),
@@ -136,18 +136,18 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
             }
         }
 
-        /*if (config.achievements()) {
-            OptionalInt opt = matchAndGrabIndex(message, raw, ACHIEVEMENT_UNLOCKED_TEXT, Icon.ACHIEVEMENT);
+        if (config.badges()) {
+            OptionalInt opt = matchAndGrabIndex(message, raw, BADGE_UNLOCKED_TEXT, Icon.BADGE);
             if (opt.isPresent()) {
                 int sub = opt.getAsInt();
-                String name = raw.substring(sub, raw.length() - 1);
-                new AdaptableIconToast(ACHIEVEMENT_TOAST_TEXTURE,
-                    Text.translatable("toast.%s.achievement_unlocked.title".formatted(MOD_ID)),
-                    Text.translatable("toast.%s.achievement_unlocked.description".formatted(MOD_ID), name)
+                String name = raw.substring(sub, raw.length() - "] badge!".length());
+                new AdaptableIconToast(BADGE_TOAST_TEXTURE,
+                    Text.translatable("toast.%s.badge_unlocked.title".formatted(MOD_ID)),
+                    Text.translatable("toast.%s.badge_unlocked.description".formatted(MOD_ID), name)
                 ).add();
                 return EventResult.cancel();
             }
-        }*/
+        }
 
         return EventResult.pass();
     }

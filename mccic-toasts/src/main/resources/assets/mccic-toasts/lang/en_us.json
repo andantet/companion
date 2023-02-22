@@ -1,8 +1,8 @@
 {
   "toast.mccic-toasts.quest_complete.title": "Quest Complete!",
   "toast.mccic-toasts.quest_complete.description": "%s",
-  "toast.mccic-toasts.achievement_unlocked.title": "Achievement Unlocked!",
-  "toast.mccic-toasts.achievement_unlocked.description": "%s",
+  "toast.mccic-toasts.badge_unlocked.title": "Badge Unlocked!",
+  "toast.mccic-toasts.badge_unlocked.description": "%s",
 
   "text.mccic-toasts.mcc_soon_popup.title": "MCC %s is soon!",
   "text.mccic-toasts.mcc_soon_popup.description": "The next event is on %s/%s @ %s%s %s!",
@@ -18,7 +18,7 @@
   "config.mccic-toasts.friends": "Friends",
   "config.mccic-toasts.parties": "Parties",
   "config.mccic-toasts.quests": "Quests",
-  "config.mccic-toasts.achievements": "Achievements",
+  "config.mccic-toasts.badges": "Badges",
   "config.mccic-toasts.event_announcements": "Event Announcements",
   "config.mccic-toasts.event_announcements.tooltip": "Get notified when the next MCC event is going to happen!",
   "config.mccic-toasts.update_notifications": "Update Notifications",

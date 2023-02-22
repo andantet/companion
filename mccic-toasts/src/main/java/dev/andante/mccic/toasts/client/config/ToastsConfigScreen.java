@@ -14,7 +14,7 @@ public class ToastsConfigScreen extends AbstractConfigScreen<ToastsClientConfig>
     public final SimpleOption<Boolean> friendsOption;
     public final SimpleOption<Boolean> partiesOption;
     public final SimpleOption<Boolean> questsOption;
-    public final SimpleOption<Boolean> achievementsOption;
+    public final SimpleOption<Boolean> badgesOption;
     public final SimpleOption<Boolean> eventAnnouncementsOption;
     public final SimpleOption<Boolean> updateNotificationsOption;
 
@@ -23,19 +23,19 @@ public class ToastsConfigScreen extends AbstractConfigScreen<ToastsClientConfig>
         this.friendsOption = this.ofBoolean("friends", ToastsClientConfig::friends);
         this.partiesOption = this.ofBoolean("parties", ToastsClientConfig::parties);
         this.questsOption = this.ofBoolean("quests", ToastsClientConfig::quests);
-        this.achievementsOption = this.ofBoolean("achievements", ToastsClientConfig::achievements);
+        this.badgesOption = this.ofBoolean("badges", ToastsClientConfig::badges);
         this.eventAnnouncementsOption = this.ofBooleanTooltip("event_announcements", ToastsClientConfig::eventAnnouncements);
         this.updateNotificationsOption = this.ofBooleanTooltip("update_notifications", ToastsClientConfig::updateNotifications);
     }
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.friendsOption, this.partiesOption, this.questsOption, this.eventAnnouncementsOption, this.updateNotificationsOption);
+        return List.of(this.friendsOption, this.partiesOption, this.questsOption, this.badgesOption, this.eventAnnouncementsOption, this.updateNotificationsOption);
     }
 
     @Override
     public ToastsClientConfig createConfig() {
-        return new ToastsClientConfig(this.friendsOption.getValue(), this.partiesOption.getValue(), this.questsOption.getValue(), this.achievementsOption.getValue(), this.eventAnnouncementsOption.getValue(), this.updateNotificationsOption.getValue());
+        return new ToastsClientConfig(this.friendsOption.getValue(), this.partiesOption.getValue(), this.questsOption.getValue(), this.badgesOption.getValue(), this.eventAnnouncementsOption.getValue(), this.updateNotificationsOption.getValue());
     }
 
     @Override

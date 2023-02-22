@@ -140,7 +140,7 @@ public class UnicodeIconsStore {
         CHAT_PARTY("chat_party", MCCIFont.ICON),
         CHAT_TEAM("chat_team", MCCIFont.ICON),
         CROWN("crown", MCCIFont.ICON),
-        FADE("fade", MCCIFont.GUI),
+        BADGE("badge", MCCIFont.ICON),
         GUI_WARDROBE("gui_wardrobe", MCCIFont.CHEST_BACKGROUNDS),
         GUI_WARDROBE_EDITOR("gui_wardrobe_editor", MCCIFont.CHEST_BACKGROUNDS),
         GUI_WARDROBE_EDITOR_FULL("gui_wardrobe_editor_full", MCCIFont.CHEST_BACKGROUNDS),
@@ -149,7 +149,8 @@ public class UnicodeIconsStore {
         GUI_WARDROBE_EDITOR_COLORS_FACTION("gui_wardrobe_editor_colors_faction", MCCIFont.CHEST_BACKGROUNDS),
         GUI_WARDROBE_EDITOR_FULL_VARIANTS("gui_wardrobe_editor_full_variants", MCCIFont.CHEST_BACKGROUNDS),
         GUI_WARDROBE_EDITOR_VARIANTS("gui_wardrobe_editor_variants", MCCIFont.CHEST_BACKGROUNDS),
-        GUI_BETA_TEST_WARNING("gui_beta_test_warning", MCCIFont.CHEST_BACKGROUNDS);
+        GUI_BETA_TEST_WARNING("gui_beta_test_warning", MCCIFont.CHEST_BACKGROUNDS),
+        FADE("fade", MCCIFont.GUI);
 
         private final String key;
         private final MCCIFont font;
