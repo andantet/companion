@@ -31,17 +31,14 @@ import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public class GameSoundManager {
+    public static final GameSoundManager INSTANCE = new GameSoundManager(GameTracker.INSTANCE);
+
     private final GameTracker gameTracker;
 
     private SoundManager soundManager;
 
     private SoundInstance lastSound;
     private FadeOut fadeOut;
-
-    public static final Identifier OVERTIME_INTRO_MUSIC_ID = new Identifier("mcc", "games.global.music.overtime_intro_music");
-    public static final Identifier OVERTIME_LOOP_MUSIC_ID = new Identifier("mcc", "games.global.music.overtime_loop_music");
-
-    public static final GameSoundManager INSTANCE = new GameSoundManager(GameTracker.INSTANCE);
 
     public GameSoundManager(GameTracker gameTracker) {
         this.gameTracker = gameTracker;
@@ -73,11 +70,11 @@ public class GameSoundManager {
         MusicClientConfig config = MusicClientConfig.getConfig();
         Identifier id = context.getSoundFileIdentifier();
         if (config.transitionToOvertime()) {
-             if (id.equals(OVERTIME_INTRO_MUSIC_ID)) {
+             if (id.equals(MCCICSounds.MUSIC_OVERTIME_INTRO)) {
                  this.tryFadeOut(config.overtimeTransitionTicks());
             }
         } else {
-            if (id.equals(OVERTIME_LOOP_MUSIC_ID)) {
+            if (id.equals(MCCICSounds.MUSIC_OVERTIME_LOOP)) {
                 this.stopLastSound();
             }
         }

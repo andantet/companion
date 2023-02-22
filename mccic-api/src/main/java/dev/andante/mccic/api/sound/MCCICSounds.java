@@ -10,7 +10,14 @@ public interface MCCICSounds {
     Identifier SCORE_ACQUIRED = create("score.acquired");
     Identifier UI_CLICK_NORMAL = create("ui.click_normal");
 
+    Identifier MUSIC_OVERTIME_INTRO = createMcc("music.global.overtime_intro_music");
+    Identifier MUSIC_OVERTIME_LOOP = createMcc("music.global.overtime_loop_music");
+
     static Identifier create(String id) {
         return new Identifier(MCCIC.MOD_ID, id);
+    }
+
+    static Identifier createMcc(String id) {
+        return new Identifier("mcc", id);
     }
 }
