@@ -54,7 +54,7 @@ public class SplashOverlayMixin {
         }
     }
 
-    @Inject(method = "method_35733", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "method_35733", at = @At("HEAD"), cancellable = true, remap = false)
     private static void onBrandColor(CallbackInfoReturnable<Integer> cir) {
         if (mccic_useCustomLoadingScreen()) {
             cir.setReturnValue(MCCICLogoTexture.MCCIC_BACKGROUND_COLOR);
