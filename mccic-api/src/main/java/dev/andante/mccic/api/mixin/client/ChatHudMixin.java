@@ -5,6 +5,7 @@ import dev.andante.mccic.api.client.tracker.GameTracker;
 import dev.andante.mccic.api.event.EventResult;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.network.message.MessageSignatureData;
@@ -23,8 +24,7 @@ public class ChatHudMixin {
             cancellable = true
     )
     private void onChatMessage(Text message, MessageSignatureData signature, int ticks, MessageIndicator indicator, boolean refresh, CallbackInfo ci) {
-        GameTracker tracker = GameTracker.INSTANCE;
-        if (tracker.isOnServer()) {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment() || GameTracker.INSTANCE.isOnServer()) {
             EventResult result = MCCIChatEvent.EVENT.invoker().onChatEvent(new MCCIChatEvent.Context((ChatHud) (Object) this, message, signature, ticks, indicator, refresh));
             if (result.isFalse()) {
                 ci.cancel();
