@@ -1,6 +1,6 @@
 {
   "pack": {
-    "pack_format": 9,
+    "pack_format": 12,
     "description": { "translate": "pack.mccic-api.american_date_format.meta.description" }
   }
 }
