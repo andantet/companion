@@ -1,5 +1,7 @@
 {
   "ui.mccic-discord-rp.config": "MCCI: Companion Konfiguráció - Discord Státusz",
+  "text.mccic-discord-rp.large_image_text": "MCCI: Companion",
+  "text.mccic-discord-rp.game_display": "%s (%s)",
   "text.mccic-discord-rp.idle": "Lazítás a szigeten",
   "text.mccic-discord-rp.queue": "Várólistán",
   "text.mccic-discord-rp.queue.players": "Várólistán (%s/%s)",
@@ -15,5 +17,8 @@
   "config.mccic-discord-rp.display_game": "Játék megjelenítése",
   "config.mccic-discord-rp.display_game_time": "Játékidő megjelenítése",
   "config.mccic-discord-rp.display_game_state": "Játékállapot megjelenítése",
-  "config.mccic-discord-rp.display_queue": "Várólista állapotának megjelenítése"
+  "config.mccic-discord-rp.display_game_art": "A játék nagy ikonjának Megjelenítése",
+  "config.mccic-discord-rp.display_game_art.tooltip": "BE: A játék ikonjának megjelenítése egy nagy képként kis játékikon nélkül; KI: Az MCC: Island logójának megjelenítése a nagy képként és a játék ikonja mint kis kép.",
+  "config.mccic-discord-rp.display_queue": "Várólista állapotának megjelenítése",
+  "config.mccic-discord-rp.display_party": "Party Megjelenítése"
 }

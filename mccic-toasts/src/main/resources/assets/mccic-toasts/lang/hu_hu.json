@@ -1,19 +1,28 @@
 {
   "toast.mccic-toasts.quest_complete.title": "Küldetés Teljesítve!",
-  "toast.mccic-toasts.achievement_unlocked.title": "Teljesítmény Feloldva!",
+  "toast.mccic-toasts.quest_complete.description": "%s",
+  "toast.mccic-toasts.badge_unlocked.title": "Jelvény Kiérdemelve!",
+  "toast.mccic-toasts.badge_unlocked.description": "%s",
 
   "text.mccic-toasts.mcc_soon_popup.title": "MCC %s hamarosan!",
   "text.mccic-toasts.mcc_soon_popup.description": "A következő esemény ekkor kezdődik: %s/%s @ %s%s %s!",
 
   "text.mccic-toasts.update_available.title": "[MCCIC] Frissítés elérhető! (%s)",
   "text.mccic-toasts.update_available.description": "Irány a Modrinth a legfrissebb verzióért",
+  "text.mccic-toasts.update_version": "%s a Minecraft %s verziójára",
+  "text.mccic-toasts.update_message": "[MCCIC] Frissítés elérhető! (%s) %s",
+  "text.mccic-toasts.update_message.download": "Kattints ide a letöltéshez!",
+  "text.mccic-toasts.update_message.tooltip": "Kattints a letöltéshez (modrinth.com/...)",
 
-  "ui.mccic-toasts.config": "MCCI: Companion Konfiguráció - Toasts",
+  "ui.mccic-toasts.config": "MCCI: Companion Konfiguráció - Toastok",
   "config.mccic-toasts.friends": "Barátok",
   "config.mccic-toasts.parties": "Partyk",
   "config.mccic-toasts.quests": "Küldetések",
-  "config.mccic-toasts.achievements": "Teljesítmények",
+  "config.mccic-toasts.badges": "Jelvények",
   "config.mccic-toasts.event_announcements": "Esemény Bejelentések",
+  "config.mccic-toasts.event_announcements.tooltip": "Kapjon értesítést, ha a következő MCC eseményre kerül sor!",
+  "config.mccic-toasts.update_notifications": "Frissítési Értesítések",
+  "config.mccic-toasts.update_notifications.tooltip": "Kapj értesítést az MCCI: Companion frissítéseiről.",
 
   "toast.mccic-toasts.type.friend_join": "Barátod fellépett",
   "toast.mccic-toasts.type.friend_leave": "Barátod lelépett",
