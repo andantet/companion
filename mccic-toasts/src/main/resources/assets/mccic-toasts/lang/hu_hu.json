@@ -1,8 +1,8 @@
 {
   "toast.mccic-toasts.quest_complete.title": "Küldetés Teljesítve!",
   "toast.mccic-toasts.quest_complete.description": "%s",
-  "toast.mccic-toasts.achievement_unlocked.title": "Teljesítmény Feloldva!",
-  "toast.mccic-toasts.achievement_unlocked.description": "%s",
+  "toast.mccic-toasts.badge_unlocked.title": "Jelvény Kiérdemelve!",
+  "toast.mccic-toasts.badge_unlocked.description": "%s",
 
   "text.mccic-toasts.mcc_soon_popup.title": "MCC %s hamarosan!",
   "text.mccic-toasts.mcc_soon_popup.description": "A következő esemény ekkor kezdődik: %s/%s @ %s%s %s!",
@@ -18,7 +18,7 @@
   "config.mccic-toasts.friends": "Barátok",
   "config.mccic-toasts.parties": "Partyk",
   "config.mccic-toasts.quests": "Küldetések",
-  "config.mccic-toasts.achievements": "Teljesítmények",
+  "config.mccic-toasts.badges": "Jelvények",
   "config.mccic-toasts.event_announcements": "Esemény Bejelentések",
   "config.mccic-toasts.event_announcements.tooltip": "Kapjon értesítést, ha a következő MCC eseményre kerül sor!",
   "config.mccic-toasts.update_notifications": "Frissítési Értesítések",
