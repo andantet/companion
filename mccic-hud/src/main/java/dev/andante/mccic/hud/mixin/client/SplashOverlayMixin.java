@@ -43,8 +43,7 @@ public class SplashOverlayMixin {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShader(Ljava/util/function/Supplier;)V",
-                    ordinal = 0,
+                    target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V",
                     shift = At.Shift.BEFORE
             )
     )

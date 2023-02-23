@@ -77,7 +77,7 @@ public interface ClientHelper {
                          .filter(LiteralTextContent.class::isInstance)
                          .map(LiteralTextContent.class::cast)
                          .map(LiteralTextContent::string)
-                         .filter(s -> s.equals("" + UnicodeIconsStore.INSTANCE.getCharacterFor(Icon.FADE)))
+                         .filter(s -> s.equals(String.valueOf(UnicodeIconsStore.INSTANCE.getCharacterFor(Icon.FADE))))
                          .isPresent();
     }
 
@@ -115,7 +115,6 @@ public interface ClientHelper {
 
     static void drawOpaqueBlack(int x1, int y1, int x2, int y2) {
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
-        RenderSystem.disableTexture();
         RenderSystem.disableDepthTest();
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(SrcFactor.SRC_ALPHA, DstFactor.ONE_MINUS_SRC_ALPHA, SrcFactor.ZERO, DstFactor.ONE);

@@ -8,7 +8,7 @@
 
   "depends": {
     "fabric-api": "*",
-    "minecraft": ">=1.19.3"
+    "minecraft": ">=1.19.4-beta"
   },
 
   "icon": "assets/mccic/textures/icon.png",

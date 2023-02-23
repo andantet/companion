@@ -28,7 +28,7 @@ public class WardrobeHudRenderer {
             int x = (width / 2) - 170;
             int y = (height / 2) + 40;
             ClientHelper.drawOpaqueBlack(x - 50, y - 110, x + 50, y + 10);
-            InventoryScreen.drawEntity(x - 10, y, 50, -40, 0, this.client.player);
+            InventoryScreen.drawEntity(matrices, x - 10, y, 50, -40, 0, this.client.player);
         }
     }
 

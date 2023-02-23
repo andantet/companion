@@ -13,8 +13,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.ButtonListWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.OptionListWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
@@ -51,7 +51,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     protected final boolean hasConfiguration;
     protected final ConfigHolder<T> configHolder;
 
-    protected ButtonListWidget list;
+    protected OptionListWidget list;
 
     public AbstractConfigScreen(Text title, Screen parent) {
         super(title);
@@ -72,7 +72,7 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     @Override
     protected void init() {
         // options list
-        this.list = new ButtonListWidget(this.client, this.width, this.height, 93, this.height - 94, 25);
+        this.list = new OptionListWidget(this.client, this.width, this.height, 93, this.height - 94, 25);
         this.list.setRenderBackground(false);
         this.list.setRenderHorizontalShadows(false);
         this.getOptions().forEach(this.list::addSingleOptionEntry);

@@ -191,7 +191,7 @@ public class MCCIHudRenderer extends DrawableHelper {
             int time = maybeTime.getAsInt();
             return (time != 0 ? Text.translatable(HUD_TIME_TEXT,
                 Text.translatable(HUD_TIME_PLAYER_COUNT_TEXT, players, maxPlayers).formatted(Formatting.WHITE),
-                Text.literal("" + time)
+                Text.literal(String.valueOf(time))
             ) : Text.translatable(HUD_TIME_TELEPORTED_TEXT)).setStyle(HUD_FONT_STYLE.withColor(Formatting.YELLOW));
         }
 

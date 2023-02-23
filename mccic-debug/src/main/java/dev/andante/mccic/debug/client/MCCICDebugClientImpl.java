@@ -160,7 +160,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
         }
 
         PlayerEntity player = MinecraftClient.getInstance().player;
-        player.sendMessage(Text.literal("" + message.getContent().getClass()), true);
+        player.sendMessage(Text.literal(String.valueOf(message.getContent().getClass())), true);
         player.sendMessage(Text.literal("\u0000 " + message));
 
         printText(message);
