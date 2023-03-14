@@ -49,7 +49,7 @@ public class SplashOverlayMixin {
     )
     private void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (mccic_useCustomLoadingScreen()) {
-            RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
         }
     }
 

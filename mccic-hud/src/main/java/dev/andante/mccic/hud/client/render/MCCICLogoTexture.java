@@ -52,9 +52,7 @@ public class MCCICLogoTexture extends ResourceTexture {
                     throw throwable;
                 }
 
-                if (stream != null) {
-                    stream.close();
-                }
+                stream.close();
 
                 return textureData;
             } catch (IOException exception) {
