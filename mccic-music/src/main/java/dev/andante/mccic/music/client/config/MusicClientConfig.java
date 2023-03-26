@@ -33,6 +33,6 @@ public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfte
     }
 
     public static MusicClientConfig createDefaultConfig() {
-        return new MusicClientConfig(0.5F, 0.25F, 1.0F, HITWSoundOnOtherDeath.OFF, true, false, true, 2 * 20, 20);
+        return new MusicClientConfig(0.5F, 0.25F, 1.0F, HITWSoundOnOtherDeath.OFF, false, false, true, 2 * 20, 20);
     }
 }
