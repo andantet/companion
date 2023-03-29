@@ -161,58 +161,61 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
     private void onGameJoin(ClientPlayNetworkHandler handler, GameJoinS2CPacket packet) {
         ToastsClientConfig config = ToastsClientConfig.getConfig();
         if (config.eventAnnouncements()) {
-            EventApiHook api = EventApiHook.INSTANCE;
-            api.retrieve();
-            if (api.isEventDateInFuture()) {
-                api.getData().ifPresent(data -> {
-                    data.createDate().ifPresent(date -> {
-                        Calendar calendar = Calendar.getInstance();
-                        TimeZone timeZone = calendar.getTimeZone();
-                        calendar.setTime(date);
-                        new AdaptableIconToast(EVENT_ANNOUNCEMENT_TOAST_TEXTURE,
-                            Text.translatable(MCC_SOON_POPUP_TITLE, data.event()),
-                            Text.translatable(MCC_SOON_POPUP_DESCRIPTION,
-                                "%02d".formatted(calendar.get(Calendar.DAY_OF_MONTH)),
-                                "%02d".formatted(calendar.get(Calendar.MONTH) + 1),
-                                calendar.get(Calendar.HOUR),
-                                calendar.get(Calendar.AM_PM) == Calendar.PM ? "pm": "am",
-                                timeZone.getDisplayName(timeZone.inDaylightTime(date), TimeZone.SHORT)
-                            )
-                        ).add();
+            EventApiHook.INSTANCE.retrieve().thenAccept(api -> {
+                if (api.isEventDateInFuture()) {
+                    api.getData().ifPresent(data -> {
+                        data.createDate().ifPresent(date -> {
+                            Calendar calendar = Calendar.getInstance();
+                            TimeZone timeZone = calendar.getTimeZone();
+                            calendar.setTime(date);
+                            new AdaptableIconToast(EVENT_ANNOUNCEMENT_TOAST_TEXTURE,
+                                    Text.translatable(MCC_SOON_POPUP_TITLE, data.event()),
+                                    Text.translatable(MCC_SOON_POPUP_DESCRIPTION,
+                                            "%02d".formatted(calendar.get(Calendar.DAY_OF_MONTH)),
+                                            "%02d".formatted(calendar.get(Calendar.MONTH) + 1),
+                                            calendar.get(Calendar.HOUR),
+                                            calendar.get(Calendar.AM_PM) == Calendar.PM ? "pm": "am",
+                                            timeZone.getDisplayName(timeZone.inDaylightTime(date), TimeZone.SHORT)
+                                    )
+                            ).add();
+                        });
                     });
-                });
-            }
+                }
+            });
         }
 
         if (config.updateNotifications()) {
-            UpdateTracker updateTracker = UpdateTracker.INSTANCE;
-            updateTracker.getData().ifPresent(data -> {
-                if (updateTracker.isUpdateAvailable()) {
-                    data.createSemanticVersion().ifPresent(version -> {
-                        FabricLoader loader = FabricLoader.getInstance();
-                        Text updateVersion = Text.translatable(UPDATE_VERSION, "%s.%s.%s%s".formatted(
-                                version.getVersionComponent(0), version.getVersionComponent(1), version.getVersionComponent(2),
-                                version.getPrereleaseKey().map(s -> "-" + s).orElse("")), version.getBuildKey().orElseGet(MinecraftClient.getInstance()::getGameVersion)
-                        );
+            UpdateTracker.INSTANCE.retrieve().thenAccept(tracker -> {
+                tracker.getData().ifPresent(data -> {
+                    if (tracker.isUpdateAvailable()) {
+                        data.createSemanticVersion().ifPresent(version -> {
+                            FabricLoader loader = FabricLoader.getInstance();
+                            Text updateVersion = Text.translatable(UPDATE_VERSION, "%s.%s.%s%s".formatted(
+                                    version.getVersionComponent(0), version.getVersionComponent(1), version.getVersionComponent(2),
+                                    version.getPrereleaseKey().map(s -> "-" + s).orElse("")), version.getBuildKey().orElseGet(MinecraftClient.getInstance()::getGameVersion)
+                            );
 
-                        new AdaptableIconToast(UPDATE_TOAST_TEXTURE, Text.translatable(UPDATE_POPUP_TITLE, updateVersion), Text.translatable(UPDATE_POPUP_DESCRIPTION)).add();
+                            new AdaptableIconToast(UPDATE_TOAST_TEXTURE, Text.translatable(UPDATE_POPUP_TITLE, updateVersion), Text.translatable(UPDATE_POPUP_DESCRIPTION)).add();
 
-                        loader.getModContainer(MCCIC.MOD_ID)
-                              .map(ModContainer::getMetadata)
-                              .map(ModMetadata::getContact)
-                              .flatMap(contacts -> contacts.get("update"))
-                              .map(s -> s.formatted(data.latest()))
-                              .ifPresent(downloadUrl -> {
-                                  MinecraftClient client = MinecraftClient.getInstance();
-                                  client.player.sendMessage(
-                                          Text.translatable(UPDATE_MESSAGE, updateVersion, Text.translatable(UPDATE_MESSAGE_DOWNLOAD).formatted(Formatting.BOLD, Formatting.UNDERLINE))
-                                              .styled(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable(UPDATE_MESSAGE_TOOLTIP).formatted(Formatting.GREEN)))
+                            loader.getModContainer(MCCIC.MOD_ID)
+                                    .map(ModContainer::getMetadata)
+                                    .map(ModMetadata::getContact)
+                                    .flatMap(contacts -> contacts.get("update"))
+                                    .map(s -> s.formatted(data.latest()))
+                                    .ifPresent(downloadUrl -> {
+                                        MinecraftClient client = MinecraftClient.getInstance();
+                                        if (client.player != null) {
+                                            client.player.sendMessage(
+                                                    Text.translatable(UPDATE_MESSAGE, updateVersion, Text.translatable(UPDATE_MESSAGE_DOWNLOAD).formatted(Formatting.BOLD, Formatting.UNDERLINE))
+                                                            .styled(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable(UPDATE_MESSAGE_TOOLTIP).formatted(Formatting.GREEN)))
                                                                     .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, downloadUrl)))
-                                              .formatted(Formatting.GREEN)
-                                  );
-                              });
-                    });
-                }
+                                                            .formatted(Formatting.GREEN)
+                                            );
+                                        }
+                                    });
+                        });
+                    }
+                });
             });
         }
     }

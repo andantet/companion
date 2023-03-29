@@ -1,13 +1,14 @@
 package dev.andante.mccic.api.client;
 
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.util.JsonHelper;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -16,12 +17,6 @@ import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
 import org.slf4j.Logger;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class UpdateTracker {
@@ -37,21 +32,16 @@ public class UpdateTracker {
         } catch (MalformedURLException exception) {
             throw new RuntimeException(exception);
         }
-
-        this.retrieve();
     }
 
     /**
      * Updates {@link #data} based on the data given from the defined {@link #url}.
      */
-    public void retrieve() {
-        try {
-            JsonReader reader = new JsonReader(new InputStreamReader(url.openStream()));
-            Optional<Data> maybeData = Data.CODEC.parse(JsonOps.INSTANCE, JsonHelper.parseJsonReader(reader)).result();
-            this.data = maybeData.orElseThrow(() -> new IOException("Codec could not parse data from update tracker source file"));
-        } catch (IOException | JsonSyntaxException | IllegalStateException exception) {
-            LOGGER.error("%s: Retrieval Error".formatted(MCCIC.MOD_NAME), exception);
-        }
+    public CompletableFuture<UpdateTracker> retrieve() {
+        return CompletableFuture.supplyAsync(() -> {
+            JsonHelper.parseCodecUrl(this.url, Data.CODEC, data -> this.data = data);
+            return this;
+        });
     }
 
     public URL getUrl() {

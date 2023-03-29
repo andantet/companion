@@ -1,18 +1,9 @@
 package dev.andante.mccic.api.mccapi;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.util.JsonHelper;
-import org.slf4j.Logger;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
@@ -22,7 +13,9 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import org.slf4j.Logger;
 
 public class EventApiHook {
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -42,15 +35,11 @@ public class EventApiHook {
     /**
      * Updates {@link #data} based on the data given from the defined {@link #url}.
      */
-    public void retrieve() {
-        try {
-            JsonReader reader = new JsonReader(new InputStreamReader(url.openStream()));
-            JsonObject root = JsonHelper.parseJsonReader(reader).getAsJsonObject();
-            Optional<Data> maybeData = Data.CODEC.parse(JsonOps.INSTANCE, root.getAsJsonObject("data")).result();
-            this.data = maybeData.orElseThrow(() -> new IOException("Codec could not parse data from Event API"));
-        } catch (IOException | JsonSyntaxException | IllegalStateException exception) {
-            LOGGER.error("%s: Retrieval Error".formatted(MCCIC.MOD_NAME), exception);
-        }
+    public CompletableFuture<EventApiHook> retrieve() {
+        return CompletableFuture.supplyAsync(() -> {
+            JsonHelper.parseCodecUrl(this.url, Data.CODEC, data -> this.data = data);
+            return this;
+        });
     }
 
     public URL getUrl() {

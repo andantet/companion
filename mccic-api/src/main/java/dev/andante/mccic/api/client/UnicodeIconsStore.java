@@ -1,34 +1,28 @@
 package dev.andante.mccic.api.client;
 
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
-import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.ListCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import dev.andante.mccic.api.MCCIC;
+import dev.andante.mccic.api.client.event.MCCIClientGameJoinEvent;
 import dev.andante.mccic.api.util.JsonHelper;
 import dev.andante.mccic.api.util.MCCIFont;
 import dev.andante.mccic.api.util.TextQuery;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.text.LiteralTextContent;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import org.slf4j.Logger;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
+import net.minecraft.text.LiteralTextContent;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
 public class UnicodeIconsStore {
-    public static final Logger LOGGER = LogUtils.getLogger();
     public static final UnicodeIconsStore INSTANCE = new UnicodeIconsStore("https://gist.githubusercontent.com/andantet/702a32539377b363bc6ae0c09d2982d2/raw/unicode_icons.json");
 
     private final URL url;
@@ -41,6 +35,11 @@ public class UnicodeIconsStore {
             throw new RuntimeException(exception);
         }
 
+        this.retrieve();
+        MCCIClientGameJoinEvent.EVENT.register(this::onGameJoin);
+    }
+
+    private void onGameJoin(ClientPlayNetworkHandler handler, GameJoinS2CPacket packet) {
         this.retrieve();
     }
 
@@ -76,14 +75,11 @@ public class UnicodeIconsStore {
     /**
      * Updates {@link #data} based on the data given from the defined {@link #url}.
      */
-    public void retrieve() {
-        try {
-            JsonReader reader = new JsonReader(new InputStreamReader(url.openStream()));
-            Optional<Data> maybeData = Data.CODEC.parse(JsonOps.INSTANCE, JsonHelper.parseJsonReader(reader)).result();
-            this.data = maybeData.orElseThrow(() -> new IOException("Codec could not parse data from unicode icons source file"));
-        } catch (IOException | JsonSyntaxException | IllegalStateException exception) {
-            LOGGER.error("%s: Retrieval Error".formatted(MCCIC.MOD_NAME), exception);
-        }
+    public CompletableFuture<UnicodeIconsStore> retrieve() {
+        return CompletableFuture.supplyAsync(() -> {
+            JsonHelper.parseCodecUrl(this.url, Data.CODEC, data -> this.data = data);
+            return this;
+        });
     }
 
     public URL getUrl() {

@@ -5,12 +5,23 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.internal.LazilyParsedNumber;
 import com.google.gson.stream.JsonReader;
-
+import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
+import dev.andante.mccic.api.MCCIC;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.Optional;
+import java.util.function.Consumer;
+import org.slf4j.Logger;
 
 public interface JsonHelper {
+    Logger LOGGER = LogUtils.getLogger();
+
     static JsonElement parseJsonReader(JsonReader reader) throws IOException {
         return switch (reader.peek()) {
             case STRING -> new JsonPrimitive(reader.nextString());
@@ -40,5 +51,20 @@ public interface JsonHelper {
             }
             default -> throw new IllegalArgumentException();
         };
+    }
+
+    static <T> Optional<T> parseCodecUrl(URL url, Codec<T> codec) {
+        try {
+            JsonReader reader = new JsonReader(new InputStreamReader(url.openStream()));
+            return codec.parse(JsonOps.INSTANCE, JsonHelper.parseJsonReader(reader)).result();
+        } catch (IOException | JsonSyntaxException | IllegalStateException exception) {
+            LOGGER.error("%s: Retrieval Error".formatted(MCCIC.MOD_NAME), exception);
+        }
+
+        return Optional.empty();
+    }
+
+    static <T> void parseCodecUrl(URL url, Codec<T> codec, Consumer<T> action) {
+        parseCodecUrl(url, codec).ifPresent(action);
     }
 }
