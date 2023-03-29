@@ -86,10 +86,6 @@ public class EventApiHook {
             ).apply(instance, Data::new)
         );
 
-        public int getEventNumber() {
-            return Integer.parseInt(this.event());
-        }
-
         public Optional<Date> createDate() {
             try {
                 TemporalAccessor temporalAccessor = DateTimeFormatter.ISO_INSTANT.parse(this.date);

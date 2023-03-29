@@ -170,7 +170,7 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
                         TimeZone timeZone = calendar.getTimeZone();
                         calendar.setTime(date);
                         new AdaptableIconToast(EVENT_ANNOUNCEMENT_TOAST_TEXTURE,
-                            Text.translatable(MCC_SOON_POPUP_TITLE, data.getEventNumber()),
+                            Text.translatable(MCC_SOON_POPUP_TITLE, data.event()),
                             Text.translatable(MCC_SOON_POPUP_DESCRIPTION,
                                 "%02d".formatted(calendar.get(Calendar.DAY_OF_MONTH)),
                                 "%02d".formatted(calendar.get(Calendar.MONTH) + 1),
