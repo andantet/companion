@@ -20,8 +20,13 @@ public class DiscordRichPresenceManager {
 
     protected void tryConnect() {
         if (this.client == null) {
-            this.client = new DiscordRichPresence(DiscordRPClientConfig.getConfig().clientId());
-            this.client.tryConnect();
+            try {
+                this.client = new DiscordRichPresence(DiscordRPClientConfig.getConfig().clientId());
+                this.client.tryConnect();
+            } catch (Exception exception) {
+                DiscordRichPresence.LOGGER.error("Unable to connect to the Discord client", exception);
+                this.client = null;
+            }
         }
     }
 

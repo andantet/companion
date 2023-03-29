@@ -40,7 +40,7 @@ public class DiscordRichPresence {
 
     public static final UUID PARTY_UUID = UUID.randomUUID();
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     private final long clientId;
     private final ScheduledExecutorService executorService;
