@@ -53,8 +53,14 @@ public class UpdateTracker {
     }
 
     public boolean isUpdateAvailable() {
+        FabricLoader loader = FabricLoader.getInstance();
+
+        if (loader.isDevelopmentEnvironment()) {
+            return true;
+        }
+
         if (this.data != null) {
-            Optional<ModContainer> maybeMod = FabricLoader.getInstance().getModContainer(MCCIC.MOD_ID);
+            Optional<ModContainer> maybeMod = loader.getModContainer(MCCIC.MOD_ID);
             if (maybeMod.isPresent()) {
                 Optional<SemanticVersion> maybeUpdate = this.data.createSemanticVersion();
                 if (maybeUpdate.isPresent()) {
