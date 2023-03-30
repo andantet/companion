@@ -37,11 +37,9 @@ public class UpdateTracker {
     /**
      * Updates {@link #data} based on the data given from the defined {@link #url}.
      */
-    public CompletableFuture<UpdateTracker> retrieve() {
-        return CompletableFuture.supplyAsync(() -> {
-            JsonHelper.parseCodecUrl(this.url, Data.CODEC, data -> this.data = data);
-            return this;
-        });
+    public CompletableFuture<Void> retrieve() {
+        return CompletableFuture.supplyAsync(() -> JsonHelper.parseCodecUrl(this.url, Data.CODEC))
+                .thenAccept(maybeData -> maybeData.ifPresent(data -> this.data = data));
     }
 
     public URL getUrl() {

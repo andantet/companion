@@ -35,11 +35,11 @@ public class EventApiHook {
     /**
      * Updates {@link #data} based on the data given from the defined {@link #url}.
      */
-    public CompletableFuture<EventApiHook> retrieve() {
-        return CompletableFuture.supplyAsync(() -> {
-            JsonHelper.parseCodecUrl(this.url, Data.CODEC, data -> this.data = data);
-            return this;
-        });
+    public CompletableFuture<Void> retrieve() {
+        return CompletableFuture.supplyAsync(() -> JsonHelper.parseCodecUrl(this.url, Data.CODEC,
+                        element -> element.getAsJsonObject().getAsJsonObject("data")
+                ))
+                .thenAccept(maybeData -> maybeData.ifPresent(data -> this.data = data));
     }
 
     public URL getUrl() {
@@ -63,16 +63,16 @@ public class EventApiHook {
 
     public record Data(String date, String event, String updateVideo) {
         public static final Codec<Data> CODEC = RecordCodecBuilder.create(
-            instance -> instance.group(
-                Codec.STRING.fieldOf("date")
-                    .xmap(Function.identity(), s -> s.substring(0, s.length() - 5) + "Z")
-                    .forGetter(Data::date),
-                Codec.STRING.fieldOf("event")
-                    .forGetter(Data::event),
-                Codec.STRING.fieldOf("updateVideo")
-                    .orElse("")
-                    .forGetter(Data::updateVideo)
-            ).apply(instance, Data::new)
+                instance -> instance.group(
+                        Codec.STRING.fieldOf("date")
+                                .xmap(Function.identity(), s -> s.substring(0, s.length() - 5) + "Z")
+                                .forGetter(Data::date),
+                        Codec.STRING.fieldOf("event")
+                                .forGetter(Data::event),
+                        Codec.STRING.fieldOf("updateVideo")
+                                .orElse("")
+                                .forGetter(Data::updateVideo)
+                ).apply(instance, Data::new)
         );
 
         public Optional<Date> createDate() {

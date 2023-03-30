@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import org.slf4j.Logger;
 
 public interface JsonHelper {
@@ -53,10 +53,10 @@ public interface JsonHelper {
         };
     }
 
-    static <T> Optional<T> parseCodecUrl(URL url, Codec<T> codec) {
+    static <T> Optional<T> parseCodecUrl(URL url, Codec<T> codec, UnaryOperator<JsonElement> modifier) {
         try {
             JsonReader reader = new JsonReader(new InputStreamReader(url.openStream()));
-            return codec.parse(JsonOps.INSTANCE, JsonHelper.parseJsonReader(reader)).result();
+            return codec.parse(JsonOps.INSTANCE, modifier.apply(JsonHelper.parseJsonReader(reader))).result();
         } catch (IOException | JsonSyntaxException | IllegalStateException exception) {
             LOGGER.error("%s: Retrieval Error".formatted(MCCIC.MOD_NAME), exception);
         }
@@ -64,7 +64,7 @@ public interface JsonHelper {
         return Optional.empty();
     }
 
-    static <T> void parseCodecUrl(URL url, Codec<T> codec, Consumer<T> action) {
-        parseCodecUrl(url, codec).ifPresent(action);
+    static <T> Optional<T> parseCodecUrl(URL url, Codec<T> codec) {
+        return parseCodecUrl(url, codec, UnaryOperator.identity());
     }
 }

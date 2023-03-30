@@ -161,9 +161,10 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
     private void onGameJoin(ClientPlayNetworkHandler handler, GameJoinS2CPacket packet) {
         ToastsClientConfig config = ToastsClientConfig.getConfig();
         if (config.eventAnnouncements()) {
-            EventApiHook.INSTANCE.retrieve().thenAccept(api -> {
-                if (api.isEventDateInFuture()) {
-                    api.getData().ifPresent(data -> {
+            EventApiHook api = EventApiHook.INSTANCE;
+            api.retrieve().thenRun(() -> {
+                api.getData().ifPresent(data -> {
+                    if (api.isEventDateInFuture()) {
                         data.createDate().ifPresent(date -> {
                             Calendar calendar = Calendar.getInstance();
                             TimeZone timeZone = calendar.getTimeZone();
@@ -174,18 +175,19 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
                                             "%02d".formatted(calendar.get(Calendar.DAY_OF_MONTH)),
                                             "%02d".formatted(calendar.get(Calendar.MONTH) + 1),
                                             calendar.get(Calendar.HOUR),
-                                            calendar.get(Calendar.AM_PM) == Calendar.PM ? "pm": "am",
+                                            calendar.get(Calendar.AM_PM) == Calendar.PM ? "pm" : "am",
                                             timeZone.getDisplayName(timeZone.inDaylightTime(date), TimeZone.SHORT)
                                     )
                             ).add();
                         });
-                    });
-                }
+                    }
+                });
             });
         }
 
         if (config.updateNotifications()) {
-            UpdateTracker.INSTANCE.retrieve().thenAccept(tracker -> {
+            UpdateTracker tracker = UpdateTracker.INSTANCE;
+            tracker.retrieve().thenRun(() -> {
                 tracker.getData().ifPresent(data -> {
                     if (tracker.isUpdateAvailable()) {
                         data.createSemanticVersion().ifPresent(version -> {
