@@ -21,8 +21,9 @@ plugins {
 
 def ENV = System.getenv()
 
+version = "${project.version}+${ENV.GITHUB_RUN_NUMBER ? "" : "local-"}${getBranch()}"
 version = project.version + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + getBranch()
-logger.lifecycle("Building MCCIC: " + version)
+logger.lifecycle("Building $mod_id: $version")
 
 /* Versioning & Dependencies */
 
@@ -38,7 +39,7 @@ def getSubprojectVersion(project) {
   def version = project.properties["${project.name}-version"]
 
   if (!version) {
-    throw new NullPointerException("Could not find version for " + project.name)
+    throw new NullPointerException("Could not find version for ${project.name}")
   }
 
   if (grgit == null) {
@@ -52,7 +53,7 @@ def getSubprojectVersion(project) {
   }
 
   var latestCommit = latestCommits.get(0)
-  return version + "+" + latestCommit.id.substring(0, 8) + DigestUtils.sha256Hex(project.rootProject.minecraft_version).substring(0, 2)
+  return "$version+${latestCommit.id.substring(0, 8) + DigestUtils.sha256Hex(project.rootProject.minecraft_version).substring(0, 2)}"
 }
 
 def getBranch() {
@@ -344,6 +345,32 @@ if (ENV.MODRINTH_TOKEN) modrinth {
   uploadFile = remapJar
   gameVersions = SUPPORTED_VERSIONS
   dependencies = [ new ModDependency("P7dR8mSH", DependencyType.REQUIRED) ]
+}
+
+if (ENV.CURSEFORGE_API_KEY) curseforge {
+  apiKey = ENV.CURSEFORGE_API_KEY
+
+  project {
+    id = project.curseforge_id
+
+    addGameVersion 'Fabric'
+
+    for (final def cf_ver in SUPPORTED_VERSIONS) addGameVersion cf_ver
+
+    changelog   = CHANGELOG
+    releaseType = project.release_type
+
+    mainArtifact(remapJar) {
+      displayName = VER_NAME
+      relations {
+        requiredDependency 'fabric-api'
+      }
+    }
+
+    afterEvaluate { uploadTask.dependsOn(remapJar) }
+  }
+
+  options { forgeGradleIntegration = false }
 }
 
 tasks.register('releaseVersion').configure {
