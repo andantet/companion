@@ -374,5 +374,5 @@ if (ENV.CURSEFORGE_API_KEY) curseforge {
 }
 
 tasks.register('releaseVersion').configure {
-  dependsOn(build, 'modrinth', 'github')
+  dependsOn(build, 'modrinth', 'github', 'curseforge')
 }
