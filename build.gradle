@@ -22,7 +22,6 @@ plugins {
 def ENV = System.getenv()
 
 version = "${project.version}+${ENV.GITHUB_RUN_NUMBER ? "" : "local-"}${getBranch()}"
-version = project.version + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + getBranch()
 logger.lifecycle("Building $mod_id: $version")
 
 /* Versioning & Dependencies */
