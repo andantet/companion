@@ -5,6 +5,7 @@
   "package": "dev.andante.mccic.hud.mixin",
   "client": [
     "client.BossBarHudMixin",
+    "client.ClientPlayNetworkHandlerMixin",
     "client.InGameHudMixin",
     "client.SplashOverlayMixin"
   ],

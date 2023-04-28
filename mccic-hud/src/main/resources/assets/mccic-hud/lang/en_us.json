@@ -12,6 +12,8 @@
   "config.mccic-hud.mccic_loading_screen.tooltip": "Replaces the loading screen with the MCCI: Companion logo when loading MCC: Island.",
   "config.mccic-hud.auto_close_beta_test_warning": "Auto-Close Beta Test Warning",
   "config.mccic-hud.auto_close_beta_test_warning.tooltip": "Whether to close the beta test warning automatically on join. Disabled by default.",
+  "config.mccic-hud.hide_secure_chat_enforcement_toast": "Hide Secure Chat Enforcement Toast",
+  "config.mccic-hud.hide_secure_chat_enforcement_toast.tooltip": "Hides the 'Chat messages can't be verified' toast when on MCC: Island. Disabled by default.",
   "config.mccic-hud.hud_enabled": "Custom HUD",
   "config.mccic-hud.hud_timer_position": "Timer Position",
   "config.mccic-hud.hud_queue_position": "Queue Position",

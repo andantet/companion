@@ -14,6 +14,7 @@ public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
     public final SimpleOption<Boolean> playerPreviewInWardrobeOption;
     public final SimpleOption<Boolean> mccicLoadingScreenOption;
     public final SimpleOption<Boolean> autoCloseBetaTestWarningOption;
+    public final SimpleOption<Boolean> hideSecureChatEnforcementToastOption;
     public final SimpleOption<Boolean> hudEnabledOption;
     public final SimpleOption<HudPosition> hudTimerPositionOption;
     public final SimpleOption<HudPosition> hudQueuePositionOption;
@@ -23,6 +24,7 @@ public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
         this.playerPreviewInWardrobeOption = this.ofBooleanTooltip("player_preview_in_wardrobe", HudClientConfig::playerPreviewInWardrobe);
         this.mccicLoadingScreenOption = this.ofBooleanTooltip("mccic_loading_screen", HudClientConfig::mccicLoadingScreen);
         this.autoCloseBetaTestWarningOption = this.ofBooleanTooltip("auto_close_beta_test_warning", HudClientConfig::autoCloseBetaTestWarning);
+        this.hideSecureChatEnforcementToastOption = this.ofBooleanTooltip("hide_secure_chat_enforcement_toast", HudClientConfig::hideSecureChatEnforcementToast);
         this.hudEnabledOption = this.ofBoolean("hud_enabled", HudClientConfig::hudEnabled);
         this.hudTimerPositionOption = this.ofEnum("hud_timer_position", HudPosition::byId, HudPosition.values(), HudClientConfig::hudTimerPosition);
         this.hudQueuePositionOption = this.ofEnum("hud_queue_position", HudPosition::byId, HudPosition.values(), HudClientConfig::hudQueuePosition);
@@ -30,7 +32,7 @@ public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.playerPreviewInWardrobeOption, this.mccicLoadingScreenOption, this.autoCloseBetaTestWarningOption);
+        return List.of(this.playerPreviewInWardrobeOption, this.mccicLoadingScreenOption, this.autoCloseBetaTestWarningOption, this.hideSecureChatEnforcementToastOption);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
 
     @Override
     public HudClientConfig createConfig() {
-        return new HudClientConfig(this.playerPreviewInWardrobeOption.getValue(), this.mccicLoadingScreenOption.getValue(), this.autoCloseBetaTestWarningOption.getValue(), this.hudEnabledOption.getValue(), this.hudTimerPositionOption.getValue(), this.hudQueuePositionOption.getValue());
+        return new HudClientConfig(this.playerPreviewInWardrobeOption.getValue(), this.mccicLoadingScreenOption.getValue(), this.autoCloseBetaTestWarningOption.getValue(), this.hideSecureChatEnforcementToastOption.getValue(), this.hudEnabledOption.getValue(), this.hudTimerPositionOption.getValue(), this.hudQueuePositionOption.getValue());
     }
 
     @Override
