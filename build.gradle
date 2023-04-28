@@ -171,18 +171,6 @@ allprojects {
       name = 'Shedaniel'
       url  = 'https://maven.shedaniel.me/'
     }
-
-    def githubUsername = System.getenv("GITHUB_USERNAME")
-    if (githubUsername != null) {
-      maven {
-        name = 'GitHub Packages (axieum/authme)'
-        url = 'https://maven.pkg.github.com/axieum/authme/'
-        credentials {
-          username = project.findProperty("gpr.user") ?: githubUsername
-          password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-        }
-      }
-    }
   }
 
   dependencies {
@@ -193,16 +181,31 @@ allprojects {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
 
-    // try get authme, to be able to log into MCC: Island
-    try {
-      modRuntimeOnly "me.axieum.mcmod.authme:authme:${project.authme_version}"
-    } catch (exception) {
-      exception.printStackTrace()
-    }
-
     testImplementation sourceSets.main.output
   }
 
+  def githubUsername = System.getenv("GITHUB_USERNAME")
+  if (githubUsername != null) {
+    repositories {
+      maven {
+        name = 'GitHub Packages (axieum/authme)'
+        url = 'https://maven.pkg.github.com/axieum/authme/'
+        credentials {
+          username = project.findProperty("gpr.user") ?: githubUsername
+          password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+      }
+    }
+
+    dependencies {
+      // try get authme, to be able to log into MCC: Island
+      try {
+        modRuntimeOnly "me.axieum.mcmod.authme:authme:${project.authme_version}"
+      } catch (exception) {
+        exception.printStackTrace()
+      }
+    }
+  }
 
   tasks.withType(ProcessResources).configureEach {
     inputs.property "version", project.version
