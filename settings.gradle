@@ -10,7 +10,7 @@ pluginManagement {
   }
 }
 
-rootProject.name = 'mccic'
+rootProject.name = 'companion'
 
 include 'mccic-api'
 include 'mccic-chat'
