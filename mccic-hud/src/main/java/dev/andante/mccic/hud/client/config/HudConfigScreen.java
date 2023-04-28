@@ -30,7 +30,12 @@ public class HudConfigScreen extends AbstractConfigScreen<HudClientConfig> {
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.playerPreviewInWardrobeOption, this.mccicLoadingScreenOption, this.autoCloseBetaTestWarningOption, this.hudEnabledOption, this.hudTimerPositionOption, this.hudQueuePositionOption);
+        return List.of(this.playerPreviewInWardrobeOption, this.mccicLoadingScreenOption, this.autoCloseBetaTestWarningOption);
+    }
+
+    @Override
+    protected List<SimpleOption<?>> getDevelopmentOptions() {
+        return List.of(this.hudEnabledOption, this.hudTimerPositionOption, this.hudQueuePositionOption);
     }
 
     @Override

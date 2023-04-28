@@ -46,13 +46,13 @@ public class MusicConfigScreen extends AbstractConfigScreen<MusicClientConfig> {
 
     @Override
     protected List<SimpleOption<?>> getOptions() {
-        return List.of(this.musicVolumeOption, this.musicVolumeAfterDeathOption, this.sfxVolumeOption, this.hitwSoundOnOtherDeathOption, this.stopMusicOnDeathOption, this.stopMusicOnChickenHitOption, this.transitionToOvertimeOption);
+        return List.of(this.musicVolumeOption, this.musicVolumeAfterDeathOption, this.sfxVolumeOption, this.stopMusicOnDeathOption, this.stopMusicOnChickenHitOption, this.hitwSoundOnOtherDeathOption, this.transitionToOvertimeOption);
     }
 
     @Override
     public MusicClientConfig createConfig() {
         MusicClientConfig config = this.getConfig();
-        return new MusicClientConfig(this.musicVolumeOption.getValue(), this.musicVolumeAfterDeathOption.getValue(), this.sfxVolumeOption.getValue(), this.hitwSoundOnOtherDeathOption.getValue(), this.stopMusicOnDeathOption.getValue(), this.stopMusicOnChickenHitOption.getValue(), this.transitionToOvertimeOption.getValue(), config.overtimeTransitionTicks(), config.fadeTransitionTicks());
+        return new MusicClientConfig(this.musicVolumeOption.getValue(), this.musicVolumeAfterDeathOption.getValue(), this.sfxVolumeOption.getValue(), this.stopMusicOnDeathOption.getValue(), this.stopMusicOnChickenHitOption.getValue(), this.hitwSoundOnOtherDeathOption.getValue(), this.transitionToOvertimeOption.getValue(), config.overtimeTransitionTicks(), config.fadeTransitionTicks());
     }
 
     @Override

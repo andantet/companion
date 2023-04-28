@@ -11,6 +11,7 @@ import dev.andante.mccic.config.MCCICConfig;
 import dev.andante.mccic.config.mixin.client.GameOptionsInvoker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -76,6 +77,11 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
         this.list.setRenderBackground(false);
         this.list.setRenderHorizontalShadows(false);
         this.getOptions().forEach(this.list::addSingleOptionEntry);
+
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            this.getDevelopmentOptions().forEach(this.list::addSingleOptionEntry);
+        }
+
         this.addSelectableChild(this.list);
 
         // back button
@@ -96,6 +102,10 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     }
 
     protected List<SimpleOption<?>> getOptions() {
+        return Collections.emptyList();
+    }
+
+    protected List<SimpleOption<?>> getDevelopmentOptions() {
         return Collections.emptyList();
     }
 

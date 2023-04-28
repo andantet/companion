@@ -8,7 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
-public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfterDeath, float sfxVolume, HITWSoundOnOtherDeath hitwSoundOnOtherDeath, boolean stopMusicOnDeath, boolean stopMusicOnChickenHit, boolean transitionToOvertime, int overtimeTransitionTicks, int fadeTransitionTicks) {
+public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfterDeath, float sfxVolume, boolean stopMusicOnDeath, boolean stopMusicOnChickenHit, HITWSoundOnOtherDeath hitwSoundOnOtherDeath, boolean transitionToOvertime, int overtimeTransitionTicks, int fadeTransitionTicks) {
     public static final Codec<MusicClientConfig> CODEC = RecordCodecBuilder.create(
         instance -> {
             ConfigCodecBuilder<MusicClientConfig> builder = new ConfigCodecBuilder<>(MusicClientConfig.createDefaultConfig());
@@ -16,9 +16,9 @@ public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfte
                 builder.createFloat("game_music_volume", MusicClientConfig::gameMusicVolume),
                 builder.createFloat("game_music_volume_after_death", MusicClientConfig::gameMusicVolumeAfterDeath),
                 builder.createFloat("sfx_volume", MusicClientConfig::sfxVolume),
-                builder.createEnum("hitw_sound_on_other_death", HITWSoundOnOtherDeath::values, MusicClientConfig::hitwSoundOnOtherDeath),
                 builder.createBool("stop_music_on_death", MusicClientConfig::stopMusicOnDeath),
                 builder.createBool("stop_music_on_chicken_hit", MusicClientConfig::stopMusicOnChickenHit),
+                builder.createEnum("hitw_sound_on_other_death", HITWSoundOnOtherDeath::values, MusicClientConfig::hitwSoundOnOtherDeath),
                 builder.createBool("transition_to_overtime", MusicClientConfig::transitionToOvertime),
                 builder.createInt("overtime_transition_ticks", MusicClientConfig::overtimeTransitionTicks),
                 builder.createInt("fade_transition_ticks", MusicClientConfig::fadeTransitionTicks)
@@ -33,6 +33,6 @@ public record MusicClientConfig(float gameMusicVolume, float gameMusicVolumeAfte
     }
 
     public static MusicClientConfig createDefaultConfig() {
-        return new MusicClientConfig(0.5F, 0.25F, 1.0F, HITWSoundOnOtherDeath.OFF, false, false, true, 2 * 20, 20);
+        return new MusicClientConfig(0.5F, 0.25F, 1.0F, false, false, HITWSoundOnOtherDeath.SCORE, true, 2 * 20, 20);
     }
 }
