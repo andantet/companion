@@ -172,12 +172,15 @@ allprojects {
       url  = 'https://maven.shedaniel.me/'
     }
 
-    maven {
-      name = 'GitHub Packages (axieum/authme)'
-      url  = 'https://maven.pkg.github.com/axieum/authme/'
-      credentials {
-        username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_USERNAME")
-        password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+    def githubUsername = System.getenv("GITHUB_USERNAME")
+    if (githubUsername != null) {
+      maven {
+        name = 'GitHub Packages (axieum/authme)'
+        url = 'https://maven.pkg.github.com/axieum/authme/'
+        credentials {
+          username = project.findProperty("gpr.user") ?: githubUsername
+          password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
       }
     }
   }
