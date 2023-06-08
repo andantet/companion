@@ -5,6 +5,7 @@ import dev.andante.mccic.hud.client.config.HudClientConfig;
 import dev.andante.mccic.hud.client.render.MCCIHudRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,11 +24,11 @@ public class InGameHudMixin {
             shift = At.Shift.BEFORE
         )
     )
-    private void onRender(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+    private void onRender(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (GameTracker.INSTANCE.isOnServer()) {
             HudClientConfig config = HudClientConfig.getConfig();
             if (config.hudEnabled()) {
-                MCCIHudRenderer.INSTANCE.render(matrices, tickDelta, config);
+                MCCIHudRenderer.INSTANCE.render(context, tickDelta, config);
             }
         }
     }

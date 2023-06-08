@@ -12,6 +12,7 @@ import dev.andante.mccic.config.mixin.client.GameOptionsInvoker;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -128,20 +129,20 @@ public abstract class AbstractConfigScreen<T extends Record> extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         // background
-        this.renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, delta);
+        this.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
 
         // title
         int padding = 6;
         ClientHelper.drawOpaqueBlack(0, TITLE_Y - padding, this.width, TITLE_Y + this.textRenderer.fontHeight + padding);
 
-        this.textRenderer.draw(matrices, this.title, (int) ((this.width / 2f) - (this.textRenderer.getWidth(this.title) / 2f)), TITLE_Y, 0xFFFFFFFF);
+        context.drawTextWithShadow(this.textRenderer, this.title, (int) ((this.width / 2f) - (this.textRenderer.getWidth(this.title) / 2f)), TITLE_Y, 0xFFFFFFFF);
 
         // options
         if (!this.list.children().isEmpty()) {
-            this.list.render(matrices, mouseX, mouseY, delta);
+            this.list.render(context, mouseX, mouseY, delta);
         }
     }
 

@@ -24,6 +24,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.CommandRegistryAccess;
@@ -107,7 +108,7 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
         }));
     }
 
-    private void onHudRender(MatrixStack matrices, float tickDelta) {
+    private void onHudRender(DrawContext context, float tickDelta) {
         if (!DebugClientConfig.getConfig().debugHud()) {
             return;
         }
@@ -120,33 +121,33 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
         ClientHelper.drawOpaqueBlack(2, 2, 130, this.y + MinecraftClient.getInstance().textRenderer.fontHeight);
         this.y = 4;
 
-        this.drawText(matrices, Text.of("State: " + gameTracker.getGameState().name()), false);
-        this.renderContent(matrices, gameTracker.getGame(), gameTracker.getTime());
+        this.drawText(context, Text.of("State: " + gameTracker.getGameState().name()), false);
+        this.renderContent(context, gameTracker.getGame(), gameTracker.getTime());
 
         QueueTracker queueTracker = QueueTracker.INSTANCE;
         this.y += 5;
-        this.drawText(matrices, Text.literal("                               ").formatted(Formatting.STRIKETHROUGH), false);
+        this.drawText(context, Text.literal("                               ").formatted(Formatting.STRIKETHROUGH), false);
         this.y -= 4;
-        this.drawText(matrices, Text.of("Queue Type: " + queueTracker.getQueueType().name()));
-        this.renderContent(matrices, queueTracker.getGame(), queueTracker.getTime());
+        this.drawText(context, Text.of("Queue Type: " + queueTracker.getQueueType().name()));
+        this.renderContent(context, queueTracker.getGame(), queueTracker.getTime());
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private void renderContent(MatrixStack matrices, Optional<Game> maybeGame, OptionalInt maybeTime) {
-        maybeGame.map(Game::getDisplayString).ifPresent(game -> this.drawText(matrices, Text.of("Game: " + game)));
-        maybeTime.ifPresent(time -> this.drawText(matrices, Text.of("Time: %s (%sm %ss)".formatted(time, time / 60, time % 60))));
+    private void renderContent(DrawContext context, Optional<Game> maybeGame, OptionalInt maybeTime) {
+        maybeGame.map(Game::getDisplayString).ifPresent(game -> this.drawText(context, Text.of("Game: " + game)));
+        maybeTime.ifPresent(time -> this.drawText(context, Text.of("Time: %s (%sm %ss)".formatted(time, time / 60, time % 60))));
     }
 
-    private void drawText(MatrixStack matrices, Text text, boolean bump) {
+    private void drawText(DrawContext context, Text text, boolean bump) {
         if (bump) {
             this.y += 10;
         }
 
-        MinecraftClient.getInstance().textRenderer.draw(matrices, text, 4, this.y, 0xFFFFFF);
+        context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, text, 4, this.y, 0xFFFFFF);
     }
 
-    private void drawText(MatrixStack matrices, Text text) {
-        this.drawText(matrices, text, true);
+    private void drawText(DrawContext context, Text text) {
+        this.drawText(context, text, true);
     }
 
     private EventResult onChatMessage(MCCIChatEvent.Context context) {

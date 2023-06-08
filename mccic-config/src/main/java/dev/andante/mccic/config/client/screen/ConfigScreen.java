@@ -6,6 +6,7 @@ import dev.andante.mccic.config.MCCICConfig;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -53,8 +54,8 @@ public class ConfigScreen extends AbstractConfigScreen<Record> {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
 
         int l = OTHER_CONFIG_LOCATION_TEXTS.size();
         int padding = 6;
@@ -63,7 +64,7 @@ public class ConfigScreen extends AbstractConfigScreen<Record> {
 
         for (int i = 0; i < l; i++) {
             Text text = OTHER_CONFIG_LOCATION_TEXTS.get(i);
-            this.textRenderer.draw(matrices, text,
+            context.drawTextWithShadow(this.textRenderer, text,
                 (int) ((this.width / 2f) - (this.textRenderer.getWidth(text) / 2f)),
                 y + ((this.textRenderer.fontHeight + 1) * i),
                 0xFFFFFFFF

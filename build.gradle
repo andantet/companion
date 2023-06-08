@@ -179,7 +179,7 @@ allprojects {
     modApi "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-    modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
+    modCompileOnly "com.terraformersmc:modmenu:${project.mod_menu_version}"
 
     testImplementation sourceSets.main.output
   }

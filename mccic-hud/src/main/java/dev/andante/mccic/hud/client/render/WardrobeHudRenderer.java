@@ -5,6 +5,7 @@ import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
 import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.hud.client.config.HudClientConfig;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.util.Window;
@@ -20,7 +21,7 @@ public class WardrobeHudRenderer {
         this.client = MinecraftClient.getInstance();
     }
 
-    public void render(Screen screen, MatrixStack matrices, int mouseX, int mouseY, float tickDelta) {
+    public void render(Screen screen, DrawContext context, int mouseX, int mouseY, float tickDelta) {
         if (HudClientConfig.getConfig().playerPreviewInWardrobe()) {
             Window window = this.client.getWindow();
             int width = window.getScaledWidth();
@@ -28,7 +29,7 @@ public class WardrobeHudRenderer {
             int x = (width / 2) - 170;
             int y = (height / 2) + 40;
             ClientHelper.drawOpaqueBlack(x - 50, y - 110, x + 50, y + 10);
-            InventoryScreen.drawEntity(matrices, x - 10, y, 50, -40, 0, this.client.player);
+            InventoryScreen.drawEntity(context, x - 10, y, 50, -40, 0, this.client.player);
         }
     }
 

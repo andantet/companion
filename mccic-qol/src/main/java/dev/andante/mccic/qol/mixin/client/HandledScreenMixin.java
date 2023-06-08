@@ -5,6 +5,7 @@ import dev.andante.mccic.api.game.GameState;
 import dev.andante.mccic.qol.client.config.QoLClientConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.slot.Slot;
@@ -23,7 +24,7 @@ public class HandledScreenMixin {
     @Unique private static Slot staticFocusedSlot;
 
     @Inject(method = "render", at = @At("HEAD"))
-    private void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         staticFocusedSlot = null;
     }
 
@@ -31,10 +32,10 @@ public class HandledScreenMixin {
         method = "render",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawSlotHighlight(Lnet/minecraft/client/util/math/MatrixStack;III)V"
+            target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawSlotHighlight(Lnet/minecraft/client/gui/DrawContext;III)V"
         )
     )
-    private void onRenderDrawSlotHighlight(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void onRenderDrawSlotHighlight(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         staticFocusedSlot = this.focusedSlot;
     }
 
@@ -42,7 +43,7 @@ public class HandledScreenMixin {
      * Cancels rendering of slot highlight when on MCCI, not in-game, configured and slot is empty.
      */
     @Inject(method = "drawSlotHighlight", at = @At("HEAD"), cancellable = true)
-    private static void onRenderDrawSlotHighlight(MatrixStack matrices, int x, int y, int z, CallbackInfo ci) {
+    private static void onRenderDrawSlotHighlight(DrawContext context, int x, int y, int z, CallbackInfo ci) {
         GameTracker tracker = GameTracker.INSTANCE;
         if (tracker.isOnServer()) {
             GameState state = tracker.getGameState();

@@ -4,6 +4,7 @@ import dev.andante.mccic.qol.MCCICQoL;
 import dev.andante.mccic.qol.mixin.client.GameMenuScreenMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
@@ -46,12 +47,12 @@ public class ConfirmDisconnectScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
+        super.render(context, mouseX, mouseY, delta);
 
         int x = (int) ((this.width / 2f) - (this.textRenderer.getWidth(CONFIRM_TEXT) / 2f));
         int y = (int) ((this.height / 2f) - BOX_HEIGHT - (BOX_HEIGHT / 2f) - (BOX_HEIGHT / 4f));
-        this.textRenderer.draw(matrices, CONFIRM_TEXT, x, y, 0xFFFFFFFF);
+        context.drawTextWithShadow(this.textRenderer, CONFIRM_TEXT, x, y, 0xFFFFFFFF);
     }
 }

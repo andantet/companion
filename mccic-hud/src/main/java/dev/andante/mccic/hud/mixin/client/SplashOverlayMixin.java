@@ -7,6 +7,7 @@ import dev.andante.mccic.hud.client.render.MCCICLogoTexture;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.SplashOverlay;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -30,10 +31,10 @@ public class SplashOverlayMixin {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V",
+                    target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIFFIIII)V",
                     ordinal = 0
             ),
-            index = 1
+            index = 0
     )
     private Identifier modifyLogoTexture(Identifier id) {
         return mccic_useCustomLoadingScreen() ? MCCICLogoTexture.MCCIC_LOGO : id;
@@ -43,11 +44,11 @@ public class SplashOverlayMixin {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderColor(FFFF)V",
+                    target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFunc(II)V",
                     shift = At.Shift.BEFORE
             )
     )
-    private void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (mccic_useCustomLoadingScreen()) {
             RenderSystem.defaultBlendFunc();
         }

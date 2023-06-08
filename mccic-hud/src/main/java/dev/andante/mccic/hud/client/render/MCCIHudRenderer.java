@@ -14,7 +14,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.Window;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Style;
@@ -30,7 +30,7 @@ import java.util.function.ToIntFunction;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Environment(EnvType.CLIENT)
-public class MCCIHudRenderer extends DrawableHelper {
+public class MCCIHudRenderer {
     public static final MCCIHudRenderer INSTANCE = new MCCIHudRenderer();
 
     public static final int
@@ -78,7 +78,7 @@ public class MCCIHudRenderer extends DrawableHelper {
         }
     }
 
-    public void render(MatrixStack matrices, float tickDelta, HudClientConfig config) {
+    public void render(DrawContext context, float tickDelta, HudClientConfig config) {
         Window window = this.client.getWindow();
         this.scaledWidth = window.getScaledWidth();
         this.scaledHeight = window.getScaledHeight();
@@ -93,7 +93,7 @@ public class MCCIHudRenderer extends DrawableHelper {
                     int height = element.getHeight();
                     int ix = x - (element.getWidth() / 2);
                     ClientHelper.drawOpaqueBlack(ix - BORDER, y - BORDER, ix + width + BORDER, y + height + BORDER);
-                    element.render(matrices, tickDelta, ix, y, config);
+                    element.render(context, tickDelta, ix, y, config);
                     y += element.getHeight() + ELEMENT_SEPARATOR;
                 }
             }
@@ -111,7 +111,7 @@ public class MCCIHudRenderer extends DrawableHelper {
                     int width = element.getWidth();
                     int height = element.getHeight();
                     ClientHelper.drawOpaqueBlack(x - BORDER, y - BORDER, x + width + BORDER, y + height + BORDER);
-                    element.render(matrices, tickDelta, x, y, config);
+                    element.render(context, tickDelta, x, y, config);
                     y += element.getHeight() + ELEMENT_SEPARATOR;
                 }
             }
@@ -135,11 +135,11 @@ public class MCCIHudRenderer extends DrawableHelper {
         }
 
         @Override
-        public void render(MatrixStack matrices, float tickDelta, int x, int y, HudClientConfig config) {
+        public void render(DrawContext context, float tickDelta, int x, int y, HudClientConfig config) {
             GameTracker gameTracker = GameTracker.INSTANCE;
             int time = gameTracker.getTime().orElse(0);
             Text text = Text.literal("%02d:%02d".formatted(time / 60, time % 60)).setStyle(HUD_FONT_STYLE.withColor(time <= 10 && time % 2 == 0 ? Formatting.RED : Formatting.WHITE));
-            this.drawTextInfer(matrices, text, x, y - 1);
+            this.drawTextInfer(context, text, x, y - 1);
         }
 
         @Override
@@ -161,12 +161,12 @@ public class MCCIHudRenderer extends DrawableHelper {
         }
 
         @Override
-        public void render(MatrixStack matrices, float tickDelta, int x, int y, HudClientConfig config) {
+        public void render(DrawContext context, float tickDelta, int x, int y, HudClientConfig config) {
             y -= 1;
             QueueTracker queueTracker = QueueTracker.INSTANCE;
-            this.drawTextInfer(matrices, this.createGameText(queueTracker.getGame()), x, y);
-            this.drawTextInfer(matrices, this.createQueueTypeText(queueTracker.getQueueType()), x, y + 8);
-            this.drawTextInfer(matrices, this.createTimeText(queueTracker.getTime(), queueTracker.getPlayers(), queueTracker.getMaxPlayers()), x, y + 16);
+            this.drawTextInfer(context, this.createGameText(queueTracker.getGame()), x, y);
+            this.drawTextInfer(context, this.createQueueTypeText(queueTracker.getQueueType()), x, y + 8);
+            this.drawTextInfer(context, this.createTimeText(queueTracker.getTime(), queueTracker.getPlayers(), queueTracker.getMaxPlayers()), x, y + 16);
         }
 
         @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -222,7 +222,7 @@ public class MCCIHudRenderer extends DrawableHelper {
     @Environment(EnvType.CLIENT)
     public abstract class Element {
         public abstract boolean shouldRender(HudClientConfig config);
-        public abstract void render(MatrixStack matrices, float tickDelta, int x, int y, HudClientConfig config);
+        public abstract void render(DrawContext context, float tickDelta, int x, int y, HudClientConfig config);
 
         public abstract int getWidth();
         public abstract int getHeight();
@@ -231,23 +231,23 @@ public class MCCIHudRenderer extends DrawableHelper {
             return true;
         }
 
-        public void drawText(MatrixStack matrices, Text text, int x, int y, int color) {
-            MCCIHudRenderer.this.textRenderer.draw(matrices, text, x, y, color);
+        public void drawText(DrawContext context, Text text, int x, int y, int color) {
+            context.drawTextWithShadow(MCCIHudRenderer.this.textRenderer, text, x, y, color);
         }
 
-        public void drawText(MatrixStack matrices, Text text, int x, int y) {
-            this.drawText(matrices, text, x, y, 0xFFFFFFFF);
+        public void drawText(DrawContext context, Text text, int x, int y) {
+            this.drawText(context, text, x, y, 0xFFFFFFFF);
         }
 
-        public void drawCenteredText(MatrixStack matrices, Text text, int x, int y) {
-            this.drawText(matrices, text, x + (this.getWidth() / 2) - (MCCIHudRenderer.this.textRenderer.getWidth(text) / 2), y, 0xFFFFFFFF);
+        public void drawCenteredText(DrawContext context, Text text, int x, int y) {
+            this.drawText(context, text, x + (this.getWidth() / 2) - (MCCIHudRenderer.this.textRenderer.getWidth(text) / 2), y, 0xFFFFFFFF);
         }
 
-        public void drawTextInfer(MatrixStack matrices, Text text, int x, int y) {
+        public void drawTextInfer(DrawContext context, Text text, int x, int y) {
             if (this.shouldCenterText()) {
-                this.drawCenteredText(matrices, text, x, y);
+                this.drawCenteredText(context, text, x, y);
             } else {
-                this.drawText(matrices, text, x, y);
+                this.drawText(context, text, x, y);
             }
         }
     }
