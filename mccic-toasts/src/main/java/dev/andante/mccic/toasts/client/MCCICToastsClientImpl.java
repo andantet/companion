@@ -4,8 +4,8 @@ import dev.andante.mccic.api.MCCIC;
 import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
 import dev.andante.mccic.api.client.UpdateTracker;
-import dev.andante.mccic.api.client.event.MCCIClientGameJoinEvent;
 import dev.andante.mccic.api.client.event.MCCIChatEvent;
+import dev.andante.mccic.api.client.event.MCCIClientGameJoinEvent;
 import dev.andante.mccic.api.client.toast.AdaptableIconToast;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.api.mccapi.EventApiHook;
@@ -46,7 +46,8 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         EVENT_ANNOUNCEMENT_TOAST_TEXTURE = new Identifier(MOD_ID, "textures/gui/toasts/event_announcement.png");
 
     public static final String
-        QUEST_COMPLETE_TEXT = "\\(.\\) Quest complete: ",
+        QUEST_COMPLETE_TEXT = "\\(.\\) Daily Quest Completed!",
+        QUEST_SCROLL_COMPLETE_TEXT = "\\(.\\) Quest Scroll Completed!",
         BADGE_UNLOCKED_TEXT = "\\(.\\) You achieved the \\[";
 
     public static final String
@@ -124,13 +125,16 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         Text message = context.message();
 
         if (config.quests()) {
-            OptionalInt opt = matchAndGrabIndex(message, raw, QUEST_COMPLETE_TEXT, Icon.QUEST_BOOK);
-            if (opt.isPresent()) {
-                int sub = opt.getAsInt();
-                String name = raw.substring(sub);
+            if (match(message, raw, QUEST_COMPLETE_TEXT, Icon.QUEST_BOOK)) {
                 new AdaptableIconToast(QUEST_TOAST_TEXTURE,
                     Text.translatable("toast.%s.quest_complete.title".formatted(MOD_ID)),
-                    Text.translatable("toast.%s.quest_complete.description".formatted(MOD_ID), name)
+                    Text.translatable("toast.%s.quest_complete.description".formatted(MOD_ID))
+                ).add();
+                return EventResult.cancel();
+            } else if (match(message, raw, QUEST_SCROLL_COMPLETE_TEXT, Icon.QUEST_BOOK)) {
+                new AdaptableIconToast(QUEST_TOAST_TEXTURE,
+                    Text.translatable("toast.%s.quest_scroll_complete.title".formatted(MOD_ID)),
+                    Text.translatable("toast.%s.quest_scroll_complete.description".formatted(MOD_ID))
                 ).add();
                 return EventResult.cancel();
             }
@@ -156,6 +160,10 @@ public final class MCCICToastsClientImpl implements MCCICToasts, ClientModInitia
         return raw.matches(pattern + ".+") && UnicodeIconsStore.doesTextContainIcon(message, icon)
             ? OptionalInt.of(pattern.replaceAll("\\\\", "").length())
             : OptionalInt.empty();
+    }
+
+    public static boolean match(Text message, String raw, String pattern, Icon icon) {
+        return raw.matches(pattern + ".+") && UnicodeIconsStore.doesTextContainIcon(message, icon);
     }
 
     private void onGameJoin(ClientPlayNetworkHandler handler, GameJoinS2CPacket packet) {
