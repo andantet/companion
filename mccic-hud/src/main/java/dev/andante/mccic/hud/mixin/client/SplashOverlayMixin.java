@@ -9,7 +9,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.SplashOverlay;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -31,8 +30,7 @@ public class SplashOverlayMixin {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIFFIIII)V",
-                    ordinal = 0
+                    target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIFFIIII)V"
             ),
             index = 0
     )
@@ -44,13 +42,14 @@ public class SplashOverlayMixin {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFunc(II)V",
-                    shift = At.Shift.BEFORE
+                    target = "Lnet/minecraft/client/gui/DrawContext;setShaderColor(FFFF)V",
+                    shift = At.Shift.AFTER
             )
     )
     private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (mccic_useCustomLoadingScreen()) {
             RenderSystem.defaultBlendFunc();
+            context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
