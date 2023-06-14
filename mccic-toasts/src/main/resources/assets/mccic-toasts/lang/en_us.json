@@ -1,6 +1,8 @@
 {
   "toast.mccic-toasts.quest_complete.title": "Quest Complete!",
-  "toast.mccic-toasts.quest_complete.description": "%s",
+  "toast.mccic-toasts.quest_complete.description": "Check your Quest Log",
+  "toast.mccic-toasts.quest_scroll_complete.title": "Quest Scroll Complete!",
+  "toast.mccic-toasts.quest_scroll_complete.description": "Check your Quest Log",
   "toast.mccic-toasts.badge_unlocked.title": "Badge Unlocked!",
   "toast.mccic-toasts.badge_unlocked.description": "%s",
 

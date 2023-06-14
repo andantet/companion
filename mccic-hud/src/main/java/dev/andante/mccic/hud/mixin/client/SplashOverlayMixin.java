@@ -42,14 +42,13 @@ public class SplashOverlayMixin {
             method = "render",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;setShaderColor(FFFF)V",
+                    target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFunc(II)V",
                     shift = At.Shift.AFTER
             )
     )
     private void onRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (mccic_useCustomLoadingScreen()) {
             RenderSystem.defaultBlendFunc();
-            context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
