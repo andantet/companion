@@ -11,6 +11,7 @@ import dev.andante.mccic.api.client.tracker.QueueTracker;
 import dev.andante.mccic.api.client.util.ClientHelper;
 import dev.andante.mccic.api.event.EventResult;
 import dev.andante.mccic.api.game.Game;
+import dev.andante.mccic.api.util.MCCIFont;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
 import dev.andante.mccic.debug.MCCICDebug;
@@ -26,7 +27,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.Scoreboard;
@@ -80,9 +80,11 @@ public final class MCCICDebugClientImpl implements MCCICDebug, ClientModInitiali
         dispatcher.register(literal(MOD_ID + ":chat_unicodes").executes(context -> {
             UnicodeIconsStore.INSTANCE.getData().ifPresent(data -> {
                 for (UnicodeIconsStore.Icon icon : UnicodeIconsStore.Icon.values()) {
-                    String key = icon.getKey();
-                    char cha = data.getCharacterFor(key);
-                    context.getSource().sendFeedback(Text.literal(key + ": ").append(Text.literal(String.valueOf(cha)).setStyle(Style.EMPTY.withFont(icon.getFont().getFont()))));
+                    for (MCCIFont font : icon.getFonts()) {
+                        String key = icon.getKey();
+                        char cha = data.getCharacterFor(key);
+                        context.getSource().sendFeedback(Text.literal(key + ": ").append(Text.literal(String.valueOf(cha)).setStyle(Style.EMPTY.withFont(font.getFont()))));
+                    }
                 }
             });
             return 1;

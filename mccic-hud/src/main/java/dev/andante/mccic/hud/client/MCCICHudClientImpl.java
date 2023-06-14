@@ -2,7 +2,6 @@ package dev.andante.mccic.hud.client;
 
 import dev.andante.mccic.api.client.UnicodeIconsStore;
 import dev.andante.mccic.api.client.UnicodeIconsStore.Icon;
-import dev.andante.mccic.api.util.TextQuery;
 import dev.andante.mccic.config.client.ClientConfigRegistry;
 import dev.andante.mccic.config.client.command.MCCICConfigCommand;
 import dev.andante.mccic.hud.MCCICHud;
@@ -35,7 +34,7 @@ public final class MCCICHudClientImpl implements MCCICHud, ClientModInitializer 
             if (HudClientConfig.getConfig().autoCloseBetaTestWarning()) {
                 client.send(() -> client.player.closeHandledScreen());
             }
-        } else if (TextQuery.findText(title, WardrobeHudRenderer.createGuiWardrobeTextPattern()).isPresent()) {
+        } else if (UnicodeIconsStore.doesTextContainIconExactFont(title, Icon.GUI_WARDROBE)) {
             ScreenEvents.afterRender(screen).register(WardrobeHudRenderer.INSTANCE::render);
         }
     }

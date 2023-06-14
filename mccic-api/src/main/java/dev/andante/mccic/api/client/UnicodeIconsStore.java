@@ -7,12 +7,6 @@ import dev.andante.mccic.api.client.event.MCCIClientGameJoinEvent;
 import dev.andante.mccic.api.util.JsonHelper;
 import dev.andante.mccic.api.util.MCCIFont;
 import dev.andante.mccic.api.util.TextQuery;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -20,6 +14,14 @@ import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
 public class UnicodeIconsStore {
@@ -56,7 +58,7 @@ public class UnicodeIconsStore {
                         .map(TextQuery::getResult)
                         .map(Text::getStyle)
                         .map(Style::getFont)
-                        .filter(id -> icon.getFont().getFont().equals(id))
+                        .filter(id -> icon.getFonts().stream().anyMatch(font -> font.getFont().equals(id)))
                         .isPresent();
     }
 
@@ -135,31 +137,24 @@ public class UnicodeIconsStore {
         CHAT_TEAM("chat_team", MCCIFont.ICON),
         CROWN("crown", MCCIFont.ICON),
         BADGE("badge", MCCIFont.ICON),
-        GUI_WARDROBE("gui_wardrobe", MCCIFont.CHEST_BACKGROUNDS),
-        GUI_WARDROBE_EDITOR("gui_wardrobe_editor", MCCIFont.CHEST_BACKGROUNDS),
-        GUI_WARDROBE_EDITOR_FULL("gui_wardrobe_editor_full", MCCIFont.CHEST_BACKGROUNDS),
-        GUI_WARDROBE_EDITOR_COLORS_SWATCH("gui_wardrobe_editor_colors_swatch", MCCIFont.CHEST_BACKGROUNDS),
-        GUI_WARDROBE_EDITOR_FULL_COLORS_FACTION("gui_wardrobe_editor_full_colors_faction", MCCIFont.CHEST_BACKGROUNDS),
-        GUI_WARDROBE_EDITOR_COLORS_FACTION("gui_wardrobe_editor_colors_faction", MCCIFont.CHEST_BACKGROUNDS),
-        GUI_WARDROBE_EDITOR_FULL_VARIANTS("gui_wardrobe_editor_full_variants", MCCIFont.CHEST_BACKGROUNDS),
-        GUI_WARDROBE_EDITOR_VARIANTS("gui_wardrobe_editor_variants", MCCIFont.CHEST_BACKGROUNDS),
+        GUI_WARDROBE("gui_wardrobe", MCCIFont.ICON, MCCIFont.ICON_OFFSET_37),
         GUI_BETA_TEST_WARNING("gui_beta_test_warning", MCCIFont.CHEST_BACKGROUNDS),
         FADE("fade", MCCIFont.GUI);
 
         private final String key;
-        private final MCCIFont font;
+        private final List<MCCIFont> fonts;
 
-        Icon(String key, MCCIFont font) {
+        Icon(String key, MCCIFont... fonts) {
             this.key = key;
-            this.font = font;
+            this.fonts = Arrays.asList(fonts);
         }
 
         public String getKey() {
             return this.key;
         }
 
-        public MCCIFont getFont() {
-            return this.font;
+        public List<MCCIFont> getFonts() {
+            return this.fonts;
         }
     }
 }

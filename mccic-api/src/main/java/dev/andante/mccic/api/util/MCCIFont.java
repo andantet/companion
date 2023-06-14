@@ -9,6 +9,7 @@ public enum MCCIFont {
     HUD("hud"),
     GUI("gui"),
     ICON("icon"),
+    ICON_OFFSET_37("icon_offset_37"),
     CHEST_BACKGROUNDS("chest_backgrounds");
 
     private final String id;
