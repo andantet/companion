@@ -1,6 +1,8 @@
 {
   "toast.mccic-toasts.quest_complete.title": "Küldetés Teljesítve!",
-  "toast.mccic-toasts.quest_complete.description": "%s",
+  "toast.mccic-toasts.quest_complete.description": "Nézd meg a Quest Log-od",
+  "toast.mccic-toasts.quest_scroll_complete.title": "Küldetés Tekercs Teljesítve!",
+  "toast.mccic-toasts.quest_scroll_complete.description": "Nézd meg a Quest Log-od",
   "toast.mccic-toasts.badge_unlocked.title": "Jelvény Kiérdemelve!",
   "toast.mccic-toasts.badge_unlocked.description": "%s",
 
