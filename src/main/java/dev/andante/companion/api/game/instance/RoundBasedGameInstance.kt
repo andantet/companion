@@ -9,33 +9,41 @@ import net.minecraft.text.Text
 /**
  * An instance of a game type.
  */
-abstract class RoundBasedGameInstance<T : RoundBasedGameInstance<T>>(
+@Suppress("LeakingThis")
+abstract class RoundBasedGameInstance<R : Round, T : RoundBasedGameInstance<R, T>>(
     /**
      * The type of this instance.
      */
     type: GameType<T>
 ) : GameInstance<T>(type) {
-    abstract val roundManager: RoundManager<T, Round<T>>
+    /**
+     * The round manager for this instance.
+     */
+    open val roundManager: RoundManager<out Round, T> = RoundManager(this, ::Round)
+
+    override fun onTitle(text: Text) {
+        roundManager.onTitle(text)
+    }
 
     override fun onGameMessage(text: Text, overlay: Boolean) {
         roundManager.onGameMessage(text)
     }
 
-    open fun onRoundInitialize(round: Round<T>, isFirstRound: Boolean) {
+    open fun onRoundInitialize(round: Round, isFirstRound: Boolean) {
     }
 
-    open fun onGameStart(round: Round<T>) {
+    open fun onGameStart(round: Round) {
     }
 
-    open fun onRoundStart(round: Round<T>, firstRound: Boolean) {
+    open fun onRoundStart(round: Round, firstRound: Boolean) {
         CompanionSoundManager.playMusic(type.settings.musicLoopSoundEvent)
     }
 
-    open fun onRoundFinish(round: Round<T>) {
+    open fun onRoundFinish(round: Round) {
         CompanionSoundManager.stopMusic()
     }
 
-    open fun onGameEnd(round: Round<T>) {
+    open fun onGameEnd(round: Round) {
     }
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {

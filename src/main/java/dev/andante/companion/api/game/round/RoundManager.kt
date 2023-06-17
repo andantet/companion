@@ -6,11 +6,11 @@ import dev.andante.companion.api.game.instance.RoundBasedGameInstance
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 
-open class RoundManager<T : RoundBasedGameInstance<T>, R : Round<T>>(
+open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     /**
      * The game instance.
      */
-    private val gameInstance: RoundBasedGameInstance<T>,
+    private val gameInstance: RoundBasedGameInstance<out R, T>,
 
     /**
      * Creates a new round from the given factory.
@@ -25,17 +25,17 @@ open class RoundManager<T : RoundBasedGameInstance<T>, R : Round<T>>(
     /**
      * The current round number.
      */
-    var currentRound = -1
+    private var currentRound = -1
 
     /**
      * The current round instance.
      */
-    var round: R = roundFactory.create()
+    private var round: R = roundFactory.create()
 
     /**
      * Stored previous rounds.
      */
-    val allRounds: MutableList<R> = mutableListOf()
+    private val allRounds: MutableList<R> = mutableListOf()
 
     /**
      * Whether the round is currently in progress.
@@ -62,19 +62,29 @@ open class RoundManager<T : RoundBasedGameInstance<T>, R : Round<T>>(
      */
     val gameEnded get() = state == State.GAME_ENDED
 
-    fun onGameMessage(text: Text) {
-        val raw: String = text.string
+    fun onTitle(text: Text) {
+        val string = text.string
+        if (string.matches(ROUND_NUMBER_TITLE)) {
+            initialize()
+        }
+    }
 
-        if (raw.matches(FACING_TEAM_REGEX)) {
+    fun onGameMessage(text: Text) {
+        val string = text.string
+        if (string.matches(FACING_TEAM_REGEX)) {
             initialize()
-        } else if (raw.matches(GAME_STARTED_REGEX)) {
+        } else if (string.matches(GAME_STARTED_REGEX)) {
             initialize()
             start()
-        } else if (raw.matches(ROUND_STARTED_REGEX)) {
+        } else if (string.matches(ROUND_STARTED_REGEX)) {
+            if (state != State.INITIALIZED) {
+                initialize()
+            }
+
             start()
-        } else if (raw.matches(ROUND_OVER_REGEX)) {
+        } else if (string.matches(ROUND_OVER_REGEX)) {
             finish()
-        } else if (raw.matches(GAME_OVER_REGEX)) {
+        } else if (string.matches(GAME_OVER_REGEX)) {
             if (state == State.IN_PROGRESS) {
                 finish()
             }
@@ -86,7 +96,7 @@ open class RoundManager<T : RoundBasedGameInstance<T>, R : Round<T>>(
     /**
      * Initializes the next round.
      */
-    fun initialize() {
+    private fun initialize() {
         // increment current round
         currentRound++
 
@@ -121,7 +131,7 @@ open class RoundManager<T : RoundBasedGameInstance<T>, R : Round<T>>(
     /**
      * Finishes the current round.
      */
-    fun finish() {
+    private fun finish() {
         // call game instance listener
         gameInstance.onRoundFinish(round)
 
@@ -175,13 +185,16 @@ open class RoundManager<T : RoundBasedGameInstance<T>, R : Round<T>>(
         val FACING_TEAM_REGEX = Regex("\\[.] You are facing the . \\w+ Team!")
 
         @RegExp
-        val ROUND_OVER_REGEX = Regex("\\[.] Round [0-9]+ over!")
+        val ROUND_NUMBER_TITLE = Regex("Round [0-9]+")
 
         @RegExp
         val GAME_STARTED_REGEX = Regex("\\[.] Game started!")
 
         @RegExp
         val ROUND_STARTED_REGEX = Regex("\\[.] Round [0-9]+ started!")
+
+        @RegExp
+        val ROUND_OVER_REGEX = Regex("\\[.] Round [0-9]+ over!")
 
         @RegExp
         val GAME_OVER_REGEX = Regex("\\[.] Game Over!")
