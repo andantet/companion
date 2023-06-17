@@ -1,5 +1,6 @@
 package dev.andante.companion.api.event
 
+import net.fabricmc.fabric.api.event.Event
 import net.fabricmc.fabric.api.event.EventFactory
 import net.minecraft.client.sound.SoundInstance
 
@@ -10,7 +11,7 @@ fun interface SoundPlayCallback {
         /**
          * An event for when the client plays a sound.
          */
-        val EVENT = EventFactory.createArrayBacked(SoundPlayCallback::class.java) { listeners -> SoundPlayCallback { sound ->
+        val EVENT: Event<SoundPlayCallback> = EventFactory.createArrayBacked(SoundPlayCallback::class.java) { listeners -> SoundPlayCallback { sound ->
             listeners.forEach { it.onSoundPlay(sound) }
         } }
     }

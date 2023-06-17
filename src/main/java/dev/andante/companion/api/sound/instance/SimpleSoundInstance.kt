@@ -12,10 +12,11 @@ import net.minecraft.util.Identifier
  */
 open class SimpleSoundInstance(
     id: Identifier,
+    repeat: Boolean,
     val volumeSupplier: () -> Float
 ) : PositionedSoundInstance(
     id, SoundCategory.MASTER, 1.0f, 1.0f,
-    SoundInstance.createRandom(), false, 0, AttenuationType.NONE,
+    SoundInstance.createRandom(), repeat, 0, AttenuationType.NONE,
     0.0, 0.0, 0.0, true
 ), TickableSoundInstance {
     override fun tick() {

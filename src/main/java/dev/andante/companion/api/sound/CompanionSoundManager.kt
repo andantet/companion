@@ -1,7 +1,7 @@
 package dev.andante.companion.api.sound
 
+import dev.andante.companion.api.event.OnStopAllSoundsCallback
 import dev.andante.companion.api.event.SoundPlayCallback
-import dev.andante.companion.api.sound.instance.GameMusicSoundInstance
 import dev.andante.companion.api.sound.instance.SimpleSoundInstance
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.sound.SoundInstance
@@ -17,44 +17,73 @@ object CompanionSoundManager {
     /**
      * The last played music sound instance.
      */
-    private var musicSoundInstance: GameMusicSoundInstance? = null
+    private var musicSoundInstance: SimpleSoundInstance? = null
 
     init {
         SoundPlayCallback.EVENT.register(::onPlaySound)
+        OnStopAllSoundsCallback.EVENT.register(::onStopAllSounds)
     }
 
     /**
      * Plays the given sound event.
      */
     fun play(id: Identifier) {
-        val instance = SimpleSoundInstance(id) { 1.0f }
+        val instance = SimpleSoundInstance(id, false) { 1.0f }
         CLIENT.soundManager.play(instance)
     }
 
     /**
      * Plays the given sound event as music.
      */
-    fun playMusic(id: Identifier?) {
-        musicSoundInstance = if (id == null) {
+    fun playMusic(id: Identifier?, repeat: Boolean = true, stop: Boolean = true): SimpleSoundInstance? {
+        if (musicSoundInstance?.id == id) {
+            return musicSoundInstance
+        }
+
+        if (stop) {
             // stop previous sound instance
-            CLIENT.soundManager.stop(musicSoundInstance)
+            musicSoundInstance?.let(CLIENT.soundManager::stop)
+        }
+
+        // start new sound instance
+        musicSoundInstance = if (id == null) {
             null
         } else {
             // play sound
-            val newSoundInstance = GameMusicSoundInstance(id) { 1.0f }
+            val newSoundInstance = SimpleSoundInstance(id, repeat) { 1.0f }
             CLIENT.soundManager.play(newSoundInstance)
-            newSoundInstance
+
+            if (stop) {
+                newSoundInstance
+            } else {
+                musicSoundInstance
+            }
         }
+
+        return musicSoundInstance
     }
 
     private fun onPlaySound(soundInstance: SoundInstance) {
+        if (soundInstance is SimpleSoundInstance) {
+            return
+        }
+
         when (val soundId = soundInstance.sound.identifier) {
             // overtime
-            CompanionSounds.MUSIC_OVERTIME_INTRO, CompanionSounds.MUSIC_OVERTIME_LOOP -> {
+            CompanionSounds.MUSIC_OVERTIME_INTRO, CompanionSounds.MUSIC_GAMEINTRO, CompanionSounds.MUSIC_ROUNDENDMUSIC -> {
+                stop(soundId)
+                playMusic(soundId, false, stop = false)
+            }
+
+            CompanionSounds.MUSIC_OVERTIME_LOOP -> {
                 stop(soundId)
                 playMusic(soundId)
             }
         }
+    }
+
+    private fun onStopAllSounds() {
+        musicSoundInstance = null
     }
 
     /**
@@ -62,5 +91,13 @@ object CompanionSoundManager {
      */
     fun stop(id: Identifier) {
         CLIENT.soundManager.stopSounds(id, SoundCategory.MASTER)
+    }
+
+    /**
+     * Stops the current music.
+     */
+    fun stopMusic() {
+        CLIENT.soundManager.stop(musicSoundInstance)
+        musicSoundInstance = null
     }
 }

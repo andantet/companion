@@ -3,12 +3,12 @@
   "minVersion": "0.8",
   "package": "dev.andante.companion.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [],
-  "injectors": {
-    "defaultRequire": 1
-  },
   "client": [
     "ClientPlayNetworkHandlerMixin",
+    "MinecraftClientMixin",
     "SoundSystemMixin"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

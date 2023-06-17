@@ -1,5 +1,8 @@
 package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
+import dev.andante.companion.api.game.type.GameTypes
+import dev.andante.companion.api.sound.CompanionSoundManager
+import dev.andante.companion.api.sound.CompanionSounds
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 
@@ -18,6 +21,8 @@ open class ParkourWarriorDojoModeInstance {
      * Called when the instance initializes.
      */
     open fun onInitialize() {
+        CompanionSoundManager.stop(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT)
+        CompanionSoundManager.playMusic(GameTypes.PARKOUR_WARRIOR_DOJO.settings.musicLoopSoundEvent)
     }
 
     /**
@@ -27,9 +32,19 @@ open class ParkourWarriorDojoModeInstance {
     }
 
     /**
+     * Called when a course is restarted by the player.
+     * @return whether the mode instance should be cleared
+     */
+    open fun onCourseRestart(): Boolean {
+        return false
+    }
+
+    /**
      * Called when the instance is cleared.
      */
     open fun onRemove() {
+        CompanionSoundManager.playMusic(null)
+        CompanionSoundManager.play(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT)
     }
 
     open fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {

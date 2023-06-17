@@ -2,6 +2,7 @@ package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
 import dev.andante.companion.api.game.instance.GameInstance
 import dev.andante.companion.api.game.type.GameType
+import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 
@@ -27,8 +28,11 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>) : G
         if (modeMatchResult != null) {
             val modeString = modeMatchResult.groupValues[1]
             Mode.ofChatString(modeString)?.let { matchedMode ->
-                mode = matchedMode
-                clearInstance()
+                if (matchedMode != mode) {
+                    clearInstance()
+                    onModeUpdate(matchedMode, mode)
+                    mode = matchedMode
+                }
             }
 
             return
@@ -36,7 +40,25 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>) : G
 
         // check for course restart
         if (string.matches(COURSE_RESTARTED_REGEX)) {
+            if (modeInstance?.onCourseRestart() == true) {
+                clearInstance()
+                return
+            }
+        }
+
+        // check for course finish
+        if (string.matches(RUN_COMPLETE_REGEX) || string.matches(NEW_PERSONAL_RECORD_REGEX)) {
             clearInstance()
+            return
+        }
+    }
+
+    /**
+     * Called when the mode is updated.
+     */
+    private fun onModeUpdate(mode: Mode, oldMode: Mode) {
+        if (mode == Mode.PRACTICE) {
+            setInstance(PracticeModeInstance())
         }
     }
 
@@ -92,6 +114,18 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>) : G
          */
         @RegExp
         val COURSE_RESTARTED_REGEX = Regex("\\[.] You restarted the course!")
+
+        /**
+         * A regex that matches the message sent when the player completes a run.
+         */
+        @RegExp
+        val RUN_COMPLETE_REGEX = Regex("\\[.] Run complete!")
+
+        /**
+         * A regex that matches the message sent when the player sets a new personal record.
+         */
+        @get:RegExp
+        val NEW_PERSONAL_RECORD_REGEX get() = Regex("\\[.] .. ${MinecraftClient.getInstance().session.profile.name} has set a new personal record! ")
     }
 
     /**

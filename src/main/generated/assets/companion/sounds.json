@@ -1,4 +1,20 @@
 {
+  "music.game.battle_box_loop": {
+    "sounds": [
+      {
+        "name": "companion:music/game/battle_box_loop",
+        "stream": true
+      }
+    ]
+  },
+  "music.game.hole_in_the_wall_loop": {
+    "sounds": [
+      {
+        "name": "companion:music/game/hole_in_the_wall_loop",
+        "stream": true
+      }
+    ]
+  },
   "music.game.parkour_warrior_loop": {
     "sounds": [
       {
@@ -10,6 +26,22 @@
   "music.game.parkour_warrior_loop_fade_out": {
     "sounds": [
       "companion:music/game/parkour_warrior_loop_fade_out"
+    ]
+  },
+  "music.game.sky_battle_loop": {
+    "sounds": [
+      {
+        "name": "companion:music/game/sky_battle_loop",
+        "stream": true
+      }
+    ]
+  },
+  "music.game.to_get_to_the_other_side_loop": {
+    "sounds": [
+      {
+        "name": "companion:music/game/to_get_to_the_other_side_loop",
+        "stream": true
+      }
     ]
   }
 }

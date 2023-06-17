@@ -2,6 +2,7 @@ package dev.andante.companion.api.game
 
 import dev.andante.companion.api.ServerTracker
 import dev.andante.companion.api.event.TitleEvents
+import dev.andante.companion.api.event.WorldJoinCallback
 import dev.andante.companion.api.game.instance.GameInstance
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
@@ -35,6 +36,9 @@ object GameTracker {
     init {
         // register tick event
         ClientTickEvents.END_CLIENT_TICK.register(::tick)
+
+        // register world join event
+        WorldJoinCallback.EVENT.register { onJoinWorld() }
 
         // register chat event
         ClientReceiveMessageEvents.GAME.register { text, overlay -> GAME_INSTANCE?.onGameMessage(text, overlay) }
@@ -86,6 +90,10 @@ object GameTracker {
         }
     }
 
+    private fun onJoinWorld() {
+        clearGameInstance()
+    }
+
     @Suppress("UNUSED_PARAMETER")
     private fun renderHud(context: DrawContext, tickDelta: Float) {
         if (!ServerTracker.IS_CONNECTED_TO_MCC_ISLAND || !FabricLoader.getInstance().isDevelopmentEnvironment) {
@@ -113,6 +121,7 @@ object GameTracker {
 
             // add type
             textRendererConsumer(Text.literal(instance.type.toString()))
+            textRendererConsumer(Text.literal(instance::class.simpleName))
 
             // pass off to instance
             instance.renderDebugHud(textRendererConsumer)
