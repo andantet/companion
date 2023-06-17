@@ -37,31 +37,6 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
      */
     private val allRounds: MutableList<R> = mutableListOf()
 
-    /**
-     * Whether the round is currently in progress.
-     */
-    val roundInProgress get() = state == State.IN_PROGRESS
-
-    /**
-     * Whether the round is starting.
-     */
-    val roundStarting get() = state == State.INITIALIZED
-
-    /**
-     * Whether the round has finished.
-     */
-    val roundFinished get() = state == State.FINISHED
-
-    /**
-     * Whether the game has started.
-     */
-    val gameStarted get() = state != State.GAME_NOT_STARTED
-
-    /**
-     * Whether the game has ended.
-     */
-    val gameEnded get() = state == State.GAME_ENDED
-
     fun onTitle(text: Text) {
         val string = text.string
         if (string.matches(ROUND_NUMBER_TITLE)) {
