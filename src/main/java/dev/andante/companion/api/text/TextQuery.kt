@@ -16,9 +16,6 @@ data class TextQuery(val siblings: List<Text>, val index: Int) {
     }
 
     companion object {
-        @RegExp
-        const val USERNAME_REGEX = "^[a-zA-Z0-9_]{2,16}"
-
         fun findTexts(
             text: Text,
             predicate: Predicate<Text?>,

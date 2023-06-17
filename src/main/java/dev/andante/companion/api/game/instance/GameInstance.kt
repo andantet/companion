@@ -1,7 +1,9 @@
 package dev.andante.companion.api.game.instance
 
+import com.google.gson.JsonElement
 import dev.andante.companion.api.game.type.GameType
 import net.minecraft.text.Text
+import java.util.UUID
 
 /**
  * An instance of a game type.
@@ -12,6 +14,11 @@ open class GameInstance<T : GameInstance<T>>(
      */
     val type: GameType<T>
 ) {
+    /**
+     * The uuid of this instance.
+     */
+    val uuid: UUID = UUID.randomUUID()
+
     /**
      * Called when the client receives a chat message.
      */
@@ -40,6 +47,10 @@ open class GameInstance<T : GameInstance<T>>(
      * Renders the debug hud.
      */
     open fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
+    }
+
+    open fun toJson(): JsonElement? {
+        return null
     }
 
     fun interface Factory<T : GameInstance<T>> {

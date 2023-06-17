@@ -1,8 +1,9 @@
 package dev.andante.companion
 
-import dev.andante.companion.api.ServerTracker
 import dev.andante.companion.api.game.GameTracker
 import dev.andante.companion.api.game.type.GameTypes
+import dev.andante.companion.api.player.PlayerReference
+import dev.andante.companion.api.server.ServerTracker
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
 import net.fabricmc.api.ClientModInitializer
@@ -20,6 +21,8 @@ object Companion : ClientModInitializer {
 
         CompanionSounds
         CompanionSoundManager
+
+        PlayerReference
 
         GameTypes
 

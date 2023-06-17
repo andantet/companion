@@ -12,7 +12,13 @@ fun interface WorldJoinCallback {
          * An event for when the client joins a world.
          */
         val EVENT: Event<WorldJoinCallback> = EventFactory.createArrayBacked(WorldJoinCallback::class.java) { listeners -> WorldJoinCallback { world ->
-            listeners.forEach { it.onJoinWorld(world) }
+            listeners.forEach {
+                try {
+                    it.onJoinWorld(world)
+                } catch (throwable: Throwable) {
+                    throwable.printStackTrace()
+                }
+            }
         } }
     }
 }

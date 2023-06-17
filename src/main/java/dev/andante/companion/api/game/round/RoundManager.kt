@@ -85,11 +85,13 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
         } else if (string.matches(ROUND_OVER_REGEX)) {
             finish()
         } else if (string.matches(GAME_OVER_REGEX)) {
-            if (state == State.IN_PROGRESS) {
+            if (state != State.FINISHED) {
                 finish()
             }
 
             endGame()
+        } else {
+            round.onGameMessage(text)
         }
     }
 
@@ -154,6 +156,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     }
 
     fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
+        round.renderDebugHud(textRendererConsumer)
         textRendererConsumer(Text.literal("${state.name}, $currentRound"))
     }
 
@@ -161,7 +164,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
         val roundsJson = JsonArray()
         allRounds.forEach { round ->
             val roundJson = JsonObject()
-            round.toJson(roundJson)
+            round.toJson(roundJson, state, currentRound)
             roundsJson.add(roundJson)
         }
         return roundsJson
@@ -179,7 +182,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     }
 
     companion object {
-        const val NBT_KEY = "rounds"
+        const val SERIALIZATION_KEY = "rounds"
 
         @RegExp
         val FACING_TEAM_REGEX = Regex("\\[.] You are facing the . \\w+ Team!")

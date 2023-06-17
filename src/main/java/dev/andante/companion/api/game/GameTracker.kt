@@ -1,11 +1,13 @@
 package dev.andante.companion.api.game
 
-import dev.andante.companion.api.ServerTracker
+import com.google.gson.GsonBuilder
 import dev.andante.companion.api.event.TitleEvents
 import dev.andante.companion.api.event.WorldJoinCallback
 import dev.andante.companion.api.game.instance.GameInstance
 import dev.andante.companion.api.game.type.GameType
+import dev.andante.companion.api.helper.FileHelper
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
+import dev.andante.companion.api.server.ServerTracker
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
@@ -26,12 +28,12 @@ object GameTracker {
     /**
      * The active game instance.
      */
-    var GAME_INSTANCE: GameInstance<*>? = null; private set
+    var gameInstance: GameInstance<*>? = null; private set
 
     /**
      * The current game type.
      */
-    val GAME_TYPE: GameType<*>? get() = GAME_INSTANCE?.type
+    val gameType: GameType<*>? get() = gameInstance?.type
 
     init {
         // register tick event
@@ -41,11 +43,11 @@ object GameTracker {
         WorldJoinCallback.EVENT.register { onJoinWorld() }
 
         // register chat event
-        ClientReceiveMessageEvents.GAME.register { text, overlay -> GAME_INSTANCE?.onGameMessage(text, overlay) }
+        ClientReceiveMessageEvents.GAME.register { text, overlay -> gameInstance?.onGameMessage(text, overlay) }
 
         // register title events
-        TitleEvents.TITLE.register { text -> GAME_INSTANCE?.onTitle(text) }
-        TitleEvents.SUBTITLE.register { text -> GAME_INSTANCE?.onSubtitle(text) }
+        TitleEvents.TITLE.register { text -> gameInstance?.onTitle(text) }
+        TitleEvents.SUBTITLE.register { text -> gameInstance?.onSubtitle(text) }
 
         // debug hud
         HudRenderCallback.EVENT.register(::renderHud)
@@ -53,7 +55,7 @@ object GameTracker {
 
     private fun tick(client: MinecraftClient) {
         // do not tick if not on mcc island
-        if (!ServerTracker.IS_CONNECTED_TO_MCC_ISLAND) {
+        if (!ServerTracker.isConnectedToMccIsland) {
             return
         }
 
@@ -71,12 +73,12 @@ object GameTracker {
                     // parse to game type
                     val type = GameType.ofScoreboardName(worldName)
                     if (type != null) {
-                        if (GAME_INSTANCE == null || type != GAME_TYPE) {
+                        if (gameInstance == null || type != gameType) {
                             clearGameInstance()
 
                             // create instance
                             LOGGER.info("Creating game instance of type ${type.id}")
-                            GAME_INSTANCE = type.createInstance()
+                            gameInstance = type.createInstance()
                         }
                     } else {
                         clearGameInstance()
@@ -96,12 +98,12 @@ object GameTracker {
 
     @Suppress("UNUSED_PARAMETER")
     private fun renderHud(context: DrawContext, tickDelta: Float) {
-        if (!ServerTracker.IS_CONNECTED_TO_MCC_ISLAND || !FabricLoader.getInstance().isDevelopmentEnvironment) {
+        if (!ServerTracker.isConnectedToMccIsland || !FabricLoader.getInstance().isDevelopmentEnvironment) {
             return
         }
 
         // render game instance debug hud
-        GAME_INSTANCE?.let { instance ->
+        gameInstance?.let { instance ->
             val textRenderer = MinecraftClient.getInstance().textRenderer
 
             var largestWidth = 0
@@ -152,15 +154,23 @@ object GameTracker {
     }
 
     private fun clearGameInstance() {
-        val instance = GAME_INSTANCE
+        val instance = gameInstance
         if (instance != null) {
             LOGGER.info("Clearing active game instance")
 
             // call instance on remove
             instance.onRemove()
 
+            // flush to json
+            val file = FileHelper.companionFile("game_instances/${instance.type.id}/${instance.uuid}.json")
+            file.parentFile.mkdirs()
+            instance.toJson()?.let { json ->
+                val gson = GsonBuilder().setPrettyPrinting().create()
+                file.writeText(gson.toJson(json))
+            }
+
             // remove instance
-            GAME_INSTANCE = null
+            gameInstance = null
         }
     }
 }
