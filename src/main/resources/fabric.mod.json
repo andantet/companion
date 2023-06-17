@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "version": "${version}",
+  "id": "companion",
+  "name": "MCCI: Companion",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "dev.andante.companion.Companion"
+      }
+    ],
+    "fabric-datagen": [
+      {
+        "adapter": "kotlin",
+        "value": "dev.andante.companion.data.CompanionDataGeneration"
+      }
+    ]
+  },
+  "mixins": [ "companion.mixins.json" ],
+  "accessWidener": "companion.accesswidener",
+  "depends": {
+    "fabricloader": "*",
+    "fabric": "*",
+    "fabric-language-kotlin": "*"
+  }
+}

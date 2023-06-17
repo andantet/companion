@@ -1,0 +1,15 @@
+pluginManagement {
+    repositories {
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
+        gradlePluginPortal()
+    }
+
+    plugins {
+        id "org.jetbrains.kotlin.jvm" version kotlin_version
+    }
+}
+
+rootProject.name = 'mcci-companion'

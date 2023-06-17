@@ -1,0 +1,31 @@
+name: build
+on: [ push, pull_request ]
+jobs:
+  build:
+    strategy:
+      matrix:
+        java: [ 17-jdk ]
+    runs-on: ubuntu-20.04
+    container:
+      image: eclipse-temurin:${{ matrix.java }}
+      options: --user root
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Publish to Maven local
+        run: ./gradlew check build publishToMavenLocal --stacktrace --parallel --warning-mode=fail
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifacts
+          path: build/libs/
+          retention-days: 5

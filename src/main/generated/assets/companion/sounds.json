@@ -1,0 +1,15 @@
+{
+  "music.game.parkour_warrior_loop": {
+    "sounds": [
+      {
+        "name": "companion:music/game/parkour_warrior_loop",
+        "stream": true
+      }
+    ]
+  },
+  "music.game.parkour_warrior_loop_fade_out": {
+    "sounds": [
+      "companion:music/game/parkour_warrior_loop_fade_out"
+    ]
+  }
+}
