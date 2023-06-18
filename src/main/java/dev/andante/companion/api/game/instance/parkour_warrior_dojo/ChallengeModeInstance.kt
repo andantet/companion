@@ -8,17 +8,11 @@ import dev.andante.companion.api.helper.FileHelper
 import dev.andante.companion.setting.MetricsSettings
 import net.minecraft.text.Text
 import net.minecraft.util.Util
-import java.util.UUID
 
 /**
  * An instance of Parkour Warrior Dojo challenge mode.
  */
 class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
-    /**
-     * The UUID of this mode instance.
-     */
-    private val uuid: UUID = UUID.randomUUID()
-
     /**
      * The file of this mode's run.
      */
@@ -53,6 +47,11 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
      * The completion type of this run.
      */
     private lateinit var completionType: CompletionType
+
+    /**
+     * The difficulty of the ending section taken.
+     */
+    val endingDifficulty: Difficulty? get() = Difficulty.ofEndingMedals(medalsGained - completedSections.size + 1)
 
     override fun onSectionUpdate(section: Section?, previousSection: Section?, medals: Int) {
         if (section == null && previousSection != null) {
@@ -96,6 +95,8 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
     }
 
     private fun flushToJson() {
+        ParkourWarriorDojoInstance.LOGGER.info("Flushing challenge instance to JSON: ${file.path}")
+
         val json = JsonObject()
 
         json.addProperty("course_number", courseNumber)
@@ -104,6 +105,7 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
         json.addProperty("duration", durationString)
         json.addProperty("medals_gained", medalsGained)
         json.addProperty("completion_type", completionType.name)
+        endingDifficulty?.let { json.addProperty("ending_difficulty", it.name) }
 
         val completedSectionsJson = JsonArray()
         completedSections.forEach { section ->

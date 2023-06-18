@@ -5,6 +5,8 @@ import dev.andante.companion.api.game.type.GameType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.util.UUID
 
 /**
@@ -83,9 +85,17 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
      * Sets the active game instance.
      */
     private fun setInstance(instance: ParkourWarriorDojoModeInstance?) {
-        modeInstance?.onRemove()
+        modeInstance?.let {
+            LOGGER.info("Removing Parkour Warrior: Dojo mode instance ${it.uuid}")
+            it.onRemove()
+        }
+
         modeInstance = instance
-        instance?.onInitialize()
+
+        instance?.let {
+            LOGGER.info("Initializing Parkour Warrior: Dojo mode instance ${it.uuid}")
+            it.onInitialize()
+        }
     }
 
     /**
@@ -96,6 +106,8 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
     }
 
     companion object {
+        val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion] Parkour Warrior Dojo Instance")
+
         /**
          * The title text displayed when a challenge mode run starts.
          */

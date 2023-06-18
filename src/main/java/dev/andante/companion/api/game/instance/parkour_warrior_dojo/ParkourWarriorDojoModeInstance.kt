@@ -8,11 +8,17 @@ import dev.andante.companion.api.sound.CompanionSounds
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
+import java.util.UUID
 
 /**
  * An instance of a Parkour Warrior Dojo mode.
  */
 open class ParkourWarriorDojoModeInstance {
+    /**
+     * The UUID of this mode instance.
+     */
+    val uuid: UUID = UUID.randomUUID()
+
     protected var currentSection: Section? = null
     protected var courseNumber: Int = -1
 
@@ -238,5 +244,27 @@ open class ParkourWarriorDojoModeInstance {
         ADVANCED,
         EXPERT,
         INCOMPLETE
+    }
+
+    enum class Difficulty(
+        val endingMedals: Int
+    ) {
+        EASY(1),
+        MEDIUM(2),
+        HARD(3);
+
+        companion object {
+            /**
+             * A map of all difficulty ending medals to their difficulties.
+             */
+            private val ENDING_MEDALS_TO_DIFFICULTY = Difficulty.values().associateBy(Difficulty::endingMedals)
+
+            /**
+             * @return the difficulty of the given ending medals
+             */
+            fun ofEndingMedals(endingMedals: Int): Difficulty? {
+                return ENDING_MEDALS_TO_DIFFICULTY[endingMedals]
+            }
+        }
     }
 }
