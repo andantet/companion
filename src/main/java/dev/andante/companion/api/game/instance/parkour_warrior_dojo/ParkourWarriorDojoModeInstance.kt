@@ -207,6 +207,7 @@ open class ParkourWarriorDojoModeInstance {
     enum class CompletionType {
         STANDARD,
         ADVANCED,
-        EXPERT
+        EXPERT,
+        INCOMPLETE
     }
 }

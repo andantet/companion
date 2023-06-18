@@ -7,7 +7,6 @@ import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper
 import net.minecraft.text.Text
 import net.minecraft.util.Util
-import org.jetbrains.annotations.ApiStatus.Internal
 import java.util.UUID
 
 /**
@@ -71,14 +70,19 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
         // add last section
         currentSection?.let(completedSections::add)
 
-        // flush file on course completed
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val json = gson.toJson(toJson())
-        file.parentFile.mkdirs()
-        file.writeText(json)
+        // flush to json
+        flushToJson()
     }
 
     override fun onCourseRestart(): Boolean {
+        // set values
+        durationString = ""
+        completionType = CompletionType.INCOMPLETE
+
+        // flush to json
+        flushToJson()
+
+        // clear instance
         return true
     }
 
@@ -86,8 +90,7 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
         textRendererConsumer(Text.literal("Run: $uuid"))
     }
 
-    @Internal
-    fun toJson(): JsonObject {
+    private fun flushToJson() {
         val json = JsonObject()
 
         json.addProperty("duration_ms", duration)
@@ -101,6 +104,9 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
         }
         json.add("completed_sections", completedSectionsJson)
 
-        return json
+        val gson = GsonBuilder().setPrettyPrinting().create()
+        val jsonString = gson.toJson(json)
+        file.parentFile.mkdirs()
+        file.writeText(jsonString)
     }
 }
