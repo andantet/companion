@@ -4,7 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dev.andante.companion.api.game.round.Round
 import dev.andante.companion.api.player.PlayerReference
-import dev.andante.companion.api.text.TextRegexes
+import dev.andante.companion.api.text.TextRegex
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 
@@ -66,12 +66,12 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
          * The message sent when the player finishes in TGTTOS.
          */
         @RegExp
-        val PLAYER_FINISHED_REGEX = Regex("\\[.] .. (${TextRegexes.USERNAME_PATTERN}), you finished the round and came in ([0-9]+).. place! \\(Score: ([0-9]+).\\)")
+        val PLAYER_FINISHED_REGEX = Regex("\\[.] .. (${TextRegex.USERNAME_PATTERN}), you finished the round and came in ([0-9]+).. place! \\(Score: ([0-9]+).\\)")
 
         /**
          * The message sent when another player finishes in TGTTOS.
          */
         @RegExp
-        val OTHER_PLAYER_FINISHED_REGEX = Regex("\\[.] .. (${TextRegexes.USERNAME_PATTERN}) finished in [0-9]+..!")
+        val OTHER_PLAYER_FINISHED_REGEX = Regex("\\[.] .. (${TextRegex.USERNAME_PATTERN}) finished in [0-9]+..!")
     }
 }
