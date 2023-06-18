@@ -9,7 +9,9 @@ import java.util.UUID
 class BattleBoxInstance(type: GameType<BattleBoxInstance>, uuid: UUID)
     : RoundBasedGameInstance<Round, BattleBoxInstance>(type, uuid, ::Round) {
     override fun onRoundInitialize(round: Round, isFirstRound: Boolean) {
-        CompanionSoundManager.playMusic(type.settings.musicLoopSoundEvent)
+        if (settings.musicSettingSupplier()) {
+            CompanionSoundManager.playMusic(settings.musicLoopSoundEvent)
+        }
     }
 
     override fun onRoundStart(round: Round, firstRound: Boolean) {

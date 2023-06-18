@@ -14,5 +14,10 @@ data class GameTypeSettings(
     /**
      * The music to loop throughout the game.
      */
-    val musicLoopSoundEvent: Identifier
+    val musicLoopSoundEvent: Identifier,
+
+    /**
+     * Whether or not to play this game's music.
+     */
+    val musicSettingSupplier: () -> Boolean
 )

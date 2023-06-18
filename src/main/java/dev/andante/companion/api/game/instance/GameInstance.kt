@@ -2,6 +2,7 @@ package dev.andante.companion.api.game.instance
 
 import com.google.gson.JsonElement
 import dev.andante.companion.api.game.type.GameType
+import dev.andante.companion.api.game.type.GameTypeSettings
 import net.minecraft.text.Text
 import java.util.UUID
 
@@ -19,6 +20,11 @@ open class GameInstance<T : GameInstance<T>>(
      */
     val uuid: UUID
 ) {
+    /**
+     * The settings of the game type.
+     */
+    val settings: GameTypeSettings get() = type.settings
+
     /**
      * Called when the client receives a chat message.
      */

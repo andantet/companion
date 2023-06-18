@@ -49,7 +49,9 @@ abstract class RoundBasedGameInstance<R : Round, T : RoundBasedGameInstance<R, T
     }
 
     open fun onRoundStart(round: Round, firstRound: Boolean) {
-        CompanionSoundManager.playMusic(type.settings.musicLoopSoundEvent)
+        if (settings.musicSettingSupplier()) {
+            CompanionSoundManager.playMusic(settings.musicLoopSoundEvent)
+        }
     }
 
     open fun onRoundFinish(round: Round) {

@@ -21,8 +21,11 @@ open class ParkourWarriorDojoModeInstance {
      * Called when the instance initializes.
      */
     open fun onInitialize() {
-        CompanionSoundManager.stop(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT)
-        CompanionSoundManager.playMusic(GameTypes.PARKOUR_WARRIOR_DOJO.settings.musicLoopSoundEvent)
+        val settings = GameTypes.PARKOUR_WARRIOR_DOJO.settings
+        if (settings.musicSettingSupplier()) {
+            CompanionSoundManager.stop(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT)
+            CompanionSoundManager.playMusic(settings.musicLoopSoundEvent)
+        }
     }
 
     /**
@@ -43,8 +46,10 @@ open class ParkourWarriorDojoModeInstance {
      * Called when the instance is cleared.
      */
     open fun onRemove() {
-        CompanionSoundManager.playMusic(null)
-        CompanionSoundManager.play(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT)
+        if (GameTypes.PARKOUR_WARRIOR_DOJO.settings.musicSettingSupplier()) {
+            CompanionSoundManager.playMusic(null)
+            CompanionSoundManager.play(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT)
+        }
     }
 
     open fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
