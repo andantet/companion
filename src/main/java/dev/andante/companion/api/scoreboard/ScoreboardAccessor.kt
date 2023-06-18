@@ -15,11 +15,45 @@ object ScoreboardAccessor {
      */
     private val SIDEBAR_DISPLAY_SLOT_ID = Scoreboard.getDisplaySlotId("sidebar")
 
-    private fun getScoreboard(client: MinecraftClient = CLIENT): Scoreboard? {
-        return client.player?.scoreboard
+    /**
+     * Gets the client scoreboard.
+     */
+    private fun getScoreboard(): Scoreboard? {
+        return CLIENT.player?.scoreboard
     }
 
-    fun getSidebarObjective(client: MinecraftClient = CLIENT): ScoreboardObjective? {
-        return getScoreboard(client)?.getObjectiveForSlot(SIDEBAR_DISPLAY_SLOT_ID)
+    /**
+     * Gets all the players assigned to the given objective.
+     */
+    private fun getPlayersForObjective(objective: ScoreboardObjective): Set<String> {
+        val scoreboard = getScoreboard() ?: return emptySet()
+        val playerObjectives = scoreboard.playerObjectives
+        return playerObjectives.filterValues { it.containsKey(objective) }.keys
+    }
+
+    /**
+     * Gets the objective assigned to the sidebar slot.
+     */
+    fun getSidebarObjective(): ScoreboardObjective? {
+        return getScoreboard()?.getObjectiveForSlot(SIDEBAR_DISPLAY_SLOT_ID)
+    }
+
+    /**
+     * Gets the given row from the sidebar objective.
+     * @return the raw team name of the player at the index of [row]
+     */
+    fun getSidebarRow(row: Int): String {
+        return try {
+            val objective = getSidebarObjective()!!
+            val players = getPlayersForObjective(objective).reversed()
+            val player = players[row]
+            val scoreboard = getScoreboard()!!
+            val team = scoreboard.getPlayerTeam(player)!!
+            team.prefix.string
+        } catch (exception: NullPointerException) {
+            ""
+        } catch (exception: IndexOutOfBoundsException) {
+            ""
+        }
     }
 }

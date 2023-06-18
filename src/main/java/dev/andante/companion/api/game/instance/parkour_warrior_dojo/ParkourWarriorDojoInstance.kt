@@ -2,6 +2,7 @@ package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
 import dev.andante.companion.api.game.instance.GameInstance
 import dev.andante.companion.api.game.type.GameType
+import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 import java.util.UUID
@@ -19,6 +20,10 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
      * The active mode instance.
      */
     private var modeInstance: ParkourWarriorDojoModeInstance? = null
+
+    override fun tick(client: MinecraftClient) {
+        modeInstance?.tick(client)
+    }
 
     override fun onGameMessage(text: Text, overlay: Boolean) {
         val string = text.string

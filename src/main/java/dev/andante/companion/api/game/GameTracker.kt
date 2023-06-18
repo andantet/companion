@@ -61,7 +61,7 @@ object GameTracker {
 
         try {
             // check scoreboard objective
-            ScoreboardAccessor.getSidebarObjective(client)?.let { objective ->
+            ScoreboardAccessor.getSidebarObjective()?.let { objective ->
                 val objectiveName = objective.displayName
 
                 // retrieve the text containing the world name
@@ -80,6 +80,8 @@ object GameTracker {
                             LOGGER.info("Creating game instance of type ${type.id}")
                             gameInstance = type.createInstance()
                         }
+
+                        gameInstance?.tick(client)
                     } else {
                         clearGameInstance()
                     }

@@ -2,8 +2,10 @@ package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
 import com.google.gson.JsonObject
 import dev.andante.companion.api.game.type.GameTypes
+import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
+import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 
@@ -12,6 +14,7 @@ import org.intellij.lang.annotations.RegExp
  */
 open class ParkourWarriorDojoModeInstance {
     protected var currentSection: Section? = null
+    protected var courseNumber: Int = -1
 
     /**
      * Called when the instance initializes.
@@ -21,6 +24,26 @@ open class ParkourWarriorDojoModeInstance {
         if (settings.musicSettingSupplier()) {
             CompanionSoundManager.stop(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT)
             CompanionSoundManager.playMusic(settings.musicLoopSoundEvent)
+        }
+    }
+
+    /**
+     * Called every client tick.
+     */
+    open fun tick(client: MinecraftClient) {
+        try {
+            // check for course
+            val firstRowString = ScoreboardAccessor.getSidebarRow(0)
+            val courseMatchResult = COURSE_SIDEBAR_REGEX.find(firstRowString)
+            if (courseMatchResult != null) {
+                val groupValues = courseMatchResult.groupValues
+
+                val courseString = groupValues[1]
+                val course = courseString.toInt()
+
+                courseNumber = course
+            }
+        } catch (_: Throwable) {
         }
     }
 
@@ -142,8 +165,14 @@ open class ParkourWarriorDojoModeInstance {
         /**
          * A regex that matches the subtitle sent when the player completes a run.
          */
-        @get:RegExp
-        val RUN_COMPLETE_SUBTITLE_REGEX get() = Regex(".([0-9]+) .([0-9:.]+) .(\\w+)")
+        @RegExp
+        val RUN_COMPLETE_SUBTITLE_REGEX = Regex(".([0-9]+) .([0-9:.]+) .(\\w+)")
+
+        /**
+         * A regex that matches the course text displayed on the sidebar.
+         */
+        @RegExp
+        val COURSE_SIDEBAR_REGEX = Regex(".COURSE: Course #([0-9]+)")
     }
 
     /**

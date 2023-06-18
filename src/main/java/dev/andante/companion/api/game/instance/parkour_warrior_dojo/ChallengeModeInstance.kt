@@ -32,7 +32,7 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
     /**
      * The current duration of the run.
      */
-    private val duration get() = Util.getMeasuringTimeMs() - startedAt
+    private val durationMs get() = Util.getMeasuringTimeMs() - startedAt
 
     /**
      * This run's completed sections.
@@ -98,7 +98,9 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
     private fun flushToJson() {
         val json = JsonObject()
 
-        json.addProperty("duration_ms", duration)
+        json.addProperty("course_number", courseNumber)
+        json.addProperty("timestamp_ms", System.currentTimeMillis())
+        json.addProperty("duration_ms", durationMs)
         json.addProperty("duration", durationString)
         json.addProperty("medals_gained", medalsGained)
         json.addProperty("completion_type", completionType.name)
