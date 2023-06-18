@@ -5,11 +5,12 @@ import dev.andante.companion.api.game.type.GameType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
+import java.util.UUID
 
 /**
  * An instance of Parkour Warrior Dojo.
  */
-class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>) : GameInstance<ParkourWarriorDojoInstance>(type) {
+class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uuid: UUID) : GameInstance<ParkourWarriorDojoInstance>(type, uuid) {
     /**
      * The active mode.
      */

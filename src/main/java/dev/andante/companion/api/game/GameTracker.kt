@@ -124,6 +124,7 @@ object GameTracker {
             // add type
             textRendererConsumer(Text.literal(instance.type.toString()))
             textRendererConsumer(Text.literal(instance::class.simpleName))
+            textRendererConsumer(Text.literal(instance.uuid.toString()))
 
             // pass off to instance
             instance.renderDebugHud(textRendererConsumer)

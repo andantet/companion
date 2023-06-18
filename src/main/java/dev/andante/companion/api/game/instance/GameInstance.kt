@@ -12,13 +12,13 @@ open class GameInstance<T : GameInstance<T>>(
     /**
      * The type of this instance.
      */
-    val type: GameType<T>
-) {
+    val type: GameType<T>,
+
     /**
      * The uuid of this instance.
      */
-    val uuid: UUID = UUID.randomUUID()
-
+    val uuid: UUID
+) {
     /**
      * Called when the client receives a chat message.
      */
@@ -54,6 +54,6 @@ open class GameInstance<T : GameInstance<T>>(
     }
 
     fun interface Factory<T : GameInstance<T>> {
-        fun create(type: GameType<T>): T
+        fun create(type: GameType<T>, uuid: UUID): T
     }
 }

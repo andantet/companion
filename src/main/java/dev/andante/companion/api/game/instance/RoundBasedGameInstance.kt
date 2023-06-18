@@ -7,6 +7,7 @@ import dev.andante.companion.api.game.round.RoundManager
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.sound.CompanionSoundManager
 import net.minecraft.text.Text
+import java.util.UUID
 
 /**
  * An instance of a game type.
@@ -19,10 +20,15 @@ abstract class RoundBasedGameInstance<R : Round, T : RoundBasedGameInstance<R, T
     type: GameType<T>,
 
     /**
+     * The uuid of this instance.
+     */
+    uuid: UUID,
+
+    /**
      * The factory to create a round instance.
      */
     roundFactory: RoundFactory<R>
-) : GameInstance<T>(type) {
+) : GameInstance<T>(type, uuid) {
     /**
      * The round manager for this instance.
      */

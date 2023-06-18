@@ -1,6 +1,8 @@
 package dev.andante.companion.api.game.type
 
 import dev.andante.companion.api.game.instance.GameInstance
+import net.minecraft.client.MinecraftClient
+import java.util.UUID
 
 /**
  * A type of game.
@@ -25,7 +27,10 @@ class GameType<T : GameInstance<T>>(
      * Creates an instance of this game.
      */
     fun createInstance(): T {
-        return instanceFactory.create(this)
+        val world = MinecraftClient.getInstance().world
+        val uuidString = world?.registryKey?.value?.path?.removePrefix("temp_world_")
+        val uuid = uuidString?.let(UUID::fromString) ?: UUID.randomUUID()
+        return instanceFactory.create(this, uuid)
     }
 
     override fun toString(): String {
