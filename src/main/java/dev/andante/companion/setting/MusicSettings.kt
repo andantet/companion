@@ -42,7 +42,7 @@ data class MusicSettings(
          * The default settings.
          */
         private val DEFAULT = MusicSettings(
-            musicVolume = 0.5f,
+            musicVolume = 0.25f,
             holeInTheWallMusic = true,
             toGetToTheOtherSideMusic = true,
             skyBattleMusic = true,

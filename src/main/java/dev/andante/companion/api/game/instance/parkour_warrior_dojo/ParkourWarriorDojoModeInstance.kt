@@ -5,6 +5,7 @@ import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
+import dev.andante.companion.setting.MusicSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
@@ -79,7 +80,7 @@ open class ParkourWarriorDojoModeInstance {
     open fun onRemove() {
         if (GameTypes.PARKOUR_WARRIOR_DOJO.settings.musicSettingSupplier()) {
             CompanionSoundManager.playMusic(null)
-            CompanionSoundManager.play(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT)
+            CompanionSoundManager.play(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT) { MusicSettings.INSTANCE.musicVolume }
         }
     }
 

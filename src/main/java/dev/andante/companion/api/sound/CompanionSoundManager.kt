@@ -28,8 +28,8 @@ object CompanionSoundManager {
     /**
      * Plays the given sound event.
      */
-    fun play(id: Identifier) {
-        val instance = SimpleSoundInstance(id, false) { 1.0f }
+    fun play(id: Identifier, volumeSupplier: () -> Float = { 1.0f }) {
+        val instance = SimpleSoundInstance(id, false, volumeSupplier)
         CLIENT.soundManager.play(instance)
     }
 
