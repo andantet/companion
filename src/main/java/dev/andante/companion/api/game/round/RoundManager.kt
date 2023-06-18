@@ -59,7 +59,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
             start()
         } else if (string.matches(ROUND_OVER_REGEX)) {
             finish()
-        } else if (string.matches(GAME_OVER_REGEX)) {
+        } else if (string.matches(GAME_OVER_REGEX) || string.matches(GAME_FINISHED_REGEX)) {
             if (state != State.FINISHED) {
                 finish()
             }
@@ -173,6 +173,9 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
 
         @RegExp
         val ROUND_OVER_REGEX = Regex("\\[.] Round [0-9]+ over!")
+
+        @RegExp
+        val GAME_FINISHED_REGEX = Regex("\\[.] You finished the game and came in [0-9]+.. place!")
 
         @RegExp
         val GAME_OVER_REGEX = Regex("\\[.] Game Over!")
