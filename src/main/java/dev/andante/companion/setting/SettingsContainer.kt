@@ -17,7 +17,8 @@ open class SettingsContainer<T>(id: String, codec: Codec<T>, default: T) : Seria
          * All settings containers.
          */
         val ALL_CONTAINERS = setOf(
-            MusicSettings.CONTAINER
+            MusicSettings.CONTAINER,
+            MetricsSettings.CONTAINER
         )
     }
 }

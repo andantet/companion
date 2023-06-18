@@ -5,6 +5,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper
+import dev.andante.companion.setting.MetricsSettings
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 import java.util.UUID
@@ -71,7 +72,9 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
         currentSection?.let(completedSections::add)
 
         // flush to json
-        flushToJson()
+        if (MetricsSettings.INSTANCE.parkourWarriorDojoMetrics) {
+            flushToJson()
+        }
     }
 
     override fun onCourseRestart(): Boolean {
@@ -80,7 +83,9 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
         completionType = CompletionType.INCOMPLETE
 
         // flush to json
-        flushToJson()
+        if (MetricsSettings.INSTANCE.parkourWarriorDojoMetrics) {
+            flushToJson()
+        }
 
         // clear instance
         return true

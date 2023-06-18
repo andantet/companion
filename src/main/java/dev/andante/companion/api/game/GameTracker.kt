@@ -163,11 +163,13 @@ object GameTracker {
             instance.onRemove()
 
             // flush to json
-            val file = FileHelper.companionFile("game_instances/${instance.type.id}/${instance.uuid}.json")
-            file.parentFile.mkdirs()
-            instance.toJson()?.let { json ->
-                val gson = GsonBuilder().setPrettyPrinting().create()
-                file.writeText(gson.toJson(json))
+            if (gameType?.settings?.metricsSettingSupplier?.invoke() == true) {
+                val file = FileHelper.companionFile("game_instances/${instance.type.id}/${instance.uuid}.json")
+                file.parentFile.mkdirs()
+                instance.toJson()?.let { json ->
+                    val gson = GsonBuilder().setPrettyPrinting().create()
+                    file.writeText(gson.toJson(json))
+                }
             }
 
             // remove instance

@@ -19,5 +19,10 @@ data class GameTypeSettings(
     /**
      * Whether or not to play this game's music.
      */
-    val musicSettingSupplier: () -> Boolean
+    val musicSettingSupplier: () -> Boolean,
+
+    /**
+     * Whether or not to save this game's metrics.
+     */
+    val metricsSettingSupplier: () -> Boolean
 )
