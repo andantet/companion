@@ -2,7 +2,6 @@ package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
 import dev.andante.companion.api.game.instance.GameInstance
 import dev.andante.companion.api.game.type.GameType
-import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 import java.util.UUID
@@ -46,12 +45,6 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
                 return
             }
         }
-
-        // check for course finish
-        if (string.matches(RUN_COMPLETE_REGEX) || string.matches(NEW_PERSONAL_RECORD_REGEX)) {
-            clearInstance()
-            return
-        }
     }
 
     /**
@@ -71,15 +64,14 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
     }
 
     override fun onSubtitle(text: Text) {
-        modeInstance?.onSubtitle(text)
+        if (modeInstance?.onSubtitle(text) == true) {
+            clearInstance()
+        }
     }
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
         textRendererConsumer(Text.literal(mode.name))
-        modeInstance?.let { instance ->
-            textRendererConsumer(Text.literal(instance.currentSection.toString()))
-            instance.renderDebugHud(textRendererConsumer)
-        }
+        modeInstance?.renderDebugHud(textRendererConsumer)
     }
 
     /**
@@ -115,18 +107,6 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
          */
         @RegExp
         val COURSE_RESTARTED_REGEX = Regex("\\[.] You restarted the course!")
-
-        /**
-         * A regex that matches the message sent when the player completes a run.
-         */
-        @RegExp
-        val RUN_COMPLETE_REGEX = Regex("\\[.] Run complete!")
-
-        /**
-         * A regex that matches the message sent when the player sets a new personal record.
-         */
-        @get:RegExp
-        val NEW_PERSONAL_RECORD_REGEX get() = Regex("\\[.] .. ${MinecraftClient.getInstance().session.profile.name} has set a new personal record! ")
     }
 
     /**

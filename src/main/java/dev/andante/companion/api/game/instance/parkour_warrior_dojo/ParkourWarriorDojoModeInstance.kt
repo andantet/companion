@@ -1,5 +1,6 @@
 package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
+import com.google.gson.JsonObject
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
@@ -10,12 +11,7 @@ import org.intellij.lang.annotations.RegExp
  * An instance of a Parkour Warrior Dojo mode.
  */
 open class ParkourWarriorDojoModeInstance {
-    private var _currentSection: Section? = null
-
-    /**
-     * The current section that the player is present at.
-     */
-    val currentSection: Section? get() = _currentSection
+    protected var currentSection: Section? = null
 
     /**
      * Called when the instance initializes.
@@ -31,7 +27,13 @@ open class ParkourWarriorDojoModeInstance {
     /**
      * Called when the current parkour section updates.
      */
-    open fun onSectionUpdate(section: Section?, previousSection: Section?) {
+    open fun onSectionUpdate(section: Section?, previousSection: Section?, medals: Int) {
+    }
+
+    /**
+     * Called when a course is completed by the player.
+     */
+    open fun onCourseCompleted(medals: Int, time: String, completionType: CompletionType) {
     }
 
     /**
@@ -53,9 +55,13 @@ open class ParkourWarriorDojoModeInstance {
     }
 
     open fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
+        textRendererConsumer(Text.literal(currentSection?.toJson().toString()))
     }
 
-    fun onSubtitle(text: Text) {
+    /**
+     * @return whether to clear the game instance
+     */
+    fun onSubtitle(text: Text): Boolean {
         val string = text.string
 
         try {
@@ -78,21 +84,46 @@ open class ParkourWarriorDojoModeInstance {
                 if (branch != null) {
                     // update section
                     val section = Section(branch, branchNo, sectionNo, sectionNameString)
-                    onSectionUpdate(section, _currentSection)
-                    _currentSection = section
+                    onSectionUpdate(section, currentSection, 0)
+                    currentSection = section
                 }
 
-                return
+                return false
+            }
+
+            // check for course finish
+            val completionResult = RUN_COMPLETE_SUBTITLE_REGEX.find(string)
+            if (completionResult != null) {
+                val groupValues = completionResult.groupValues
+
+                // gather captures
+                val medalsString = groupValues[1]
+                val timeString = groupValues[2]
+                val completionTypeString = groupValues[3]
+
+                val medals = medalsString.toInt()
+                val completionType = CompletionType.valueOf(completionTypeString.uppercase())
+
+                onCourseCompleted(medals, timeString, completionType)
+                return true
             }
         } catch (_: Throwable) {
         }
 
         // check for medal
-        if (string.matches(MEDAL_GAINED_REGEX)) {
+        val medalsMatchResult = MEDAL_GAINED_REGEX.find(string)
+        if (medalsMatchResult != null) {
+            val groupValues = medalsMatchResult.groupValues
+
+            val medalsString = groupValues[1]
+            val medals = medalsString.toInt()
+
             // update section
-            onSectionUpdate(null, _currentSection)
-            _currentSection = null
+            onSectionUpdate(null, currentSection, medals)
+            currentSection = null
         }
+
+        return false
     }
 
     companion object {
@@ -106,7 +137,13 @@ open class ParkourWarriorDojoModeInstance {
          * A regex that matches the title sent when the player gains a medal.
          */
         @RegExp
-        val MEDAL_GAINED_REGEX = Regex("\\+[0-9]+.")
+        val MEDAL_GAINED_REGEX = Regex("\\+([0-9]+).")
+
+        /**
+         * A regex that matches the subtitle sent when the player completes a run.
+         */
+        @get:RegExp
+        val RUN_COMPLETE_SUBTITLE_REGEX get() = Regex(".([0-9]+) .([0-9:.]+) .(\\w+)")
     }
 
     /**
@@ -133,6 +170,15 @@ open class ParkourWarriorDojoModeInstance {
          */
         val sectionName: String
     ) {
+        fun toJson(): JsonObject {
+            val json = JsonObject()
+            json.addProperty("branch", branch.name)
+            json.addProperty("branch_number", branchNumber)
+            json.addProperty("section_number", sectionNumber)
+            json.addProperty("section_name", sectionName)
+            return json
+        }
+
         enum class Branch(
             /**
              * The abbreviated version displayed on the section title.
@@ -156,5 +202,11 @@ open class ParkourWarriorDojoModeInstance {
                 }
             }
         }
+    }
+
+    enum class CompletionType {
+        STANDARD,
+        ADVANCED,
+        EXPERT
     }
 }
