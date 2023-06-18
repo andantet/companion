@@ -3,13 +3,12 @@ package dev.andante.companion.api.game.instance.tgttos
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dev.andante.companion.api.game.round.Round
-import dev.andante.companion.api.game.round.RoundManager
 import dev.andante.companion.api.player.PlayerReference
 import dev.andante.companion.api.text.TextRegexes
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 
-class ToGetToTheOtherSideRound : Round() {
+class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
     private val finishedPlayers = mutableListOf<PlayerReference>()
     private var scoreEarned: Int = 0
 
@@ -40,9 +39,9 @@ class ToGetToTheOtherSideRound : Round() {
         textRendererConsumer(Text.literal("Finished players: ${finishedPlayers.size}"))
     }
 
-    override fun toJson(json: JsonObject, state: RoundManager.State, currentRound: Int) {
+    override fun toJson(json: JsonObject) {
         // round number
-        json.addProperty("round", currentRound)
+        json.addProperty("round", roundNumber)
 
         // earned score
         json.addProperty("score_earned", scoreEarned)

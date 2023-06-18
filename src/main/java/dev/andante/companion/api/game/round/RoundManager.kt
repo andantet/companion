@@ -30,7 +30,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     /**
      * The current round instance.
      */
-    private var round: R = roundFactory.create()
+    private var round: R = roundFactory.create(currentRound)
 
     /**
      * Stored previous rounds.
@@ -78,7 +78,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
         currentRound++
 
         // create new round
-        round = roundFactory.create()
+        round = roundFactory.create(currentRound)
 
         // set state
         state = State.INITIALIZED
@@ -139,7 +139,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
         val roundsJson = JsonArray()
         allRounds.forEach { round ->
             val roundJson = JsonObject()
-            round.toJson(roundJson, state, currentRound)
+            round.toJson(roundJson)
             roundsJson.add(roundJson)
         }
         return roundsJson

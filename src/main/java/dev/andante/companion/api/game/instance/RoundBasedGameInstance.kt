@@ -67,8 +67,10 @@ abstract class RoundBasedGameInstance<R : Round, T : RoundBasedGameInstance<R, T
 
     override fun toJson(): JsonObject {
         val json = JsonObject()
+
         val roundManagerJson = roundManager.toJson()
         json.add(RoundManager.SERIALIZATION_KEY, roundManagerJson)
+
         return json
     }
 }

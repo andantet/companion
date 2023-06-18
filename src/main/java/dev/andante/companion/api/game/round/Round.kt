@@ -6,7 +6,12 @@ import net.minecraft.text.Text
 /**
  * Represents a round held in a [RoundManager].
  */
-open class Round {
+open class Round(
+    /**
+     * The round number of this round.
+     */
+    val roundNumber: Int
+) {
     open fun onGameMessage(text: Text) {
     }
 
@@ -16,5 +21,5 @@ open class Round {
     /**
      * Writes this game instance to JSON.
      */
-    open fun toJson(json: JsonObject, state: RoundManager.State, currentRound: Int) {}
+    open fun toJson(json: JsonObject) {}
 }

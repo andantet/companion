@@ -7,5 +7,5 @@ fun interface RoundFactory<R : Round> {
     /**
      * Creates an instance of a round.
      */
-    fun create(): R
+    fun create(roundNumber: Int): R
 }
