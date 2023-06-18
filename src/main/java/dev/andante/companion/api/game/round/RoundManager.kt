@@ -3,6 +3,8 @@ package dev.andante.companion.api.game.round
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dev.andante.companion.api.game.instance.RoundBasedGameInstance
+import dev.andante.companion.api.sound.CompanionSoundManager
+import dev.andante.companion.api.sound.CompanionSounds
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 
@@ -62,6 +64,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
         } else if (string.matches(GAME_OVER_REGEX) || string.matches(GAME_FINISHED_REGEX)) {
             if (state != State.FINISHED) {
                 finish()
+                CompanionSoundManager.playMusic(CompanionSounds.MUSIC_ROUNDENDMUSIC)
             }
 
             endGame()
