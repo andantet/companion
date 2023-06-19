@@ -29,6 +29,8 @@ import org.kohsuke.github.GHReleaseBuilder
 version = mod_version
 group = maven_group
 
+compileKotlin.kotlinOptions.jvmTarget = "17"
+
 repositories {
   maven {
     name = 'Terraformers'
