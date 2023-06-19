@@ -33,18 +33,25 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
     /**
      * The map of the round.
      */
-    private var map: String? = null
+    private var map: GameMap? = null
 
     /**
      * The modifier of the round.
      */
     private var modifier: Modifier = Modifier.INACTIVE
 
+    /**
+     * An exposed reference to an object representing all game data for the round.
+     */
+    val data get() = Data(finishedPlayers.toList(), scoreEarned, placement, map, modifier)
+
     override fun tick(client: MinecraftClient) {
         // check for map
         if (map == null) {
             val firstRowString = ScoreboardAccessor.getSidebarRow(0)
-            map = MAP_SIDEBAR_REGEX.captureGroup(firstRowString)
+            MAP_SIDEBAR_REGEX.captureGroup(firstRowString)?.let { mapString ->
+                map = GameMap.sidebarNameAssocation(mapString)
+            }
         }
 
         // check for modifier
@@ -80,7 +87,6 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
     }
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
-        textRendererConsumer(Text.literal("Round: $roundNumber"))
         textRendererConsumer(Text.literal("Map: $map"))
         textRendererConsumer(Text.literal("Modifier: $modifier"))
         textRendererConsumer(Text.literal("Placement: $placement"))
@@ -93,7 +99,7 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
         json.addProperty("round", roundNumber)
 
         // map
-        map?.let { json.addProperty("map", it) }
+        map?.let { json.addProperty("map", it.name) }
 
         // modifier
         json.addProperty("modifier", modifier.name)
@@ -138,6 +144,50 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
         val MODIFIER_SIDEBAR_REGEX = Regex(".MODIFIER: (.+)")
     }
 
+    enum class GameMap(
+        /**
+         * The name of this map as displayed on the side bar.
+         */
+        val sidebarName: String
+    ) {
+        BADLANDS("BADLANDS"),
+        BASINS("BASINS"),
+        BEEHIVE("BEEHIVE"),
+        BOATS("BOATS"),
+        BREAKDOWN("BREAKDOWN"),
+        CLIFF("CLIFF"),
+        DOORS("DOORS"),
+        GLIDE("GLIDE"),
+        INDUSTRY("INDUSTRY"),
+        LAUNCHER("LAUNCHER"),
+        PASSING("PASSING"),
+        TRAIN_PASSING("TRAIN PASSING"),
+        POLAR_PASSING("POLAR PASSING"),
+        PIT("PIT"),
+        PITS("PITS"),
+        SHALLOW_LAVA("SHALLOW LAVA"),
+        SKYDIVE("SKYDIVE"),
+        SKYSCRAPER("SKYSCRAPER"),
+        SIEGE("SIEGE"),
+        SPIRAL_CLIMB("SPIRAL_CLIMB"),
+        SPIRAL("SPIRAL"),
+        TERRA_SWOOP_FORCE("TERRA SWOOP FORCE"),
+        TO_THE_DOME("TO THE DOME!"),
+        TRAIN("TRAIN"),
+        AIR_TRAIN("AIR TRAIN"),
+        SANTAS_TRAIN("SANTA'S TRAIN"),
+        WALLS("WALLS"),
+        TREETOP("TREETOP"),
+        WATER_PARK("WATER PARK");
+
+        companion object {
+            /**
+             * @return the map of the given sidebar name
+             */
+            val sidebarNameAssocation = AssociationHelper.createAssociationFunction(GameMap.values(), GameMap::sidebarName)
+        }
+    }
+
     /**
      * A To Get to the Other Side modifier.
      */
@@ -147,20 +197,52 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
          */
         val sidebarName: String
     ) {
-        RED_LIGHT_GREEN_LIGHT("RED LIGHT GREEN LIGHT"),
+        RED_LIGHT_GREEN_LIGHT("RED LIGHT, GREEN LIGHT"),
         ONE_LIFE("ONE LIFE"),
         HOT_POTATO("HOT POTATO"),
         TNT_TIME("TNT TIME"),
         CRUMBLING_BLOCKS("CRUMBLING_BLOCKS"),
-        SLAP_STICK("EARLY_BIRDS"),
+        EARLY_BIRDS("EARLY BIRDS"),
+        SLAP_STICK("SLAP STICK"),
         CRACK_SHOT("CRACK SHOT"),
+        DOUBLE_TIME("DOUBLE TIME"),
         INACTIVE("INACTIVE");
 
         companion object {
             /**
-             * @return the mode of the given sidebar name
+             * @return the modifier of the given sidebar name
              */
             val sidebarNameAssocation = AssociationHelper.createAssociationFunction(Modifier.values(), Modifier::sidebarName)
         }
     }
+
+    /**
+     * The game-relevant data of a round.
+     */
+    data class Data(
+        /**
+         * The players who finished a round.
+         */
+        val finishedPlayers: List<PlayerReference>,
+
+        /**
+         * The score earned from a round.
+         */
+        val scoreEarned: Int,
+
+        /**
+         * The placement of the player in a round.
+         */
+        val placement: Int,
+
+        /**
+         * The map of a round.
+         */
+        val map: GameMap?,
+
+        /**
+         * The modifier of a round.
+         */
+        val modifier: Modifier
+    )
 }

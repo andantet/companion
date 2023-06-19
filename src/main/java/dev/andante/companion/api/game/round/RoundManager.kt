@@ -60,10 +60,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
             initialize()
             start()
         } else if (string.matches(ROUND_STARTED_REGEX)) {
-            if (state != State.INITIALIZED) {
-                initialize()
-            }
-
+            initialize()
             start()
         } else if (string.matches(ROUND_OVER_REGEX)) {
             finish()
@@ -83,18 +80,18 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
      * Initializes the next round.
      */
     private fun initialize() {
-        if (state == State.INITIALIZED) {
+        if (state == State.INITIALIZED || state == State.IN_PROGRESS) {
             return
         }
+
+        // set state
+        state = State.INITIALIZED
 
         // increment current round
         currentRound++
 
         // create new round
         round = roundFactory.create(currentRound)
-
-        // set state
-        state = State.INITIALIZED
 
         // call game instance listener
         gameInstance.onRoundInitialize(round, currentRound == 0)
@@ -108,10 +105,10 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
             return
         }
 
-        val isFirstRound = currentRound == 0
-
         // set state
         state = State.IN_PROGRESS
+
+        val isFirstRound = currentRound == 0
 
         if (isFirstRound) {
             // call game instance listener
@@ -126,18 +123,18 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
      * Finishes the current round.
      */
     private fun finish() {
-        if (state == State.FINISHED) {
+        if (state == State.FINISHED || state == State.GAME_ENDED) {
             return
         }
+
+        // set state
+        state = State.FINISHED
 
         // call game instance listener
         gameInstance.onRoundFinish(round)
 
         // add that round to storage
         allRounds.add(round)
-
-        // set state
-        state = State.FINISHED
     }
 
     /**
@@ -156,7 +153,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     }
 
     fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
-        textRendererConsumer(Text.literal("${state.name}, $currentRound"))
+        textRendererConsumer(Text.literal("State: $state, Round: $currentRound"))
         round.renderDebugHud(textRendererConsumer)
     }
 

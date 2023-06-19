@@ -23,6 +23,16 @@ data class MusicSettings(
     val toGetToTheOtherSideMusic: Boolean,
 
     /**
+     * Whether to play 'One Minute to MCC'/'Decision Dome' when the map 'To The Dome!' is played.
+     */
+    val toGetToTheOtherSideMapToTheDomeMusic: Boolean,
+
+    /**
+     * Whether to play the music faster when the modifier 'Double Time' is being played.
+     */
+    val toGetToTheOtherSideModifierDoubleTimeMusic: Boolean,
+
+    /**
      * Whether to play Sky Battle music.
      */
     val skyBattleMusic: Boolean,
@@ -45,6 +55,8 @@ data class MusicSettings(
             musicVolume = 0.25f,
             holeInTheWallMusic = true,
             toGetToTheOtherSideMusic = true,
+            toGetToTheOtherSideMapToTheDomeMusic = true,
+            toGetToTheOtherSideModifierDoubleTimeMusic = false,
             skyBattleMusic = true,
             battleBoxMusic = true,
             parkourWarriorDojoMusic = true
@@ -64,6 +76,12 @@ data class MusicSettings(
                 Codec.BOOL.fieldOf("to_get_to_the_other_side_music")
                     .orElse(DEFAULT.toGetToTheOtherSideMusic)
                     .forGetter(MusicSettings::toGetToTheOtherSideMusic),
+                Codec.BOOL.fieldOf("to_get_to_the_other_side_map_to_the_dome_music")
+                    .orElse(DEFAULT.toGetToTheOtherSideMapToTheDomeMusic)
+                    .forGetter(MusicSettings::toGetToTheOtherSideMapToTheDomeMusic),
+                Codec.BOOL.fieldOf("to_get_to_the_other_side_modifier_double_time_music")
+                    .orElse(DEFAULT.toGetToTheOtherSideModifierDoubleTimeMusic)
+                    .forGetter(MusicSettings::toGetToTheOtherSideModifierDoubleTimeMusic),
                 Codec.BOOL.fieldOf("sky_battle_music")
                     .orElse(DEFAULT.skyBattleMusic)
                     .forGetter(MusicSettings::skyBattleMusic),

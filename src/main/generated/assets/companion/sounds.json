@@ -43,5 +43,21 @@
         "stream": true
       }
     ]
+  },
+  "music.game.to_get_to_the_other_side_loop_map_to_the_dome": {
+    "sounds": [
+      {
+        "name": "companion:music/game/to_get_to_the_other_side_loop_map_to_the_dome",
+        "stream": true
+      }
+    ]
+  },
+  "music.game.to_get_to_the_other_side_loop_modifier_double_time": {
+    "sounds": [
+      {
+        "name": "companion:music/game/to_get_to_the_other_side_loop_modifier_double_time",
+        "stream": true
+      }
+    ]
   }
 }

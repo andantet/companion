@@ -6,6 +6,8 @@ import net.minecraft.util.Identifier
 object CompanionSounds {
     val MUSIC_GAME_HOLE_IN_THE_WALL_LOOP = create("music.game.hole_in_the_wall_loop")
     val MUSIC_GAME_TO_GET_TO_THE_OTHER_SIDE_LOOP = create("music.game.to_get_to_the_other_side_loop")
+    val MUSIC_GAME_TO_GET_TO_THE_OTHER_SIDE_LOOP_MODIFIER_DOUBLE_TIME = create("music.game.to_get_to_the_other_side_loop_modifier_double_time")
+    val MUSIC_GAME_TO_GET_TO_THE_OTHER_SIDE_LOOP_MAP_TO_THE_DOME = create("music.game.to_get_to_the_other_side_loop_map_to_the_dome")
     val MUSIC_GAME_SKY_BATTLE_LOOP = create("music.game.sky_battle_loop")
     val MUSIC_GAME_BATTLE_BOX_LOOP = create("music.game.battle_box_loop")
 

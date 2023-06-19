@@ -9,6 +9,8 @@ class CompanionSoundProvider(dataOutput: FabricDataOutput) : SoundProvider(dataO
     override fun generateSounds(soundGenerator: SoundGenerator) {
         soundGenerator.addDefault(CompanionSounds.MUSIC_GAME_HOLE_IN_THE_WALL_LOOP, SoundBuilder::stream)
         soundGenerator.addDefault(CompanionSounds.MUSIC_GAME_TO_GET_TO_THE_OTHER_SIDE_LOOP, SoundBuilder::stream)
+        soundGenerator.addDefault(CompanionSounds.MUSIC_GAME_TO_GET_TO_THE_OTHER_SIDE_LOOP_MODIFIER_DOUBLE_TIME, SoundBuilder::stream)
+        soundGenerator.addDefault(CompanionSounds.MUSIC_GAME_TO_GET_TO_THE_OTHER_SIDE_LOOP_MAP_TO_THE_DOME, SoundBuilder::stream)
         soundGenerator.addDefault(CompanionSounds.MUSIC_GAME_SKY_BATTLE_LOOP, SoundBuilder::stream)
         soundGenerator.addDefault(CompanionSounds.MUSIC_GAME_BATTLE_BOX_LOOP, SoundBuilder::stream)
 
