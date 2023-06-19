@@ -49,7 +49,7 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance(
     /**
      * The completion type of this run.
      */
-    private lateinit var completionType: CompletionType
+    private var completionType: CompletionType = CompletionType.INCOMPLETE
 
     /**
      * The difficulty of the ending section taken.
@@ -108,7 +108,10 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance(
         json.addProperty("duration", durationString)
         json.addProperty("medals_gained", medalsGained)
         json.addProperty("completion_type", completionType.name)
-        endingDifficulty?.let { json.addProperty("ending_difficulty", it.name) }
+
+        if (completionType != CompletionType.INCOMPLETE) {
+            endingDifficulty?.let { json.addProperty("ending_difficulty", it.name) }
+        }
 
         val completedSectionsJson = JsonArray()
         completedSections.forEach { section ->
