@@ -21,7 +21,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Publish to Maven local
-        run: ./gradlew check build publishToMavenLocal --stacktrace --parallel --warning-mode=fail
+        run: ./gradlew check build --stacktrace --parallel --warning-mode=fail
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
