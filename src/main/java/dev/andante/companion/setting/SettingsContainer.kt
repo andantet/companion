@@ -9,8 +9,8 @@ import dev.andante.companion.api.serialization.SerializableContainer
  */
 open class SettingsContainer<T>(id: String, codec: Codec<T>, default: T) : SerializableContainer<T>(
     id, codec, default,
-    companionFile("config/$id.json"),
-    companionFile("config/$id.json_old")
+    companionFile("settings/$id.json"),
+    companionFile("settings/$id.json_old")
 ) {
     companion object {
         /**
