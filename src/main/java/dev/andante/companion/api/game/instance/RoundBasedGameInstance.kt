@@ -6,6 +6,7 @@ import dev.andante.companion.api.game.round.RoundFactory
 import dev.andante.companion.api.game.round.RoundManager
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.sound.CompanionSoundManager
+import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import java.util.UUID
 
@@ -33,6 +34,10 @@ abstract class RoundBasedGameInstance<R : Round, T : RoundBasedGameInstance<R, T
      * The round manager for this instance.
      */
     open val roundManager: RoundManager<out Round, T> = RoundManager(this, roundFactory)
+
+    override fun tick(client: MinecraftClient) {
+        roundManager.tick(client)
+    }
 
     override fun onTitle(text: Text) {
         roundManager.onTitle(text)

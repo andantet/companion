@@ -71,7 +71,7 @@ object GameTracker {
                     val worldName = worldNameText.string
 
                     // parse to game type
-                    val type = GameType.ofScoreboardName(worldName)
+                    val type = GameType.scoreboardNameAssociation(worldName)
                     if (type != null) {
                         if (gameInstance == null || type != gameType) {
                             clearGameInstance()

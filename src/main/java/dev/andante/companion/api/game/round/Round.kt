@@ -1,6 +1,7 @@
 package dev.andante.companion.api.game.round
 
 import com.google.gson.JsonObject
+import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 
 /**
@@ -12,6 +13,9 @@ open class Round(
      */
     val roundNumber: Int
 ) {
+    open fun tick(client: MinecraftClient) {
+    }
+
     open fun onGameMessage(text: Text) {
     }
 

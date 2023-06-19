@@ -2,6 +2,7 @@ package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
 import com.google.gson.JsonObject
 import dev.andante.companion.api.game.type.GameTypes
+import dev.andante.companion.api.helper.AssociationHelper
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
@@ -107,7 +108,7 @@ open class ParkourWarriorDojoModeInstance {
                 val sectionNameString = groupValues[4]
 
                 // parse captures
-                val branch = Section.Branch.ofAbbreviation(branchString)
+                val branch = Section.Branch.titleAbbreviationAssocation(branchString)
                 val branchNo = branchNoString.toInt()
                 val sectionNo = sectionNoString.toInt()
 
@@ -226,16 +227,9 @@ open class ParkourWarriorDojoModeInstance {
 
             companion object {
                 /**
-                 * A map of all branch title abbreviations to their branches.
-                 */
-                private val TITLE_ABBREVIATION_TO_BRANCH = Branch.values().associateBy(Branch::titleAbbreviation)
-
-                /**
                  * @return the mode of the given chat string
                  */
-                fun ofAbbreviation(string: String): Branch? {
-                    return TITLE_ABBREVIATION_TO_BRANCH[string]
-                }
+                val titleAbbreviationAssocation = AssociationHelper.createAssociationFunction(Branch.values(), Branch::titleAbbreviation)
             }
         }
     }
@@ -256,16 +250,9 @@ open class ParkourWarriorDojoModeInstance {
 
         companion object {
             /**
-             * A map of all difficulty ending medals to their difficulties.
-             */
-            private val ENDING_MEDALS_TO_DIFFICULTY = Difficulty.values().associateBy(Difficulty::endingMedals)
-
-            /**
              * @return the difficulty of the given ending medals
              */
-            fun ofEndingMedals(endingMedals: Int): Difficulty? {
-                return ENDING_MEDALS_TO_DIFFICULTY[endingMedals]
-            }
+            val endingMedalsAssociation = AssociationHelper.createAssociationFunction(Difficulty.values(), Difficulty::endingMedals)
         }
     }
 }

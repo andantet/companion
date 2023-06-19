@@ -2,6 +2,7 @@ package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
 import dev.andante.companion.api.game.instance.GameInstance
 import dev.andante.companion.api.game.type.GameType
+import dev.andante.companion.api.helper.AssociationHelper
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
@@ -34,7 +35,7 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
         val modeMatchResult = MODE_CHANGE_REGEX.find(string)
         if (modeMatchResult != null) {
             val modeString = modeMatchResult.groupValues[1]
-            Mode.ofChatString(modeString)?.let { matchedMode ->
+            Mode.chatStringAssociation(modeString)?.let { matchedMode ->
                 if (matchedMode != mode) {
                     clearInstance()
                     onModeUpdate(matchedMode, mode)
@@ -147,16 +148,9 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
 
         companion object {
             /**
-             * A map of all mode chat strings to their modes.
-             */
-            private val CHAT_STRING_TO_MODE = Mode.values().associateBy(Mode::chatString)
-
-            /**
              * @return the mode of the given chat string
              */
-            fun ofChatString(string: String): Mode? {
-                return CHAT_STRING_TO_MODE[string]
-            }
+            val chatStringAssociation = AssociationHelper.createAssociationFunction(Mode.values(), Mode::chatString)
         }
     }
 }

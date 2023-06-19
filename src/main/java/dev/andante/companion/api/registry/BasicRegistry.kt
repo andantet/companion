@@ -56,6 +56,13 @@ open class BasicRegistry<T : Any> {
     }
 
     /**
+     * @return the entries of this registry
+     */
+    fun getEntries(): List<T> {
+        return entries
+    }
+
+    /**
      * Performs [action] on every registered entry.
      */
     fun forEach(action: Consumer<T>) {

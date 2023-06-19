@@ -2,50 +2,101 @@ package dev.andante.companion.api.game.instance.tgttos
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import dev.andante.companion.api.extension.captureGroup
 import dev.andante.companion.api.game.round.Round
+import dev.andante.companion.api.helper.AssociationHelper
 import dev.andante.companion.api.player.PlayerReference
+import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import dev.andante.companion.api.text.TextRegex
+import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 
 class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
+    /**
+     * The finished players of the round.
+     */
     private val finishedPlayers = mutableListOf<PlayerReference>()
+
+    /**
+     * The score earned from the round.
+     * Set when the player finishes.
+     */
     private var scoreEarned: Int = 0
+
+    /**
+     * The player's placement.
+     * Set when the player finishes.
+     */
     private var placement: Int = -1
+
+    /**
+     * The map of the round.
+     */
+    private var map: String? = null
+
+    /**
+     * The modifier of the round.
+     */
+    private var modifier: Modifier = Modifier.INACTIVE
+
+    override fun tick(client: MinecraftClient) {
+        // check for map
+        if (map == null) {
+            val firstRowString = ScoreboardAccessor.getSidebarRow(0)
+            map = MAP_SIDEBAR_REGEX.captureGroup(firstRowString)
+        }
+
+        // check for modifier
+        if (modifier == Modifier.INACTIVE) {
+            val fourthRowString = ScoreboardAccessor.getSidebarRow(3)
+            MODIFIER_SIDEBAR_REGEX.captureGroup(fourthRowString)?.let { modifierString ->
+                modifier = Modifier.sidebarNameAssocation(modifierString) ?: Modifier.INACTIVE
+            }
+        }
+    }
 
     override fun onGameMessage(text: Text) {
         val string = text.string
 
-        try {
-            // check for finishes
-            val finishedMatchResult = OTHER_PLAYER_FINISHED_REGEX.find(string) ?: PLAYER_FINISHED_REGEX.find(string)
-            if (finishedMatchResult != null) {
-                val playerNameString = finishedMatchResult.groupValues[1]
-                val playerReference = PlayerReference.fromUsername(playerNameString)
-                finishedPlayers.add(playerReference)
-            }
+        // check for finishes
+        val finishedMatchResult = OTHER_PLAYER_FINISHED_REGEX.find(string) ?: PLAYER_FINISHED_REGEX.find(string)
+        if (finishedMatchResult != null) {
+            val playerNameString = finishedMatchResult.groupValues[1]
+            val playerReference = PlayerReference.fromUsername(playerNameString)
+            finishedPlayers.add(playerReference)
+        }
 
-            // check for score
-            val scoreMatchResult = PLAYER_FINISHED_REGEX.find(string)
-            if (scoreMatchResult != null) {
-                val placementString = scoreMatchResult.groupValues[1]
-                val scoreString = scoreMatchResult.groupValues[2]
-                val placement = placementString.toInt()
-                val score = scoreString.toInt()
-                this.placement = placement
-                scoreEarned = score
-            }
-        } catch (_: Throwable) {
+        // check for score
+        val scoreMatchResult = PLAYER_FINISHED_REGEX.find(string)
+        if (scoreMatchResult != null) {
+            val placementString = scoreMatchResult.groupValues[1]
+            val scoreString = scoreMatchResult.groupValues[2]
+            val placement = placementString.toInt()
+            val score = scoreString.toInt()
+            this.placement = placement
+            scoreEarned = score
         }
     }
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
+        textRendererConsumer(Text.literal("Round: $roundNumber"))
+        textRendererConsumer(Text.literal("Map: $map"))
+        textRendererConsumer(Text.literal("Modifier: $modifier"))
+        textRendererConsumer(Text.literal("Placement: $placement"))
+        textRendererConsumer(Text.literal("Score earned: $scoreEarned"))
         textRendererConsumer(Text.literal("Finished players: ${finishedPlayers.size}"))
     }
 
     override fun toJson(json: JsonObject) {
         // round number
         json.addProperty("round", roundNumber)
+
+        // map
+        map?.let { json.addProperty("map", it) }
+
+        // modifier
+        json.addProperty("modifier", modifier.name)
 
         // placement
         json.addProperty("placement", placement)
@@ -66,12 +117,50 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
          * The message sent when the player finishes in TGTTOS.
          */
         @RegExp
-        val PLAYER_FINISHED_REGEX = Regex("\\[.] .. (${TextRegex.USERNAME_PATTERN}), you finished the round and came in ([0-9]+).. place! \\(Score: ([0-9]+).\\)")
+        val PLAYER_FINISHED_REGEX = Regex("\\[.] .. ${TextRegex.USERNAME_PATTERN}, you finished the round and came in ([0-9]+).. place! \\(Score: ([0-9]+).\\)")
 
         /**
          * The message sent when another player finishes in TGTTOS.
          */
         @RegExp
         val OTHER_PLAYER_FINISHED_REGEX = Regex("\\[.] .. (${TextRegex.USERNAME_PATTERN}) finished in [0-9]+..!")
+
+        /**
+         * A regex that matches the map text displayed on the sidebar.
+         */
+        @RegExp
+        val MAP_SIDEBAR_REGEX = Regex(".MAP: (.+)")
+
+        /**
+         * A regex that matches the modifier text displayed on the sidebar.
+         */
+        @RegExp
+        val MODIFIER_SIDEBAR_REGEX = Regex(".MODIFIER: (.+)")
+    }
+
+    /**
+     * A To Get to the Other Side modifier.
+     */
+    enum class Modifier(
+        /**
+         * The name of this modifier as displayed on the side bar.
+         */
+        val sidebarName: String
+    ) {
+        RED_LIGHT_GREEN_LIGHT("RED LIGHT GREEN LIGHT"),
+        ONE_LIFE("ONE LIFE"),
+        HOT_POTATO("HOT POTATO"),
+        TNT_TIME("TNT TIME"),
+        CRUMBLING_BLOCKS("CRUMBLING_BLOCKS"),
+        SLAP_STICK("EARLY_BIRDS"),
+        CRACK_SHOT("CRACK SHOT"),
+        INACTIVE("INACTIVE");
+
+        companion object {
+            /**
+             * @return the mode of the given sidebar name
+             */
+            val sidebarNameAssocation = AssociationHelper.createAssociationFunction(Modifier.values(), Modifier::sidebarName)
+        }
     }
 }

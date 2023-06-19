@@ -5,6 +5,8 @@ import com.google.gson.JsonObject
 import dev.andante.companion.api.game.instance.RoundBasedGameInstance
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
+import dev.andante.companion.setting.MusicSettings
+import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
 
@@ -39,6 +41,10 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
      */
     private val allRounds: MutableList<R> = mutableListOf()
 
+    fun tick(client: MinecraftClient) {
+        round.tick(client)
+    }
+
     fun onTitle(text: Text) {
         val string = text.string
         if (string.matches(ROUND_NUMBER_TITLE)) {
@@ -64,7 +70,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
         } else if (string.matches(GAME_OVER_REGEX) || string.matches(GAME_FINISHED_REGEX)) {
             if (state != State.FINISHED) {
                 finish()
-                CompanionSoundManager.playMusic(CompanionSounds.MUSIC_ROUNDENDMUSIC)
+                CompanionSoundManager.play(CompanionSounds.MUSIC_ROUNDENDMUSIC) { MusicSettings.INSTANCE.musicVolume }
             }
 
             endGame()
@@ -77,6 +83,10 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
      * Initializes the next round.
      */
     private fun initialize() {
+        if (state == State.INITIALIZED) {
+            return
+        }
+
         // increment current round
         currentRound++
 
@@ -94,6 +104,10 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
      * Starts the current round.
      */
     private fun start() {
+        if (state == State.IN_PROGRESS) {
+            return
+        }
+
         val isFirstRound = currentRound == 0
 
         // set state
@@ -112,6 +126,10 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
      * Finishes the current round.
      */
     private fun finish() {
+        if (state == State.FINISHED) {
+            return
+        }
+
         // call game instance listener
         gameInstance.onRoundFinish(round)
 
@@ -126,6 +144,10 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
      * Ends the game at the final round.
      */
     private fun endGame() {
+        if (state == State.GAME_ENDED) {
+            return
+        }
+
         // set state
         state = State.GAME_ENDED
 
@@ -134,8 +156,8 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     }
 
     fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
-        round.renderDebugHud(textRendererConsumer)
         textRendererConsumer(Text.literal("${state.name}, $currentRound"))
+        round.renderDebugHud(textRendererConsumer)
     }
 
     fun toJson(): JsonArray {

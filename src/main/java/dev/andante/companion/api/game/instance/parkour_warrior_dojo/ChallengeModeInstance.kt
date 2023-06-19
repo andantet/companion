@@ -51,7 +51,7 @@ class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
     /**
      * The difficulty of the ending section taken.
      */
-    val endingDifficulty: Difficulty? get() = Difficulty.ofEndingMedals(medalsGained - completedSections.size + 1)
+    private val endingDifficulty: Difficulty? get() = Difficulty.endingMedalsAssociation(medalsGained - completedSections.size + 1)
 
     override fun onSectionUpdate(section: Section?, previousSection: Section?, medals: Int) {
         if (section == null && previousSection != null) {
