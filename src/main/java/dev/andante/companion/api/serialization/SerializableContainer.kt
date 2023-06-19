@@ -86,6 +86,10 @@ open class SerializableContainer<T>(
 
             // set
             _serializableObject = decodedSettings
+
+            // resave (in case of updates to schemas)
+            save()
+
             return decodedSettings
         } catch (exception: Exception) {
             LOGGER.error("Something went wrong loading serializable object: $id", exception)
