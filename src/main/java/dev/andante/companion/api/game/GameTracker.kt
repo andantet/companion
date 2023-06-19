@@ -132,25 +132,32 @@ object GameTracker {
             instance.renderDebugHud(textRendererConsumer)
 
             // render text
+            val border = 2
+
+            val textHeightConsumer = { i: Int -> (textRenderer.fontHeight + 1) * i }
+            val textHeight = textHeightConsumer(renderBuffer.size)
+
+            val backgroundWidth = largestWidth + 1 + border
+            val backgroundHeight = textHeight + border
+
             val startX = 10
-            val startY = 30
+            val startY = context.scaledWindowHeight / 2 - textHeight / 2
 
             // render background
-            val border = 2
+
             val backgroundX = startX - border
             val backgroundY = startY - border
 
             context.fill(RenderLayer.getGuiOverlay(),
                 backgroundX, backgroundY,
-                backgroundX + largestWidth + 1 + border,
-                backgroundY + ((textRenderer.fontHeight + 1) * renderBuffer.size) + border,
+                backgroundX + backgroundWidth, backgroundY + backgroundHeight,
                 0x7C000000
             )
 
             // render text from buffer
             var i = 0
             renderBuffer.forEach { text ->
-                context.drawTextWithShadow(textRenderer, text, startX, startY + ((textRenderer.fontHeight + 1) * i), 0xFFFFFF)
+                context.drawTextWithShadow(textRenderer, text, startX, startY + textHeightConsumer(i), 0xFFFFFF)
                 i++
             }
         }
