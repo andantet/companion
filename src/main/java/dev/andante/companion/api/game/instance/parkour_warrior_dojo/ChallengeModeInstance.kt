@@ -6,13 +6,16 @@ import com.google.gson.JsonObject
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper
 import dev.andante.companion.setting.MetricsSettings
+import dev.andante.companion.setting.MusicSettings
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 
 /**
  * An instance of Parkour Warrior Dojo challenge mode.
  */
-class ChallengeModeInstance : ParkourWarriorDojoModeInstance() {
+class ChallengeModeInstance : ParkourWarriorDojoModeInstance(
+    { MusicSettings.INSTANCE.parkourWarriorDojoChallengeModeMusic }
+) {
     /**
      * The file of this mode's run.
      */

@@ -15,7 +15,12 @@ import java.util.UUID
 /**
  * An instance of a Parkour Warrior Dojo mode.
  */
-open class ParkourWarriorDojoModeInstance {
+open class ParkourWarriorDojoModeInstance(
+    /**
+     * Whether or not to play this mode's music.
+     */
+    val musicSettingSupplier: () -> Boolean
+) {
     /**
      * The UUID of this mode instance.
      */
@@ -28,10 +33,9 @@ open class ParkourWarriorDojoModeInstance {
      * Called when the instance initializes.
      */
     open fun onInitialize() {
-        val settings = GameTypes.PARKOUR_WARRIOR_DOJO.settings
-        if (settings.musicSettingSupplier()) {
+        if (musicSettingSupplier()) {
             CompanionSoundManager.stop(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT)
-            CompanionSoundManager.playMusic(settings.musicLoopSoundEvent)
+            CompanionSoundManager.playMusic(GameTypes.PARKOUR_WARRIOR_DOJO.settings.musicLoopSoundEvent)
         }
     }
 
@@ -79,8 +83,7 @@ open class ParkourWarriorDojoModeInstance {
      * Called when the instance is cleared.
      */
     open fun onRemove() {
-        if (GameTypes.PARKOUR_WARRIOR_DOJO.settings.musicSettingSupplier()) {
-            CompanionSoundManager.playMusic(null)
+        if (CompanionSoundManager.stopMusic()) {
             CompanionSoundManager.play(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT) { MusicSettings.INSTANCE.musicVolume }
         }
     }

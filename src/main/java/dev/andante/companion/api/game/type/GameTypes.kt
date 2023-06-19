@@ -51,6 +51,6 @@ object GameTypes : BasicRegistry<GameType<*>>() {
      */
     val PARKOUR_WARRIOR_DOJO = register("parkour_warrior_dojo", GameType(::ParkourWarriorDojoInstance, GameTypeSettings(
         "PARKOUR WARRIOR", CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP,
-        { MusicSettings.INSTANCE.parkourWarriorDojoMusic }, { MetricsSettings.INSTANCE.parkourWarriorDojoMetrics }
+        { false }, { MetricsSettings.INSTANCE.parkourWarriorDojoMetrics }
     )))
 }

@@ -97,8 +97,10 @@ object CompanionSoundManager {
     /**
      * Stops the current music.
      */
-    fun stopMusic() {
+    fun stopMusic(): Boolean {
+        val wasPlaying = musicSoundInstance?.isDone == false
         CLIENT.soundManager.stop(musicSoundInstance)
         musicSoundInstance = null
+        return wasPlaying
     }
 }

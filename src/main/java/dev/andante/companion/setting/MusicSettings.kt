@@ -43,9 +43,14 @@ data class MusicSettings(
     val battleBoxMusic: Boolean,
 
     /**
-     * Whether to play Parkour Warrior: Dojo music.
+     * Whether to play Parkour Warrior: Dojo music in Challenge Mode.
      */
-    val parkourWarriorDojoMusic: Boolean
+    val parkourWarriorDojoChallengeModeMusic: Boolean,
+
+    /**
+     * Whether to play Parkour Warrior: Dojo music in Practice Mode.
+     */
+    val parkourWarriorDojoPracticeModeMusic: Boolean
 ) {
     companion object {
         /**
@@ -59,7 +64,8 @@ data class MusicSettings(
             toGetToTheOtherSideModifierDoubleTimeMusic = false,
             skyBattleMusic = true,
             battleBoxMusic = true,
-            parkourWarriorDojoMusic = true
+            parkourWarriorDojoChallengeModeMusic = true,
+            parkourWarriorDojoPracticeModeMusic = true
         )
 
         /**
@@ -88,9 +94,12 @@ data class MusicSettings(
                 Codec.BOOL.fieldOf("battle_box_music")
                     .orElse(DEFAULT.battleBoxMusic)
                     .forGetter(MusicSettings::battleBoxMusic),
-                Codec.BOOL.fieldOf("parkour_warrior_dojo_music")
-                    .orElse(DEFAULT.parkourWarriorDojoMusic)
-                    .forGetter(MusicSettings::parkourWarriorDojoMusic)
+                Codec.BOOL.fieldOf("parkour_warrior_dojo_challenge_mode_music")
+                    .orElse(DEFAULT.parkourWarriorDojoChallengeModeMusic)
+                    .forGetter(MusicSettings::parkourWarriorDojoChallengeModeMusic),
+                Codec.BOOL.fieldOf("parkour_warrior_dojo_practice_mode_music")
+                    .orElse(DEFAULT.parkourWarriorDojoPracticeModeMusic)
+                    .forGetter(MusicSettings::parkourWarriorDojoPracticeModeMusic)
             ).apply(instance, ::MusicSettings)
         }
 
