@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "version": "${version}",
+  "id": "companion-test",
+  "name": "MCCI: Companion (Test)",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "dev.andante.companion.test.CompanionTest"
+      }
+    ]
+  },
+  "depends": {
+    "companion": "*"
+  }
+}

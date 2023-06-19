@@ -118,6 +118,15 @@ tasks.withType(AbstractArchiveTask).configureEach {
 
 loom {
   accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
+
+  runs {
+    testClient {
+      client()
+
+      name = "Minecraft Client (Test)"
+      source sourceSets.test
+    }
+  }
 }
 
 jar {
