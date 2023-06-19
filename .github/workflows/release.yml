@@ -6,9 +6,12 @@ permissions:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        java: [ 17-jdk ]
     runs-on: ubuntu-20.04
     container:
-      image: eclipse-temurin:18-jdk
+      image: eclipse-temurin:${{ matrix.java }}
       options: --user root
     steps:
       - run: apt update && apt install git -y && git --version
