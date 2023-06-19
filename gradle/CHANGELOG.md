@@ -1,5 +1,5 @@
 ### **A lot of features are not present yet in 5.x!**
-### **It is recommended to use this version alongside version 4.x**
+### **It is recommended to use this version alongside version 4.x, disabling the music configuration in the previous version.**
 
 ---
 
@@ -25,3 +25,4 @@ Differences to 4.x:
 
 * Renamed configuration to settings, and moved files to `/companion/settings/`
 * Rewritten the mod in Kotlin
+* Changed mod id from `mccic` -> `mcci-companion`
