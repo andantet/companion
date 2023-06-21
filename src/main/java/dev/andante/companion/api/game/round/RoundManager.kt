@@ -188,7 +188,7 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
         val ROUND_NUMBER_TITLE = Regex("Round [0-9]+")
 
         @RegExp
-        val GAME_STARTED_REGEX = Regex("\\[.] Game started!")
+        val GAME_STARTED_REGEX = Regex("\\[.] Game Started!")
 
         @RegExp
         val ROUND_STARTED_REGEX = Regex("\\[.] Round [0-9]+ started!")
