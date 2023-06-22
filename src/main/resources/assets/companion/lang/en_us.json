@@ -1,4 +1,7 @@
 {
+  "command.companion.something_went_wrong": "Something went wrong executing that command",
   "command.companion.settings.reloaded_all_settings": "Reloaded all settings for MCCI: Companion",
-  "command.companion.settings.settings_reload_failure": "Failed to reload %s settings for MCCI: Companion"
+  "command.companion.settings.settings_reload_failure": "Failed to reload %s settings for MCCI: Companion",
+  "command.companion.fetch.fetching": "Fetching [%s]",
+  "command.companion.fetch.fetched": "Fetched [%s]"
 }

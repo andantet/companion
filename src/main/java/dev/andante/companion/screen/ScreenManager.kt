@@ -1,0 +1,49 @@
+package dev.andante.companion.screen
+
+import dev.andante.companion.api.event.ScreenClosedCallback
+import dev.andante.companion.api.icon.IconKeys
+import dev.andante.companion.api.icon.IconManager
+import dev.andante.companion.hud.WardrobeScreenRenderer
+import dev.andante.companion.setting.HudSettings
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
+import net.minecraft.client.gui.screen.ingame.HandledScreen
+
+/**
+ * Manages screens.
+ */
+object ScreenManager {
+    private const val WARDROBE_TEXT = "WARDROBE"
+
+    init {
+        // register after initialize
+        ScreenEvents.AFTER_INIT.register { client, screen, _, _ ->
+            val title = screen.title.string
+            val settings = HudSettings.INSTANCE
+
+            // render player in wardrobe
+            if (settings.renderPlayerInWardrobe) {
+                if (title.contains(WARDROBE_TEXT)) {
+                    if (screen is HandledScreen<*>) {
+                        WardrobeScreenRenderer.preparePlayerRender(screen)
+
+                        ScreenEvents.beforeRender(screen).register { _, context, _, _, _ ->
+                            WardrobeScreenRenderer.renderPlayer(client, screen, context)
+                        }
+                    }
+                }
+            }
+
+            // beta test warning
+            if (settings.closeBetaTestWarning) {
+                IconManager[IconKeys.GUI_BETA_TEST_WARNING]?.let { betaTestIcon ->
+                    if (title.contains(betaTestIcon)) {
+                        client.send { client.player?.closeHandledScreen() }
+                    }
+                }
+            }
+        }
+
+        // register on remove
+        ScreenClosedCallback.EVENT.register { WardrobeScreenRenderer.onScreenRemoved() }
+    }
+}
