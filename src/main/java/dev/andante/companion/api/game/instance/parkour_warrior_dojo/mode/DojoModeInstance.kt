@@ -1,4 +1,4 @@
-package dev.andante.companion.api.game.instance.parkour_warrior_dojo
+package dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode
 
 import com.google.gson.JsonObject
 import dev.andante.companion.api.game.type.GameTypes
@@ -15,7 +15,7 @@ import java.util.UUID
 /**
  * An instance of a Parkour Warrior Dojo mode.
  */
-open class ParkourWarriorDojoModeInstance(
+open class DojoModeInstance(
     /**
      * Whether or not to play this mode's music.
      */

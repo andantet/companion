@@ -1,8 +1,9 @@
-package dev.andante.companion.api.game.instance.parkour_warrior_dojo
+package dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.ParkourWarriorDojoInstance
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper
 import dev.andante.companion.setting.MetricsSettings
@@ -13,7 +14,7 @@ import net.minecraft.util.Util
 /**
  * An instance of Parkour Warrior Dojo challenge mode.
  */
-class ChallengeModeInstance : ParkourWarriorDojoModeInstance(
+class ChallengeModeInstance : DojoModeInstance(
     { MusicSettings.INSTANCE.parkourWarriorDojoChallengeModeMusic }
 ) {
     /**

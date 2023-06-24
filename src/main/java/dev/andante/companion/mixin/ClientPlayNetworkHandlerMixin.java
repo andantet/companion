@@ -1,7 +1,9 @@
 package dev.andante.companion.mixin;
 
+import dev.andante.companion.api.event.PacketEvents;
 import dev.andante.companion.api.event.TitleEvents;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,5 +27,13 @@ public class ClientPlayNetworkHandlerMixin {
     @Inject(method = "onSubtitle", at = @At("TAIL"))
     private void onOnSubtitle(SubtitleS2CPacket packet, CallbackInfo ci) {
         TitleEvents.INSTANCE.getSUBTITLE().invoker().onTitle(packet.getSubtitle());
+    }
+
+    /**
+     * Hands off the tail of sendPacket to an event.
+     */
+    @Inject(method = "sendPacket(Lnet/minecraft/network/packet/Packet;)V", at = @At("TAIL"))
+    private void onSendPacket(Packet<?> packet, CallbackInfo ci) {
+        PacketEvents.INSTANCE.getOUT().invoker().onPacket(packet);
     }
 }

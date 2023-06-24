@@ -1,6 +1,9 @@
 package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
 import dev.andante.companion.api.game.instance.GameInstance
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.ChallengeModeInstance
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.DojoModeInstance
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.PracticeModeInstance
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.helper.AssociationHelper
 import net.minecraft.client.MinecraftClient
@@ -22,7 +25,7 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
     /**
      * The active mode instance.
      */
-    private var modeInstance: ParkourWarriorDojoModeInstance? = null
+    private var modeInstance: DojoModeInstance? = null
 
     override fun tick(client: MinecraftClient) {
         modeInstance?.tick(client)
@@ -85,7 +88,7 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
     /**
      * Sets the active game instance.
      */
-    private fun setInstance(instance: ParkourWarriorDojoModeInstance?) {
+    private fun setInstance(instance: DojoModeInstance?) {
         modeInstance?.let {
             LOGGER.info("Removing Parkour Warrior: Dojo mode instance ${it.uuid}")
             it.onRemove()
