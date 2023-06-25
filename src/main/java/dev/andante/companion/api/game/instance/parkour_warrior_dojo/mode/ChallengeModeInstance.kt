@@ -3,13 +3,14 @@ package dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoRunManager
 import dev.andante.companion.api.game.instance.parkour_warrior_dojo.ParkourWarriorDojoInstance
-import dev.andante.companion.api.game.type.GameTypes
-import dev.andante.companion.api.helper.FileHelper
+import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.player.position.serializer.PositionRecorderManager
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import dev.andante.companion.setting.MetricsSettings
 import dev.andante.companion.setting.MusicSettings
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.text.Text
 import net.minecraft.util.Util
@@ -23,7 +24,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
     /**
      * The file of this mode's run.
      */
-    private val file = FileHelper.companionFile("game_instances/${GameTypes.PARKOUR_WARRIOR_DOJO.id}/runs/$uuid.json")
+    private val file = DojoRunManager.RUNS_FOLDER.resolve("$uuid.json")
 
     /**
      * The time that the run started at.
@@ -64,6 +65,11 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
      * The position recorder for this instance.
      */
     private val positionRecorder = PositionRecorderManager.create(world)
+
+    override fun tick(client: MinecraftClient) {
+        super.tick(client)
+        GhostPlayerManager.tickTimeline(client)
+    }
 
     override fun onSectionUpdate(section: Section?, previousSection: Section?, medals: Int) {
         if (section == null && previousSection != null) {

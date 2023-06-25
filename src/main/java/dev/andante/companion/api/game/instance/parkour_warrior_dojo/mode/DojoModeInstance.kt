@@ -1,12 +1,17 @@
 package dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode
 
 import com.google.gson.JsonObject
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoRunManager
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.AssociationHelper
+import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
 import dev.andante.companion.setting.MusicSettings
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
@@ -86,10 +91,19 @@ open class DojoModeInstance(
     /**
      * Called when the instance is cleared.
      */
-    open fun onRemove() {
+    @OptIn(DelicateCoroutinesApi::class)
+    fun onRemove() {
         if (CompanionSoundManager.stopMusic()) {
             CompanionSoundManager.play(CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP_FADE_OUT) { MusicSettings.INSTANCE.musicVolume }
         }
+
+        GlobalScope.launch {
+            synchronized(DojoRunManager) {
+                DojoRunManager.reloadRunTimelines()
+            }
+        }
+
+        GhostPlayerManager.reset()
     }
 
     open fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {

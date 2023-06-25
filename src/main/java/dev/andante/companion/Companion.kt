@@ -1,6 +1,7 @@
 package dev.andante.companion
 
 import dev.andante.companion.api.game.GameTracker
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoRunManager
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.icon.IconManager
 import dev.andante.companion.api.item.CustomItemManager
@@ -11,6 +12,7 @@ import dev.andante.companion.api.server.ServerTracker
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
 import dev.andante.companion.command.FetchCommand
+import dev.andante.companion.command.ParkourWarriorDojoCommand
 import dev.andante.companion.command.SettingsCommand
 import dev.andante.companion.screen.ScreenManager
 import dev.andante.companion.setting.SettingsContainer
@@ -42,6 +44,7 @@ object Companion : ClientModInitializer {
         // positions
         GhostPlayerManager
         PositionRecorderManager
+        DojoRunManager.reloadRunTimelines()
 
         // games
         GameTypes
@@ -61,6 +64,7 @@ object Companion : ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
             SettingsCommand.register(dispatcher)
             FetchCommand.register(dispatcher)
+            ParkourWarriorDojoCommand.register(dispatcher)
         }
     }
 }

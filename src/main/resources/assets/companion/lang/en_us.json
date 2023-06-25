@@ -4,5 +4,11 @@
   "command.companion.settings.settings_reload_failure": "Failed to reload %s settings for MCCI: Companion",
   "command.companion.fetch.fetching": "Fetching [%s]",
   "command.companion.fetch.fetched": "Fetched [%s]",
+  "command.companion.parkour_warrior_dojo.runs.noRunsFound": "No Parkour Warrior: Dojo runs found.",
+  "command.companion.parkour_warrior_dojo.runs.noRunFound": "No Parkour Warrior: Dojo run found.",
+  "command.companion.parkour_warrior_dojo.notPresent": "You must be in Parkour Warrior: Dojo to run this command.",
+  "command.companion.parkour_warrior_dojo.runs.ghostAdded": "Ghost added (%s)",
+  "command.companion.parkour_warrior_dojo.runs.ghostRemoved": "Ghost removed (%s)",
+  "command.companion.parkour_warrior_dojo.runs.ghostsCleared": "Cleared all ghosts",
   "entity.companion.ghost": "Ghost"
 }

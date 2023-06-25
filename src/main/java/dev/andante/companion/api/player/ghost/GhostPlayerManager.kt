@@ -1,5 +1,6 @@
 package dev.andante.companion.api.player.ghost
 
+import dev.andante.companion.api.event.WorldJoinCallback
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import dev.andante.companion.mixin.ghost.WorldRendererMixin
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
@@ -12,16 +13,36 @@ object GhostPlayerManager {
      */
     private val ghostPlayers = mutableListOf<GhostPlayerEntity>()
 
+    /**
+     * The time at the last tick.
+     */
+    private var lastTickTime: Long = -1L
+
     init {
-        // register tick event
+        WorldJoinCallback.EVENT.register { _ ->
+            lastTickTime = -1L
+            clear()
+        }
+
         ClientTickEvents.END_WORLD_TICK.register { tick() }
     }
 
     /**
-     * Ticks ghost timelines.
+     * Runs every world tick.
      */
     private fun tick() {
-        ghostPlayers.removeIf(GhostPlayerEntity::tickTimeline)
+        ghostPlayers.forEach(GhostPlayerEntity::tickPosition)
+    }
+
+    /**
+     * Ticks ghost timelines. Can be called safely multiple times per tick. To be called by other classes when required.
+     */
+    fun tickTimeline(client: MinecraftClient) {
+        val time = client.world?.time ?: 0L
+        if (time > lastTickTime) {
+            ghostPlayers.removeIf(GhostPlayerEntity::tickTimeline)
+            lastTickTime = time
+        }
     }
 
     /**
@@ -41,8 +62,19 @@ object GhostPlayerManager {
     /**
      * Removes a ghost.
      */
-    fun remove(player: GhostPlayerEntity) {
-        ghostPlayers.remove(player)
+    fun remove(timeline: PositionTimeline): Boolean {
+        return ghostPlayers.removeIf { it.timeline == timeline }
+    }
+
+    /**
+     * Clears all ghosts.
+     */
+    fun clear() {
+        ghostPlayers.clear()
+    }
+
+    operator fun contains(timeline: PositionTimeline): Boolean {
+        return ghostPlayers.any { it.timeline == timeline }
     }
 
     /**
@@ -58,5 +90,12 @@ object GhostPlayerManager {
      */
     fun getPlayers(): List<GhostPlayerEntity> {
         return ghostPlayers
+    }
+
+    /**
+     * Resets the timeline of all ghost players.
+     */
+    fun reset() {
+        ghostPlayers.forEach(GhostPlayerEntity::resetTimeline)
     }
 }

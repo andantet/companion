@@ -2,6 +2,7 @@ package dev.andante.companion.api.player.ghost
 
 import com.mojang.authlib.GameProfile
 import dev.andante.companion.Companion
+import dev.andante.companion.api.player.position.TemporalPosition
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import net.minecraft.client.network.OtherClientPlayerEntity
 import net.minecraft.client.world.ClientWorld
@@ -15,7 +16,7 @@ class GhostPlayerEntity(
     /**
      * The timeline to run.
      */
-    private val timeline: PositionTimeline,
+    val timeline: PositionTimeline,
 
     /**
      * Whether to repeat the timeline.
@@ -25,9 +26,15 @@ class GhostPlayerEntity(
     world: ClientWorld,
     profile: GameProfile
 ) : OtherClientPlayerEntity(world, profile) {
+    /**
+     * The current tick of the timeline.
+     */
     private var timelineTick = 0L
 
-    fun tickTimeline(): Boolean {
+    /**
+     * Ticks the position of the player based on [timelineTick].
+     */
+    fun tickPosition() {
         prevX = x
         prevY = y
         prevZ = z
@@ -43,28 +50,22 @@ class GhostPlayerEntity(
         prevBodyYaw = bodyYaw
 
         // update positions
-        timeline.mappedPositions[timelineTick]?.let { temporalPosition ->
-            setPosition(temporalPosition.pos)
-
-            yaw = temporalPosition.yaw
-            pitch = temporalPosition.pitch
-
-            headYaw = temporalPosition.headYaw
-            bodyYaw = temporalPosition.bodyYaw
-
-            pose = temporalPosition.entityPose
-        }
+        timeline.mappedPositions[timelineTick]?.let(::updateTemporalPosition)
 
         // animate
         updateLimbs(false)
+    }
 
+    /**
+     * Ticks the timeline and its relevant information.
+     */
+    fun tickTimeline(): Boolean {
         // check finished
         val finished = timeline.isFinished(timelineTick)
         return if (finished) {
             if (repeatTimeline) {
                 // repeat
-                timelineTick = 0
-                resetPosition()
+                resetTimeline()
                 false
             } else {
                 // finish
@@ -75,6 +76,28 @@ class GhostPlayerEntity(
             timelineTick++
             false
         }
+    }
+
+    /**
+     * Resets the timeline tick.
+     */
+    fun resetTimeline() {
+        timelineTick = 0
+    }
+
+    /**
+     * Updates the player's positions with the given temporal position.
+     */
+    private fun updateTemporalPosition(temporalPosition: TemporalPosition) {
+        setPosition(temporalPosition.pos)
+
+        yaw = temporalPosition.yaw
+        pitch = temporalPosition.pitch
+
+        headYaw = temporalPosition.headYaw
+        bodyYaw = temporalPosition.bodyYaw
+
+        pose = temporalPosition.entityPose
     }
 
     override fun getDisplayName(): Text {
