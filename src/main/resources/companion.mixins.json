@@ -6,7 +6,9 @@
   "client": [
     "ClientPlayNetworkHandlerMixin",
     "MinecraftClientMixin",
-    "SoundSystemMixin"
+    "SoundSystemMixin",
+    "ghost.LivingEntityRendererMixin",
+    "ghost.WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

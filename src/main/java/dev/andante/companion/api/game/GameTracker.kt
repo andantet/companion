@@ -10,6 +10,7 @@ import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import dev.andante.companion.api.server.ServerTracker
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.minecraft.client.MinecraftClient
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -43,6 +44,9 @@ object GameTracker {
         // register title events
         TitleEvents.TITLE.register { text -> gameInstance?.onTitle(text) }
         TitleEvents.SUBTITLE.register { text -> gameInstance?.onSubtitle(text) }
+
+        // register render events
+        WorldRenderEvents.AFTER_ENTITIES.register { context -> gameInstance?.afterRenderEntities(context) }
     }
 
     private fun tick(client: MinecraftClient) {

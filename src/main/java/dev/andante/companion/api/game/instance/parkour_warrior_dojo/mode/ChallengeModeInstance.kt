@@ -6,15 +6,18 @@ import com.google.gson.JsonObject
 import dev.andante.companion.api.game.instance.parkour_warrior_dojo.ParkourWarriorDojoInstance
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper
+import dev.andante.companion.api.player.position.serializer.PositionRecorderManager
+import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import dev.andante.companion.setting.MetricsSettings
 import dev.andante.companion.setting.MusicSettings
+import net.minecraft.client.world.ClientWorld
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 
 /**
  * An instance of Parkour Warrior Dojo challenge mode.
  */
-class ChallengeModeInstance : DojoModeInstance(
+class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
     { MusicSettings.INSTANCE.parkourWarriorDojoChallengeModeMusic }
 ) {
     /**
@@ -57,6 +60,11 @@ class ChallengeModeInstance : DojoModeInstance(
      */
     private val endingDifficulty: Difficulty? get() = Difficulty.endingMedalsAssociation(medalsGained - completedSections.size + 1)
 
+    /**
+     * The position recorder for this instance.
+     */
+    private val positionRecorder = PositionRecorderManager.create(world)
+
     override fun onSectionUpdate(section: Section?, previousSection: Section?, medals: Int) {
         if (section == null && previousSection != null) {
             completedSections.add(previousSection)
@@ -76,7 +84,10 @@ class ChallengeModeInstance : DojoModeInstance(
 
         // flush to json
         if (MetricsSettings.INSTANCE.parkourWarriorDojoMetrics) {
-            flushToJson()
+            val positionTimeline = PositionRecorderManager.removeAndCompile(positionRecorder)
+            flushToJson(positionTimeline)
+        } else {
+            PositionRecorderManager.remove(positionRecorder)
         }
     }
 
@@ -87,7 +98,10 @@ class ChallengeModeInstance : DojoModeInstance(
 
         // flush to json
         if (MetricsSettings.INSTANCE.parkourWarriorDojoMetrics) {
-            flushToJson()
+            val positionTimeline = PositionRecorderManager.removeAndCompile(positionRecorder)
+            flushToJson(positionTimeline)
+        } else {
+            PositionRecorderManager.remove(positionRecorder)
         }
 
         // clear instance
@@ -96,9 +110,10 @@ class ChallengeModeInstance : DojoModeInstance(
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
         textRendererConsumer(Text.literal("Run: $uuid"))
+        positionRecorder.renderDebugHud(textRendererConsumer)
     }
 
-    private fun flushToJson() {
+    private fun flushToJson(positionTimeline: PositionTimeline) {
         ParkourWarriorDojoInstance.LOGGER.info("Flushing challenge instance to JSON: ${file.path}")
 
         val json = JsonObject()
@@ -119,6 +134,8 @@ class ChallengeModeInstance : DojoModeInstance(
             completedSectionsJson.add(section.toJson())
         }
         json.add("completed_sections", completedSectionsJson)
+
+        json.add("position_timeline", positionTimeline.toJson())
 
         val gson = GsonBuilder().setPrettyPrinting().create()
         val jsonString = gson.toJson(json)

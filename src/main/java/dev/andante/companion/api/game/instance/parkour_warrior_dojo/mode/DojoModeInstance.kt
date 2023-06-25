@@ -7,6 +7,7 @@ import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
 import dev.andante.companion.setting.MusicSettings
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
@@ -77,6 +78,9 @@ open class DojoModeInstance(
      */
     open fun onCourseRestart(): Boolean {
         return false
+    }
+
+    open fun afterRenderEntities(context: WorldRenderContext) {
     }
 
     /**

@@ -3,6 +3,7 @@ package dev.andante.companion.api.game.instance
 import com.google.gson.JsonElement
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.game.type.GameTypeSettings
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import java.util.UUID
@@ -54,6 +55,12 @@ open class GameInstance<T : GameInstance<T>>(
      * Called when the game type is no longer detected as the type of this instance.
      */
     open fun onRemove() {
+    }
+
+    /**
+     * Called after entities are rendered.
+     */
+    open fun afterRenderEntities(context: WorldRenderContext) {
     }
 
     /**

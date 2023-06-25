@@ -6,6 +6,7 @@ import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.DojoMod
 import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.PracticeModeInstance
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.helper.AssociationHelper
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 import org.intellij.lang.annotations.RegExp
@@ -70,7 +71,7 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
     override fun onTitle(text: Text) {
         // detect challenge run start
         if (text.string == GO_TEXT) {
-            setInstance(ChallengeModeInstance())
+            setInstance(ChallengeModeInstance(MinecraftClient.getInstance().world!!))
         }
     }
 
@@ -78,6 +79,10 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
         if (modeInstance?.onSubtitle(text) == true) {
             clearInstance()
         }
+    }
+
+    override fun afterRenderEntities(context: WorldRenderContext) {
+        modeInstance?.afterRenderEntities(context)
     }
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {

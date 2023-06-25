@@ -5,6 +5,8 @@ import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.icon.IconManager
 import dev.andante.companion.api.item.CustomItemManager
 import dev.andante.companion.api.player.PlayerReference
+import dev.andante.companion.api.player.ghost.GhostPlayerManager
+import dev.andante.companion.api.player.position.serializer.PositionRecorderManager
 import dev.andante.companion.api.server.ServerTracker
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
@@ -36,6 +38,10 @@ object Companion : ClientModInitializer {
 
         // player reference cache events
         PlayerReference
+
+        // positions
+        GhostPlayerManager
+        PositionRecorderManager
 
         // games
         GameTypes
