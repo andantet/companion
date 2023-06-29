@@ -1,4 +1,4 @@
-package dev.andante.companion.hud
+package dev.andante.companion.screen
 
 import dev.andante.companion.api.item.CustomItemKeys
 import dev.andante.companion.api.item.CustomItemManager

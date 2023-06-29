@@ -25,7 +25,7 @@ object Companion : ClientModInitializer {
     const val MOD_ID = "companion"
     private const val MOD_NAME = "MCCI: Companion"
 
-    val LOGGER: Logger = LoggerFactory.getLogger(MOD_NAME)
+    private val LOGGER: Logger = LoggerFactory.getLogger(MOD_NAME)
 
     @Suppress("DeferredResultUnused")
     override fun onInitializeClient() {
