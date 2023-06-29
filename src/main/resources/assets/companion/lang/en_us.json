@@ -7,6 +7,8 @@
   "command.companion.parkour_warrior_dojo.runs.noRunsFound": "No Parkour Warrior: Dojo runs found.",
   "command.companion.parkour_warrior_dojo.runs.noRunFound": "No Parkour Warrior: Dojo run found.",
   "command.companion.parkour_warrior_dojo.notPresent": "You must be in Parkour Warrior: Dojo to run this command.",
+  "command.companion.parkour_warrior_dojo.runs.list": "[Parkour Warrior: Dojo] Loaded runs:\n%s",
+  "command.companion.parkour_warrior_dojo.runs.reloaded": "Successfully reloaded %s runs!",
   "command.companion.parkour_warrior_dojo.runs.ghostAdded": "Ghost added (%s)",
   "command.companion.parkour_warrior_dojo.runs.ghostRemoved": "Ghost removed (%s)",
   "command.companion.parkour_warrior_dojo.runs.ghostsCleared": "Cleared all ghosts",

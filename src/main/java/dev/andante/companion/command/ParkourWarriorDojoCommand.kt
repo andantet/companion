@@ -18,17 +18,21 @@ import net.minecraft.text.Text
 import java.io.File
 
 object ParkourWarriorDojoCommand {
-    private val FEEDBACK_STYLE = Style.EMPTY.withColor(0x8E8ED5)
+    private val FEEDBACK_STYLE = Style.EMPTY.withColor(0xFFE72B)
+    private val GHOST_FEEDBACK_STYLE = Style.EMPTY.withColor(0x8E8ED5)
 
     private val NO_RUNS_FOUND_EXCEPTION = SimpleCommandExceptionType(Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.noRunsFound"))
     private val NO_RUN_FOUND_EXCEPTION = SimpleCommandExceptionType(Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.noRunFound"))
 
     private val NOT_IN_PARKOUR_WARRIOR_DOJO_EXCEPTION = SimpleCommandExceptionType(Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.notPresent"))
 
+    private const val RUNS_LIST_KEY = "command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.list"
+    private const val RELOADED_RUNS_KEY = "command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.reloaded"
+
     private const val ADDED_GHOST_KEY = "command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.ghostAdded"
     private const val REMOVED_GHOST_KEY = "command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.ghostRemoved"
 
-    private val CLEARED_ALL_GHOSTS_MESSAGE = Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.ghostsCleared").setStyle(FEEDBACK_STYLE)
+    private val CLEARED_ALL_GHOSTS_MESSAGE = Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.ghostsCleared").setStyle(GHOST_FEEDBACK_STYLE)
 
     private const val ID_KEY = "id"
 
@@ -37,25 +41,32 @@ object ParkourWarriorDojoCommand {
             literal("${Companion.MOD_ID}:parkour_warrior_dojo")
                 .then(
                     literal("runs")
-                        .executes(::executeListRuns)
                         .then(
-                            literal("ghost")
+                            literal("list")
+                                .executes(::executeListRuns)
+                        )
+                        .then(
+                            literal("reload")
+                                .executes(::executeReloadRuns)
+                        )
+                )
+                .then(
+                    literal("ghost")
+                        .then(
+                            literal("toggle")
                                 .then(
-                                    literal("toggle")
+                                    argument(ID_KEY, StringArgumentType.string())
+                                        .suggests { _, builder -> DojoRunManager.suggestRuns(builder) }
+                                        .executes { context -> executeGhost(context, false) }
                                         .then(
-                                            argument(ID_KEY, StringArgumentType.string())
-                                                .suggests { _, builder -> DojoRunManager.suggestRuns(builder) }
-                                                .executes { context -> executeGhost(context, false) }
-                                                .then(
-                                                    literal("repeat")
-                                                        .executes { context -> executeGhost(context, true) }
-                                                )
+                                            literal("repeat")
+                                                .executes { context -> executeGhost(context, true) }
                                         )
                                 )
-                                .then(
-                                    literal("clear")
-                                        .executes(::executeGhostClear)
-                                )
+                        )
+                        .then(
+                            literal("clear")
+                                .executes(::executeGhostClear)
                         )
                 )
         )
@@ -65,10 +76,16 @@ object ParkourWarriorDojoCommand {
     private fun executeListRuns(context: CommandContext<FabricClientCommandSource>): Int {
         val files = DojoRunManager.listRunFiles()
         if (files.isNotEmpty()) {
-            context.source.sendFeedback(Text.literal("Runs: ${files.joinToString(transform = File::nameWithoutExtension)}"))
+            context.source.sendFeedback(Text.translatable(RUNS_LIST_KEY, files.joinToString(transform = File::nameWithoutExtension, prefix = "- ", separator = "\n- ")).setStyle(FEEDBACK_STYLE))
         } else {
             throw NO_RUNS_FOUND_EXCEPTION.create()
         }
+        return 1
+    }
+
+    private fun executeReloadRuns(context: CommandContext<FabricClientCommandSource>): Int {
+        val count = DojoRunManager.reloadRunTimelines()
+        context.source.sendFeedback(Text.translatable(RELOADED_RUNS_KEY, count).setStyle(FEEDBACK_STYLE))
         return 1
     }
 
@@ -80,10 +97,10 @@ object ParkourWarriorDojoCommand {
         val id = StringArgumentType.getString(context, ID_KEY)
         val timeline = DojoRunManager[id] ?: throw NO_RUN_FOUND_EXCEPTION.create()
         if (GhostPlayerManager.remove(timeline)) {
-            context.source.sendFeedback(Text.translatable(REMOVED_GHOST_KEY, id).setStyle(FEEDBACK_STYLE))
+            context.source.sendFeedback(Text.translatable(REMOVED_GHOST_KEY, id).setStyle(GHOST_FEEDBACK_STYLE))
         } else {
             GhostPlayerManager.add(timeline, repeat)
-            context.source.sendFeedback(Text.translatable(ADDED_GHOST_KEY, id).setStyle(FEEDBACK_STYLE))
+            context.source.sendFeedback(Text.translatable(ADDED_GHOST_KEY, id).setStyle(GHOST_FEEDBACK_STYLE))
         }
 
         return 1
@@ -91,7 +108,7 @@ object ParkourWarriorDojoCommand {
 
     private fun executeGhostClear(context: CommandContext<FabricClientCommandSource>): Int {
         GhostPlayerManager.clear()
-        context.source.sendFeedback(CLEARED_ALL_GHOSTS_MESSAGE.setStyle(FEEDBACK_STYLE))
+        context.source.sendFeedback(CLEARED_ALL_GHOSTS_MESSAGE.setStyle(GHOST_FEEDBACK_STYLE))
         return 1
     }
 }
