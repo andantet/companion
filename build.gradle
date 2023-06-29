@@ -79,6 +79,8 @@ if (githubUsername != null) {
     try {
       modRuntimeOnly "me.axieum.mcmod.authme:authme:${project.auth_me_version}"
     } catch (exception) {
+      print("Could not depend on axeium/authme")
+      exception.printStackTrace()
     }
   }
 }
