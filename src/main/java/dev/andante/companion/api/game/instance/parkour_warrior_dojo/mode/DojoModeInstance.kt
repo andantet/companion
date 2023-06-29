@@ -5,6 +5,8 @@ import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoRunManag
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.AssociationHelper
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
+import dev.andante.companion.api.regex.RegexKeys
+import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
@@ -15,7 +17,6 @@ import kotlinx.coroutines.launch
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
-import org.intellij.lang.annotations.RegExp
 import java.util.UUID
 
 /**
@@ -52,7 +53,7 @@ open class DojoModeInstance(
         try {
             // check for course
             val firstRowString = ScoreboardAccessor.getSidebarRow(0)
-            val courseMatchResult = COURSE_SIDEBAR_REGEX.find(firstRowString)
+            val courseMatchResult = RegexManager[RegexKeys.PARKOUR_WARRIOR_DOJO_COURSE_SIDEBAR]?.find(firstRowString)
             if (courseMatchResult != null) {
                 val groupValues = courseMatchResult.groupValues
 
@@ -118,7 +119,7 @@ open class DojoModeInstance(
 
         try {
             // check for section
-            val sectionMatchResult = SECTION_ENTERED_REGEX.find(string)
+            val sectionMatchResult = RegexManager[RegexKeys.PARKOUR_WARRIOR_DOJO_SECTION_TITLE]?.find(string)
             if (sectionMatchResult != null) {
                 val groupValues = sectionMatchResult.groupValues
 
@@ -144,7 +145,7 @@ open class DojoModeInstance(
             }
 
             // check for course finish
-            val completionResult = RUN_COMPLETE_SUBTITLE_REGEX.find(string)
+            val completionResult = RegexManager[RegexKeys.PARKOUR_WARRIOR_DOJO_RUN_COMPLETE_TITLE]?.find(string)
             if (completionResult != null) {
                 val groupValues = completionResult.groupValues
 
@@ -163,7 +164,7 @@ open class DojoModeInstance(
         }
 
         // check for medal
-        val medalsMatchResult = MEDAL_GAINED_REGEX.find(string)
+        val medalsMatchResult = RegexManager[RegexKeys.PARKOUR_WARRIOR_DOJO_MEDAL_GAINED]?.find(string)
         if (medalsMatchResult != null) {
             val groupValues = medalsMatchResult.groupValues
 
@@ -176,32 +177,6 @@ open class DojoModeInstance(
         }
 
         return false
-    }
-
-    companion object {
-        /**
-         * A regex that matches the title sent when the player enters a section.
-         */
-        @RegExp
-        val SECTION_ENTERED_REGEX = Regex("\\[([MB])([0-9]+)-([0-9]+)] (.+)")
-
-        /**
-         * A regex that matches the title sent when the player gains a medal.
-         */
-        @RegExp
-        val MEDAL_GAINED_REGEX = Regex("\\+([0-9]+).")
-
-        /**
-         * A regex that matches the subtitle sent when the player completes a run.
-         */
-        @RegExp
-        val RUN_COMPLETE_SUBTITLE_REGEX = Regex(".([0-9]+) .([0-9:.]+) .(\\w+)")
-
-        /**
-         * A regex that matches the course text displayed on the sidebar.
-         */
-        @RegExp
-        val COURSE_SIDEBAR_REGEX = Regex(".COURSE: Course #([0-9]+)")
     }
 
     /**

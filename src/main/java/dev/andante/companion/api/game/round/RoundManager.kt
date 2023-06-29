@@ -3,12 +3,13 @@ package dev.andante.companion.api.game.round
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dev.andante.companion.api.game.instance.RoundBasedGameInstance
+import dev.andante.companion.api.regex.RegexKeys
+import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
 import dev.andante.companion.setting.MusicSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
-import org.intellij.lang.annotations.RegExp
 
 open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     /**
@@ -47,24 +48,24 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
 
     fun onTitle(text: Text) {
         val string = text.string
-        if (string.matches(ROUND_NUMBER_TITLE)) {
+        if (RegexManager.matches(RegexKeys.ROUND_NUMBER_TITLE, string)) {
             initialize()
         }
     }
 
     fun onGameMessage(text: Text) {
         val string = text.string
-        if (string.matches(FACING_TEAM_REGEX)) {
+        if (RegexManager.matches(RegexKeys.FACING_TEAM, string)) {
             initialize()
-        } else if (string.matches(GAME_STARTED_REGEX)) {
-            initialize()
-            start()
-        } else if (string.matches(ROUND_STARTED_REGEX)) {
+        } else if (RegexManager.matches(RegexKeys.GAME_STARTED, string)) {
             initialize()
             start()
-        } else if (string.matches(ROUND_OVER_REGEX)) {
+        } else if (RegexManager.matches(RegexKeys.ROUND_STARTED, string)) {
+            initialize()
+            start()
+        } else if (RegexManager.matches(RegexKeys.ROUND_OVER, string)) {
             finish()
-        } else if (string.matches(GAME_OVER_REGEX) || string.matches(GAME_FINISHED_REGEX)) {
+        } else if (RegexManager.matches(RegexKeys.GAME_OVER, string) || RegexManager.matches(RegexKeys.GAME_FINISHED, string)) {
             if (state != State.FINISHED) {
                 finish()
                 CompanionSoundManager.play(CompanionSounds.MUSIC_ROUNDENDMUSIC) { MusicSettings.INSTANCE.musicVolume }
@@ -180,26 +181,5 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
 
     companion object {
         const val SERIALIZATION_KEY = "rounds"
-
-        @RegExp
-        val FACING_TEAM_REGEX = Regex("\\[.] You are facing the . \\w+ Team!")
-
-        @RegExp
-        val ROUND_NUMBER_TITLE = Regex("Round [0-9]+")
-
-        @RegExp
-        val GAME_STARTED_REGEX = Regex("\\[.] Game Started!")
-
-        @RegExp
-        val ROUND_STARTED_REGEX = Regex("\\[.] Round [0-9]+ started!")
-
-        @RegExp
-        val ROUND_OVER_REGEX = Regex("\\[.] Round [0-9]+ over!")
-
-        @RegExp
-        val GAME_FINISHED_REGEX = Regex("\\[.] You finished the game and came in [0-9]+.. place!")
-
-        @RegExp
-        val GAME_OVER_REGEX = Regex("\\[.] Game Over!")
     }
 }

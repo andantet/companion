@@ -6,10 +6,11 @@ import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.DojoMod
 import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.PracticeModeInstance
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.helper.AssociationHelper
+import dev.andante.companion.api.regex.RegexKeys
+import dev.andante.companion.api.regex.RegexManager
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
-import org.intellij.lang.annotations.RegExp
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.UUID
@@ -36,7 +37,7 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
         val string = text.string
 
         // check for chat mode
-        val modeMatchResult = MODE_CHANGE_REGEX.find(string)
+        val modeMatchResult = RegexManager[RegexKeys.PARKOUR_WARRIOR_DOJO_MODE_CHANGE]?.find(string)
         if (modeMatchResult != null) {
             val modeString = modeMatchResult.groupValues[1]
             Mode.chatStringAssociation(modeString)?.let { matchedMode ->
@@ -51,7 +52,7 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
         }
 
         // check for course restart
-        if (string.matches(COURSE_RESTARTED_REGEX)) {
+        if (RegexManager.matches(RegexKeys.PARKOUR_WARRIOR_DOJO_COURSE_RESTARTED, string)) {
             if (modeInstance?.onCourseRestart() == true) {
                 clearInstance()
                 return
@@ -70,7 +71,7 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
 
     override fun onTitle(text: Text) {
         // detect challenge run start
-        if (text.string == GO_TEXT) {
+        if (RegexManager.matches(RegexKeys.PARKOUR_WARRIOR_DOJO_COURSE_STARTED, text.string)) {
             setInstance(ChallengeModeInstance(MinecraftClient.getInstance().world!!))
         }
     }
@@ -116,23 +117,6 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
 
     companion object {
         val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion] Parkour Warrior Dojo Instance")
-
-        /**
-         * The title text displayed when a challenge mode run starts.
-         */
-        const val GO_TEXT = "Go!"
-
-        /**
-         * A regex that matches the message sent when the mode changes.
-         */
-        @RegExp
-        val MODE_CHANGE_REGEX = Regex("\\[.] You are now in: (\\w+) Mode")
-
-        /**
-         * A regex that matches the message sent when the player restarts a course.
-         */
-        @RegExp
-        val COURSE_RESTARTED_REGEX = Regex("\\[.] You restarted the course!")
     }
 
     /**

@@ -124,6 +124,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
 
         val json = JsonObject()
 
+        json.addProperty("uuid", uuid.toString())
         json.addProperty("course_number", courseNumber)
         json.addProperty("timestamp_ms", System.currentTimeMillis())
         json.addProperty("duration_ms", durationMs)

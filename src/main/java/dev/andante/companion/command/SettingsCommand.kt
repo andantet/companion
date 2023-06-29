@@ -6,9 +6,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType
 import dev.andante.companion.Companion
 import dev.andante.companion.setting.SettingsContainer
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 
 object SettingsCommand {
     private val RELOADED_SETTINGS_TEXT = Text.translatable("command.${Companion.MOD_ID}.settings.reloaded_all_settings")
@@ -16,9 +17,9 @@ object SettingsCommand {
 
     fun register(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
         dispatcher.register(
-            ClientCommandManager.literal("${Companion.MOD_ID}:settings")
+            literal("${Companion.MOD_ID}:settings")
                 .then(
-                    ClientCommandManager.literal("reload")
+                    literal("reload")
                         .executes(::executeReload)
                 )
         )
@@ -35,7 +36,7 @@ object SettingsCommand {
             }
         }
 
-        context.source.sendFeedback(RELOADED_SETTINGS_TEXT)
+        context.source.sendFeedback(RELOADED_SETTINGS_TEXT.formatted(Formatting.LIGHT_PURPLE))
         return 1
     }
 }

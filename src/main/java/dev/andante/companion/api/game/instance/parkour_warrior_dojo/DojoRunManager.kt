@@ -8,12 +8,12 @@ import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.JsonOps
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper.companionFile
+import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileFilter
-import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 object DojoRunManager {
@@ -27,7 +27,7 @@ object DojoRunManager {
     /**
      * Loaded run position timelines.
      */
-    private val runTimelines = mutableMapOf<UUID, PositionTimeline>()
+    private val runTimelines = mutableMapOf<String, PositionTimeline>()
 
     /**
      * Lists all run files stored in the runs folder.
@@ -40,13 +40,17 @@ object DojoRunManager {
      * Reloads run timelines from disk.
      */
     fun reloadRunTimelines(): Int {
+        // clear ghosts (ghosts detach from their registered timelines)
+        GhostPlayerManager.clear()
+
+        // clear previous timelines
         runTimelines.clear()
 
+        // load new timelines
         var count = 0
         listRunFiles().forEach { file ->
             try {
                 val fileName = file.nameWithoutExtension
-                val uuid = UUID.fromString(fileName)
 
                 val text = file.readText()
                 val json = JsonParser.parseString(text) as JsonObject
@@ -57,7 +61,7 @@ object DojoRunManager {
                     .result()
                     .orElseThrow()
 
-                runTimelines[uuid] = timeline
+                runTimelines[fileName] = timeline
                 count++
             } catch (exception: Exception) {
                 LOGGER.error("Could not parse run file: $file", exception)
@@ -67,15 +71,15 @@ object DojoRunManager {
         return count
     }
 
-    operator fun get(uuid: UUID): PositionTimeline? {
-        return runTimelines[uuid]
+    operator fun get(id: String): PositionTimeline? {
+        return runTimelines[id]
     }
 
     /**
      * Suggests the loaded runs to the given suggestions builder.
      */
     fun suggestRuns(builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
-        runTimelines.keys.map(UUID::toString).forEach(builder::suggest)
+        runTimelines.keys.forEach(builder::suggest)
         return builder.buildFuture()
     }
 }
