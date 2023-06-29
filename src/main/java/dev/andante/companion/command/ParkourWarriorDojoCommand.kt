@@ -18,6 +18,8 @@ import net.minecraft.text.Text
 import java.io.File
 
 object ParkourWarriorDojoCommand {
+    private val FEEDBACK_STYLE = Style.EMPTY.withColor(0x8E8ED5)
+
     private val NO_RUNS_FOUND_EXCEPTION = SimpleCommandExceptionType(Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.noRunsFound"))
     private val NO_RUN_FOUND_EXCEPTION = SimpleCommandExceptionType(Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.noRunFound"))
 
@@ -26,7 +28,7 @@ object ParkourWarriorDojoCommand {
     private const val ADDED_GHOST_KEY = "command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.ghostAdded"
     private const val REMOVED_GHOST_KEY = "command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.ghostRemoved"
 
-    private val CLEARED_ALL_GHOSTS_MESSAGE = Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.ghostsCleared")
+    private val CLEARED_ALL_GHOSTS_MESSAGE = Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.ghostsCleared").setStyle(FEEDBACK_STYLE)
 
     private const val ID_KEY = "id"
 
@@ -41,7 +43,7 @@ object ParkourWarriorDojoCommand {
                                 .then(
                                     literal("toggle")
                                         .then(
-                                            argument(ID_KEY, StringArgumentType.greedyString())
+                                            argument(ID_KEY, StringArgumentType.string())
                                                 .suggests { _, builder -> DojoRunManager.suggestRuns(builder) }
                                                 .executes { context -> executeGhost(context, false) }
                                                 .then(
@@ -77,12 +79,11 @@ object ParkourWarriorDojoCommand {
 
         val id = StringArgumentType.getString(context, ID_KEY)
         val timeline = DojoRunManager[id] ?: throw NO_RUN_FOUND_EXCEPTION.create()
-        val style = Style.EMPTY.withColor(0x8E8ED5)
         if (GhostPlayerManager.remove(timeline)) {
-            context.source.sendFeedback(Text.translatable(REMOVED_GHOST_KEY, id).setStyle(style))
+            context.source.sendFeedback(Text.translatable(REMOVED_GHOST_KEY, id).setStyle(FEEDBACK_STYLE))
         } else {
             GhostPlayerManager.add(timeline, repeat)
-            context.source.sendFeedback(Text.translatable(ADDED_GHOST_KEY, id).setStyle(style))
+            context.source.sendFeedback(Text.translatable(ADDED_GHOST_KEY, id).setStyle(FEEDBACK_STYLE))
         }
 
         return 1
@@ -90,7 +91,7 @@ object ParkourWarriorDojoCommand {
 
     private fun executeGhostClear(context: CommandContext<FabricClientCommandSource>): Int {
         GhostPlayerManager.clear()
-        context.source.sendFeedback(CLEARED_ALL_GHOSTS_MESSAGE)
+        context.source.sendFeedback(CLEARED_ALL_GHOSTS_MESSAGE.setStyle(FEEDBACK_STYLE))
         return 1
     }
 }
