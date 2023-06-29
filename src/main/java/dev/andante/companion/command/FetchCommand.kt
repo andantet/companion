@@ -7,7 +7,7 @@ import dev.andante.companion.api.icon.IconManager
 import dev.andante.companion.api.item.CustomItemManager
 import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.serialization.CachedFetchedJsonMap
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -19,17 +19,17 @@ object FetchCommand {
 
     fun register(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
         dispatcher.register(
-            ClientCommandManager.literal("${Companion.MOD_ID}:fetch")
+            literal("${Companion.MOD_ID}:fetch")
                 .then(
-                    ClientCommandManager.literal("icons")
+                    literal("icons")
                         .executes { execute(it, IconManager) }
                 )
                 .then(
-                    ClientCommandManager.literal("custom_items")
+                    literal("custom_items")
                         .executes { execute(it, CustomItemManager) }
                 )
                 .then(
-                    ClientCommandManager.literal("regex")
+                    literal("regex")
                         .executes { execute(it, RegexManager) }
                 )
         )

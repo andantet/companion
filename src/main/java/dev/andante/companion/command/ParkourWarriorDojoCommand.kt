@@ -1,6 +1,7 @@
 package dev.andante.companion.command
 
 import com.mojang.brigadier.CommandDispatcher
+import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
@@ -9,13 +10,12 @@ import dev.andante.companion.api.game.GameTracker
 import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoRunManager
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
-import net.minecraft.command.argument.UuidArgumentType
 import net.minecraft.text.Style
 import net.minecraft.text.Text
 import java.io.File
-import java.util.UUID
 
 object ParkourWarriorDojoCommand {
     private val NO_RUNS_FOUND_EXCEPTION = SimpleCommandExceptionType(Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.noRunsFound"))
@@ -28,27 +28,30 @@ object ParkourWarriorDojoCommand {
 
     private val CLEARED_ALL_GHOSTS_MESSAGE = Text.translatable("command.${Companion.MOD_ID}.parkour_warrior_dojo.runs.ghostsCleared")
 
-    private const val UUID_KEY = "uuid"
+    private const val ID_KEY = "id"
 
     fun register(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
         dispatcher.register(
-            ClientCommandManager.literal("${Companion.MOD_ID}:parkour_warrior_dojo")
+            literal("${Companion.MOD_ID}:parkour_warrior_dojo")
                 .then(
-                    ClientCommandManager.literal("runs")
+                    literal("runs")
                         .executes(::executeListRuns)
                         .then(
-                            ClientCommandManager.literal("ghost")
+                            literal("ghost")
                                 .then(
-                                    ClientCommandManager.argument(UUID_KEY, UuidArgumentType.uuid())
-                                        .suggests { _, builder -> DojoRunManager.suggestRuns(builder) }
-                                        .executes { context -> executeGhost(context, false) }
+                                    literal("toggle")
                                         .then(
-                                            ClientCommandManager.literal("repeat")
-                                                .executes { context -> executeGhost(context, true) }
+                                            argument(ID_KEY, StringArgumentType.greedyString())
+                                                .suggests { _, builder -> DojoRunManager.suggestRuns(builder) }
+                                                .executes { context -> executeGhost(context, false) }
+                                                .then(
+                                                    literal("repeat")
+                                                        .executes { context -> executeGhost(context, true) }
+                                                )
                                         )
                                 )
                                 .then(
-                                    ClientCommandManager.literal("clear")
+                                    literal("clear")
                                         .executes(::executeGhostClear)
                                 )
                         )
@@ -72,14 +75,14 @@ object ParkourWarriorDojoCommand {
             throw NOT_IN_PARKOUR_WARRIOR_DOJO_EXCEPTION.create()
         }
 
-        val uuid = context.getArgument(UUID_KEY, UUID::class.java)
-        val timeline = DojoRunManager[uuid] ?: throw NO_RUN_FOUND_EXCEPTION.create()
+        val id = StringArgumentType.getString(context, ID_KEY)
+        val timeline = DojoRunManager[id] ?: throw NO_RUN_FOUND_EXCEPTION.create()
         val style = Style.EMPTY.withColor(0x8E8ED5)
         if (GhostPlayerManager.remove(timeline)) {
-            context.source.sendFeedback(Text.translatable(REMOVED_GHOST_KEY, uuid).setStyle(style))
+            context.source.sendFeedback(Text.translatable(REMOVED_GHOST_KEY, id).setStyle(style))
         } else {
             GhostPlayerManager.add(timeline, repeat)
-            context.source.sendFeedback(Text.translatable(ADDED_GHOST_KEY, uuid).setStyle(style))
+            context.source.sendFeedback(Text.translatable(ADDED_GHOST_KEY, id).setStyle(style))
         }
 
         return 1
