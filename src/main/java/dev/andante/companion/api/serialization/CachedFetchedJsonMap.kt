@@ -109,8 +109,15 @@ open class CachedFetchedJsonMap<T>(
      * Retrieves a key from the map.
      */
     @Throws(IllegalArgumentException::class)
-    operator fun get(key: String): T? {
+    open operator fun get(key: String): T? {
         return fetchedMap[key] ?: cachedMap[key]
+    }
+
+    /**
+     * @return the stored map as a string
+     */
+    fun asString(): String {
+        return fetchedMap.entries.joinToString(transform = { "${it.key}: ${it.value}" }, separator = "\n- ", prefix = "- ")
     }
 
     companion object {

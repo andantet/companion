@@ -6,11 +6,11 @@ import dev.andante.companion.api.extension.captureGroup
 import dev.andante.companion.api.game.round.Round
 import dev.andante.companion.api.helper.AssociationHelper
 import dev.andante.companion.api.player.PlayerReference
+import dev.andante.companion.api.regex.RegexKeys
+import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
-import dev.andante.companion.api.text.TextRegex
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
-import org.intellij.lang.annotations.RegExp
 
 class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
     /**
@@ -49,7 +49,7 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
         // check for map
         if (map == null) {
             val firstRowString = ScoreboardAccessor.getSidebarRow(0)
-            MAP_SIDEBAR_REGEX.captureGroup(firstRowString)?.let { mapString ->
+            RegexManager[RegexKeys.MAP_SIDEBAR]?.captureGroup(firstRowString)?.let { mapString ->
                 map = GameMap.sidebarNameAssocation(mapString)
             }
         }
@@ -57,7 +57,7 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
         // check for modifier
         if (modifier == Modifier.INACTIVE) {
             val fourthRowString = ScoreboardAccessor.getSidebarRow(3)
-            MODIFIER_SIDEBAR_REGEX.captureGroup(fourthRowString)?.let { modifierString ->
+            RegexManager[RegexKeys.MODIFIER_SIDEBAR]?.captureGroup(fourthRowString)?.let { modifierString ->
                 modifier = Modifier.sidebarNameAssocation(modifierString) ?: Modifier.INACTIVE
             }
         }
@@ -67,7 +67,7 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
         val string = text.string
 
         // check for finishes
-        val finishedMatchResult = OTHER_PLAYER_FINISHED_REGEX.find(string) ?: PLAYER_FINISHED_REGEX.find(string)
+        val finishedMatchResult = RegexManager[RegexKeys.OTHER_PLAYER_FINISHED]?.find(string) ?: RegexManager[RegexKeys.PLAYER_FINISHED]?.find(string)
         if (finishedMatchResult != null) {
             val playerNameString = finishedMatchResult.groupValues[1]
             val playerReference = PlayerReference.fromUsername(playerNameString)
@@ -75,7 +75,7 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
         }
 
         // check for score
-        val scoreMatchResult = PLAYER_FINISHED_REGEX.find(string)
+        val scoreMatchResult = RegexManager[RegexKeys.PLAYER_FINISHED]?.find(string)
         if (scoreMatchResult != null) {
             val placementString = scoreMatchResult.groupValues[1]
             val scoreString = scoreMatchResult.groupValues[2]
@@ -116,32 +116,6 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
             finishedPlayersJson.add(reference.toJson())
         }
         json.add("finished_players", finishedPlayersJson)
-    }
-
-    companion object {
-        /**
-         * The message sent when the player finishes in TGTTOS.
-         */
-        @RegExp
-        val PLAYER_FINISHED_REGEX = Regex("\\[.] .. ${TextRegex.USERNAME_PATTERN}, you finished the round and came in ([0-9]+).. place! \\(Score: ([0-9]+).\\)")
-
-        /**
-         * The message sent when another player finishes in TGTTOS.
-         */
-        @RegExp
-        val OTHER_PLAYER_FINISHED_REGEX = Regex("\\[.] .. (${TextRegex.USERNAME_PATTERN}) finished in [0-9]+..!")
-
-        /**
-         * A regex that matches the map text displayed on the sidebar.
-         */
-        @RegExp
-        val MAP_SIDEBAR_REGEX = Regex(".MAP: (.+)")
-
-        /**
-         * A regex that matches the modifier text displayed on the sidebar.
-         */
-        @RegExp
-        val MODIFIER_SIDEBAR_REGEX = Regex(".MODIFIER: (.+)")
     }
 
     enum class GameMap(

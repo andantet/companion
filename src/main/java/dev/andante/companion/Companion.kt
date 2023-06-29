@@ -3,11 +3,11 @@ package dev.andante.companion
 import dev.andante.companion.api.game.GameTracker
 import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoRunManager
 import dev.andante.companion.api.game.type.GameTypes
-import dev.andante.companion.api.icon.IconManager
 import dev.andante.companion.api.item.CustomItemManager
 import dev.andante.companion.api.player.PlayerReference
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.player.position.serializer.PositionRecorderManager
+import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.server.ServerTracker
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
@@ -25,7 +25,7 @@ object Companion : ClientModInitializer {
     const val MOD_ID = "companion"
     private const val MOD_NAME = "MCCI: Companion"
 
-    val LOGGER: Logger = LoggerFactory.getLogger(MOD_NAME)
+    private val LOGGER: Logger = LoggerFactory.getLogger(MOD_NAME)
 
     @Suppress("DeferredResultUnused")
     override fun onInitializeClient() {
@@ -57,7 +57,7 @@ object Companion : ClientModInitializer {
         SettingsContainer.ALL_CONTAINERS.forEach(SettingsContainer<*>::load)
 
         // fetchers
-        IconManager.fetch()
+        RegexManager.fetch()
         CustomItemManager.fetch()
 
         // commands

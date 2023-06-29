@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext
 import dev.andante.companion.Companion
 import dev.andante.companion.api.icon.IconManager
 import dev.andante.companion.api.item.CustomItemManager
+import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.serialization.CachedFetchedJsonMap
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
@@ -27,6 +28,10 @@ object FetchCommand {
                     ClientCommandManager.literal("custom_items")
                         .executes { execute(it, CustomItemManager) }
                 )
+                .then(
+                    ClientCommandManager.literal("regex")
+                        .executes { execute(it, RegexManager) }
+                )
         )
     }
 
@@ -37,6 +42,7 @@ object FetchCommand {
                 context.source.sendFeedback(SOMETHING_WENT_WRONG_TEXT)
             } else {
                 context.source.sendFeedback(Text.translatable(FETCHED_ICONS_KEY, manager.cacheId))
+                context.source.sendFeedback(Text.literal(manager.asString()))
             }
         }
         return 1

@@ -12,6 +12,7 @@ import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.command.argument.UuidArgumentType
+import net.minecraft.text.Style
 import net.minecraft.text.Text
 import java.io.File
 import java.util.UUID
@@ -73,11 +74,12 @@ object ParkourWarriorDojoCommand {
 
         val uuid = context.getArgument(UUID_KEY, UUID::class.java)
         val timeline = DojoRunManager[uuid] ?: throw NO_RUN_FOUND_EXCEPTION.create()
+        val style = Style.EMPTY.withColor(0x8E8ED5)
         if (GhostPlayerManager.remove(timeline)) {
-            context.source.sendFeedback(Text.translatable(REMOVED_GHOST_KEY, uuid))
+            context.source.sendFeedback(Text.translatable(REMOVED_GHOST_KEY, uuid).setStyle(style))
         } else {
             GhostPlayerManager.add(timeline, repeat)
-            context.source.sendFeedback(Text.translatable(ADDED_GHOST_KEY, uuid))
+            context.source.sendFeedback(Text.translatable(ADDED_GHOST_KEY, uuid).setStyle(style))
         }
 
         return 1
