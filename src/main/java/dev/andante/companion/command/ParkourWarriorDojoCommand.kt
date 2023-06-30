@@ -51,7 +51,7 @@ object ParkourWarriorDojoCommand {
                         )
                 )
                 .then(
-                    literal("ghost")
+                    literal("ghosts")
                         .then(
                             literal("toggle")
                                 .then(
