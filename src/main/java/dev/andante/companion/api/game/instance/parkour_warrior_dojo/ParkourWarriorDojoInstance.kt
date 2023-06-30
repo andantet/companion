@@ -6,6 +6,7 @@ import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.DojoMod
 import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.PracticeModeInstance
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.helper.AssociationHelper
+import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
@@ -31,6 +32,10 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
 
     override fun tick(client: MinecraftClient) {
         modeInstance?.tick(client)
+
+        if (modeInstance != null) {
+            GhostPlayerManager.tickTimeline(client)
+        }
     }
 
     override fun onGameMessage(text: Text, overlay: Boolean) {

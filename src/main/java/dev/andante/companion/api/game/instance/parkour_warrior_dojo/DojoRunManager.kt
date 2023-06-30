@@ -9,6 +9,7 @@ import com.mojang.serialization.JsonOps
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper.companionFile
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
+import dev.andante.companion.api.player.position.serializer.IdentifiablePositionTimeline
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -40,9 +41,6 @@ object DojoRunManager {
      * Reloads run timelines from disk.
      */
     fun reloadRunTimelines(): Int {
-        // clear ghosts (ghosts detach from their registered timelines)
-        GhostPlayerManager.clear()
-
         // clear previous timelines
         runTimelines.clear()
 
@@ -68,11 +66,14 @@ object DojoRunManager {
             }
         }
 
+        // verify that ghosts are still valid
+        GhostPlayerManager.tryInvalidatePlayers(runTimelines)
+
         return count
     }
 
-    operator fun get(id: String): PositionTimeline? {
-        return runTimelines[id]
+    operator fun get(id: String): IdentifiablePositionTimeline? {
+        return runTimelines[id]?.let { timeline -> IdentifiablePositionTimeline(id, timeline) }
     }
 
     /**

@@ -1,6 +1,7 @@
 package dev.andante.companion.api.player.ghost
 
 import dev.andante.companion.api.event.WorldJoinCallback
+import dev.andante.companion.api.player.position.serializer.IdentifiablePositionTimeline
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import dev.andante.companion.mixin.ghost.WorldRendererMixin
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
@@ -48,7 +49,7 @@ object GhostPlayerManager {
     /**
      * Adds a ghost with the given parameters.
      */
-    fun add(timeline: PositionTimeline, repeat: Boolean = false): GhostPlayerEntity? {
+    fun add(timeline: IdentifiablePositionTimeline, repeat: Boolean = false): GhostPlayerEntity? {
         val client = MinecraftClient.getInstance()
         client.world?.let { world ->
             val player = GhostPlayerEntity(timeline, repeat, world, client.session.profile)
@@ -62,8 +63,8 @@ object GhostPlayerManager {
     /**
      * Removes a ghost.
      */
-    fun remove(timeline: PositionTimeline): Boolean {
-        return ghostPlayers.removeIf { it.timeline == timeline }
+    fun remove(timeline: IdentifiablePositionTimeline): Boolean {
+        return ghostPlayers.removeIf { it.timelineReference == timeline }
     }
 
     /**
@@ -73,8 +74,16 @@ object GhostPlayerManager {
         ghostPlayers.clear()
     }
 
-    operator fun contains(timeline: PositionTimeline): Boolean {
-        return ghostPlayers.any { it.timeline == timeline }
+    /**
+     * Removes any ghost player with a timeline id not in the given map.
+     */
+    fun tryInvalidatePlayers(registeredTimelines: Map<String, PositionTimeline>) {
+        val registeredIds = registeredTimelines.keys
+        ghostPlayers.removeIf { player -> !registeredIds.contains(player.timelineReference.id) }
+    }
+
+    operator fun contains(timeline: IdentifiablePositionTimeline): Boolean {
+        return ghostPlayers.any { it.timelineReference == timeline }
     }
 
     /**

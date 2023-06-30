@@ -66,11 +66,6 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
      */
     private val positionRecorder = PositionRecorderManager.create(world)
 
-    override fun tick(client: MinecraftClient) {
-        super.tick(client)
-        GhostPlayerManager.tickTimeline(client)
-    }
-
     override fun onSectionUpdate(section: Section?, previousSection: Section?, medals: Int) {
         if (section == null && previousSection != null) {
             completedSections.add(previousSection)

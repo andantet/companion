@@ -3,7 +3,7 @@ package dev.andante.companion.api.player.ghost
 import com.mojang.authlib.GameProfile
 import dev.andante.companion.Companion
 import dev.andante.companion.api.player.position.TemporalPosition
-import dev.andante.companion.api.player.position.serializer.PositionTimeline
+import dev.andante.companion.api.player.position.serializer.IdentifiablePositionTimeline
 import net.minecraft.client.network.OtherClientPlayerEntity
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.player.PlayerEntity
@@ -16,7 +16,7 @@ class GhostPlayerEntity(
     /**
      * The timeline to run.
      */
-    val timeline: PositionTimeline,
+    val timelineReference: IdentifiablePositionTimeline,
 
     /**
      * Whether to repeat the timeline.
@@ -50,7 +50,7 @@ class GhostPlayerEntity(
         prevBodyYaw = bodyYaw
 
         // update positions
-        timeline.mappedPositions[timelineTick]?.let(::updateTemporalPosition)
+        timelineReference.timeline.mappedPositions[timelineTick]?.let(::updateTemporalPosition)
 
         // animate
         updateLimbs(false)
@@ -61,7 +61,7 @@ class GhostPlayerEntity(
      */
     fun tickTimeline(): Boolean {
         // check finished
-        val finished = timeline.isFinished(timelineTick)
+        val finished = timelineReference.timeline.isFinished(timelineTick)
         return if (finished) {
             if (repeatTimeline) {
                 // repeat
