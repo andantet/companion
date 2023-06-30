@@ -122,6 +122,10 @@ loom {
   accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
 
   runs {
+    server {
+      ideConfigGenerated = false
+    }
+
     testClient {
       client()
 
