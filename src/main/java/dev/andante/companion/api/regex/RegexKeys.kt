@@ -63,4 +63,14 @@ object RegexKeys {
      * A regex that matches the course text displayed on the sidebar.
      */
     const val PARKOUR_WARRIOR_DOJO_COURSE_SIDEBAR = "parkour_warrior_dojo_course_sidebar"
+
+    /**
+     * A regex that matches the tooltip displayed to equip items.
+     */
+    const val ITEM_EQUIP = "item_equip"
+
+    /**
+     * A regex that matches the tooltip displayed to unequip items.
+     */
+    const val ITEM_UNEQUIP = "item_unequip"
 }

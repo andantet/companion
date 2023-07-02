@@ -6,11 +6,6 @@ import net.minecraft.scoreboard.ScoreboardObjective
 
 object ScoreboardAccessor {
     /**
-     * The client instance.
-     */
-    private val CLIENT = MinecraftClient.getInstance()
-
-    /**
      * The id of the sidebar display slot.
      */
     private val SIDEBAR_DISPLAY_SLOT_ID = Scoreboard.getDisplaySlotId("sidebar")
@@ -19,7 +14,7 @@ object ScoreboardAccessor {
      * Gets the client scoreboard.
      */
     private fun getScoreboard(): Scoreboard? {
-        return CLIENT.player?.scoreboard
+        return MinecraftClient.getInstance().player?.scoreboard
     }
 
     /**

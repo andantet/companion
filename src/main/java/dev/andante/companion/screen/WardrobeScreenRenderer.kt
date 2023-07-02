@@ -1,12 +1,17 @@
 package dev.andante.companion.screen
 
+import dev.andante.companion.api.helper.lore
 import dev.andante.companion.api.item.CustomItemKeys
 import dev.andante.companion.api.item.CustomItemManager
+import dev.andante.companion.api.regex.RegexKeys
+import dev.andante.companion.api.regex.RegexManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.entity.EquipmentSlot
+import net.minecraft.item.ItemStack
+import net.minecraft.text.Text
 
 /**
  * Manages rendering of the wardrobe screen.
@@ -16,7 +21,7 @@ object WardrobeScreenRenderer {
     private val REGULAR_WIDTH get() = 176
 
     private val PLAYER_RENDER_BACKGROUND_WIDTH get() = 178
-    private val PLAYER_RENDER_BACKGROUND_HEIGHT get() = 130
+    private val PLAYER_RENDER_BACKGROUND_HEIGHT get() = 178
     private val PLAYER_RENDER_SEPARATION get() = 20
 
     /**
@@ -38,11 +43,34 @@ object WardrobeScreenRenderer {
     fun renderPlayer(client: MinecraftClient, screen: HandledScreen<*>, context: DrawContext) {
         // get current menu
         screen.screenHandler.cursorStack.let { stack ->
+            if (stack.isEmpty) {
+                return@let
+            }
+
+            // check menu
             stack.nbt?.getInt("CustomModelData")?.let { value ->
                 CosmeticMenu.CUSTOM_ITEM_MAP_RESOLVED
                     .entries
                     .firstOrNull { it.value == value } // compare values
                     ?.let { (menu, _) -> currentMenu = menu } // set current menu
+            }
+
+            // check lore
+            val loreStrings = stack.lore.map(Text::getString)
+            val loreMatcher = { key: String -> loreStrings.any { string -> RegexManager.matches(key, string) } }
+
+            if (loreMatcher(RegexKeys.ITEM_UNEQUIP)) {
+                // unequip slot
+                currentMenu.equipmentSlot?.let { slot ->
+                    client.player?.equipStack(slot, ItemStack.EMPTY)
+                }
+            } else if (loreMatcher(RegexKeys.ITEM_EQUIP)) {
+                // equip slot
+                currentMenu.equipmentSlot?.let { slot ->
+                    client.send {
+                        client.player?.equipStack(slot, stack)
+                    }
+                }
             }
         }
 
@@ -51,7 +79,7 @@ object WardrobeScreenRenderer {
             val x = screen.x - PLAYER_RENDER_SEPARATION - PLAYER_RENDER_BACKGROUND_WIDTH
             val y = screen.y
             context.fill(x, y, x + PLAYER_RENDER_BACKGROUND_WIDTH, y + PLAYER_RENDER_BACKGROUND_HEIGHT, 0x7FFFFFFF)
-            InventoryScreen.drawEntity(context, x + (PLAYER_RENDER_BACKGROUND_WIDTH / 2) - 30, y + PLAYER_RENDER_BACKGROUND_HEIGHT - 10, 40, -40f, 0f, player)
+            InventoryScreen.drawEntity(context, x + (PLAYER_RENDER_BACKGROUND_WIDTH / 2) - 30, y + PLAYER_RENDER_BACKGROUND_HEIGHT - 30, 50, -40f, 0f, player)
         }
     }
 
