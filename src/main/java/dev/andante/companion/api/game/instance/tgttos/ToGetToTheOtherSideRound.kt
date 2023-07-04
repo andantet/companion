@@ -2,6 +2,7 @@ package dev.andante.companion.api.game.instance.tgttos
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.mojang.serialization.JsonOps
 import dev.andante.companion.api.extension.captureGroup
 import dev.andante.companion.api.game.round.Round
 import dev.andante.companion.api.helper.AssociationHelper
@@ -111,10 +112,10 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
         json.addProperty("score_earned", scoreEarned)
 
         // finished players
-        val finishedPlayersJson = JsonArray()
-        finishedPlayers.forEach { reference ->
-            finishedPlayersJson.add(reference.toJson())
-        }
+        val finishedPlayersJson = PlayerReference.CODEC.listOf()
+            .encodeStart(JsonOps.INSTANCE, finishedPlayers)
+            .result()
+            .orElse(JsonArray())
         json.add("finished_players", finishedPlayersJson)
     }
 

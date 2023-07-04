@@ -1,65 +1,62 @@
 package dev.andante.companion.api.game.instance.parkour_warrior_dojo
 
-import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.JsonOps
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.challenge.DojoChallengeRun
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper.companionFile
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
-import dev.andante.companion.api.player.position.serializer.IdentifiablePositionTimeline
-import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileFilter
 import java.util.concurrent.CompletableFuture
 
-object DojoRunManager {
-    private val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion / Parkour Warrior Dojo] Run Manager")
+object DojoChallengeRunManager {
+    private val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion / Parkour Warrior Dojo] Challenge Run Manager")
 
     /**
      * The folder where runs are stored.
      */
-    val RUNS_FOLDER = companionFile("game_instances/${GameTypes.PARKOUR_WARRIOR_DOJO.id}/runs")
+    val GAME_TYPE_FOLDER = companionFile("game_instances/${GameTypes.PARKOUR_WARRIOR_DOJO.id}")
 
     /**
-     * Loaded run position timelines.
+     * Loaded challenge runs.
      */
-    private val runTimelines = mutableMapOf<String, PositionTimeline>()
+    private val challengeRuns = mutableMapOf<String, DojoChallengeRun>()
 
     /**
      * Lists all run files stored in the runs folder.
      */
     fun listRunFiles(): List<File> {
-        return RUNS_FOLDER.listFiles(FileFilter { it.extension == "json" })?.toList() ?: emptyList()
+        return GAME_TYPE_FOLDER.listFiles(FileFilter { it.extension == "json" })?.toList() ?: emptyList()
     }
 
     /**
-     * Reloads run timelines from disk.
+     * Reloads all challenge runs from disk.
      */
-    fun reloadRunTimelines(): Int {
-        // clear previous timelines
-        runTimelines.clear()
+    fun reload(): Int {
+        // clear previous runs
+        challengeRuns.clear()
 
-        // load new timelines
+        // load new runs
         var count = 0
         listRunFiles().forEach { file ->
             try {
                 val fileName = file.nameWithoutExtension
 
                 val text = file.readText()
-                val json = JsonParser.parseString(text) as JsonObject
-                val timelineJson = json.getAsJsonObject("position_timeline")
+                val json = JsonParser.parseString(text)
 
-                val timeline = PositionTimeline.CODEC.decode(JsonOps.INSTANCE, timelineJson)
-                    .map(Pair<PositionTimeline, *>::getFirst)
+                val run = DojoChallengeRun.CODEC.decode(JsonOps.INSTANCE, json)
+                    .map(Pair<DojoChallengeRun, *>::getFirst)
                     .result()
                     .orElseThrow()
 
-                runTimelines[fileName] = timeline
+                challengeRuns[fileName] = run
                 count++
             } catch (exception: Exception) {
                 LOGGER.error("Could not parse run file: $file", exception)
@@ -67,20 +64,20 @@ object DojoRunManager {
         }
 
         // verify that ghosts are still valid
-        GhostPlayerManager.tryInvalidatePlayers(runTimelines)
+        GhostPlayerManager.tryInvalidatePlayers(challengeRuns.mapValues { it.value.positionTimeline })
 
         return count
     }
 
-    operator fun get(id: String): IdentifiablePositionTimeline? {
-        return runTimelines[id]?.let { timeline -> IdentifiablePositionTimeline(id, timeline) }
+    operator fun get(id: String): DojoChallengeRun? {
+        return challengeRuns[id]
     }
 
     /**
      * Suggests the loaded runs to the given suggestions builder.
      */
     fun suggestRuns(builder: SuggestionsBuilder): CompletableFuture<Suggestions> {
-        runTimelines.keys.forEach(builder::suggest)
+        challengeRuns.keys.forEach(builder::suggest)
         return builder.buildFuture()
     }
 }

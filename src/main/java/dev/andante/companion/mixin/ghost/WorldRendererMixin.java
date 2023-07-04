@@ -30,14 +30,14 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public abstract class WorldRendererMixin {
     @Shadow protected abstract void renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers);
 
-    @Shadow @Final public BufferBuilderStorage bufferBuilders;
+    @Shadow @Final private BufferBuilderStorage bufferBuilders;
     @Shadow private @Nullable PostEffectProcessor entityOutlinePostProcessor;
     @Shadow @Final private MinecraftClient client;
 
     /**
      * Renders ghost players.
      */
-    @SuppressWarnings({"InvalidInjectorMethodSignature", "MixinAnnotationTarget", "UnresolvedMixinReference"})
+    @SuppressWarnings("InvalidInjectorMethodSignature")
     @Inject(
             method = "render",
             at = @At(

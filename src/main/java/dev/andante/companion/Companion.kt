@@ -1,7 +1,7 @@
 package dev.andante.companion
 
 import dev.andante.companion.api.game.GameTracker
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoRunManager
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoChallengeRunManager
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.item.CustomItemManager
 import dev.andante.companion.api.player.PlayerReference
@@ -44,7 +44,7 @@ object Companion : ClientModInitializer {
         // positions
         GhostPlayerManager
         PositionRecorderManager
-        DojoRunManager.reloadRunTimelines()
+        DojoChallengeRunManager.reload()
 
         // games
         GameTypes

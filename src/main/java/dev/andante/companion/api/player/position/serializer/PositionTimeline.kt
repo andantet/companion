@@ -42,7 +42,7 @@ class PositionTimeline(
          */
         val CODEC: Codec<PositionTimeline> = RecordCodecBuilder.create { instance ->
             instance.group(
-                Codec.list(TemporalPosition.CODEC).fieldOf("positions").forGetter(PositionTimeline::positions)
+                TemporalPosition.CODEC.listOf().fieldOf("positions").forGetter(PositionTimeline::positions)
             ).apply(instance, ::PositionTimeline)
         }
     }

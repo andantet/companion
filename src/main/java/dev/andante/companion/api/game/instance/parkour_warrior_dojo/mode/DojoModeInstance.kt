@@ -1,9 +1,9 @@
 package dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode
 
-import com.google.gson.JsonObject
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoRunManager
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoChallengeRunManager
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoSection
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.challenge.DojoCompletionType
 import dev.andante.companion.api.game.type.GameTypes
-import dev.andante.companion.api.helper.AssociationHelper
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
@@ -33,7 +33,7 @@ open class DojoModeInstance(
      */
     val uuid: UUID = UUID.randomUUID()
 
-    protected var currentSection: Section? = null
+    protected var currentSection: DojoSection? = null
     protected var courseNumber: Int = -1
 
     /**
@@ -69,13 +69,13 @@ open class DojoModeInstance(
     /**
      * Called when the current parkour section updates.
      */
-    open fun onSectionUpdate(section: Section?, previousSection: Section?, medals: Int) {
+    open fun onSectionUpdate(section: DojoSection?, previousSection: DojoSection?, medals: Int) {
     }
 
     /**
      * Called when a course is completed by the player.
      */
-    open fun onCourseCompleted(medals: Int, time: String, completionType: CompletionType) {
+    open fun onCourseCompleted(medals: Int, time: String, completionType: DojoCompletionType) {
     }
 
     /**
@@ -99,8 +99,8 @@ open class DojoModeInstance(
         }
 
         GlobalScope.launch {
-            synchronized(DojoRunManager) {
-                DojoRunManager.reloadRunTimelines()
+            synchronized(DojoChallengeRunManager) {
+                DojoChallengeRunManager.reload()
             }
         }
 
@@ -108,7 +108,6 @@ open class DojoModeInstance(
     }
 
     open fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
-        textRendererConsumer(Text.literal(currentSection?.toJson().toString()))
     }
 
     /**
@@ -130,13 +129,13 @@ open class DojoModeInstance(
                 val sectionNameString = groupValues[4]
 
                 // parse captures
-                val branch = Section.Branch.titleAbbreviationAssocation(branchString)
+                val branch = DojoSection.Branch.titleAbbreviationAssocation(branchString)
                 val branchNo = branchNoString.toInt()
                 val sectionNo = sectionNoString.toInt()
 
                 if (branch != null) {
                     // update section
-                    val section = Section(branch, branchNo, sectionNo, sectionNameString)
+                    val section = DojoSection(branch, branchNo, sectionNo, sectionNameString)
                     onSectionUpdate(section, currentSection, 0)
                     currentSection = section
                 }
@@ -155,7 +154,7 @@ open class DojoModeInstance(
                 val completionTypeString = groupValues[3]
 
                 val medals = medalsString.toInt()
-                val completionType = CompletionType.valueOf(completionTypeString.uppercase())
+                val completionType = DojoCompletionType.valueOf(completionTypeString.uppercase())
 
                 onCourseCompleted(medals, timeString, completionType)
                 return true
@@ -179,76 +178,4 @@ open class DojoModeInstance(
         return false
     }
 
-    /**
-     * A store of section information.
-     */
-    data class Section(
-        /**
-         * The section's branch.
-         */
-        val branch: Branch,
-
-        /**
-         * The section's branch number.
-         */
-        val branchNumber: Int,
-
-        /**
-         * The individual section's number.
-         */
-        val sectionNumber: Int,
-
-        /**
-         * The individual section's name.
-         */
-        val sectionName: String
-    ) {
-        fun toJson(): JsonObject {
-            val json = JsonObject()
-            json.addProperty("branch", branch.name)
-            json.addProperty("branch_number", branchNumber)
-            json.addProperty("section_number", sectionNumber)
-            json.addProperty("section_name", sectionName)
-            return json
-        }
-
-        enum class Branch(
-            /**
-             * The abbreviated version displayed on the section title.
-             */
-            val titleAbbreviation: String
-        ) {
-            MAIN("M"),
-            BONUS("B");
-
-            companion object {
-                /**
-                 * @return the mode of the given chat string
-                 */
-                val titleAbbreviationAssocation = AssociationHelper.createAssociationFunction(Branch.values(), Branch::titleAbbreviation)
-            }
-        }
-    }
-
-    enum class CompletionType {
-        STANDARD,
-        ADVANCED,
-        EXPERT,
-        INCOMPLETE
-    }
-
-    enum class Difficulty(
-        val endingMedals: Int
-    ) {
-        EASY(1),
-        MEDIUM(2),
-        HARD(3);
-
-        companion object {
-            /**
-             * @return the difficulty of the given ending medals
-             */
-            val endingMedalsAssociation = AssociationHelper.createAssociationFunction(Difficulty.values(), Difficulty::endingMedals)
-        }
-    }
 }

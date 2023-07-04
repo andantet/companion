@@ -7,9 +7,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import dev.andante.companion.Companion
 import dev.andante.companion.api.game.GameTracker
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoRunManager
+import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoChallengeRunManager
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
+import dev.andante.companion.api.player.position.serializer.IdentifiablePositionTimeline
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
@@ -56,7 +57,7 @@ object ParkourWarriorDojoCommand {
                             literal("toggle")
                                 .then(
                                     argument(ID_KEY, StringArgumentType.string())
-                                        .suggests { _, builder -> DojoRunManager.suggestRuns(builder) }
+                                        .suggests { _, builder -> DojoChallengeRunManager.suggestRuns(builder) }
                                         .executes { context -> executeGhost(context, false) }
                                         .then(
                                             literal("repeat")
@@ -74,7 +75,7 @@ object ParkourWarriorDojoCommand {
 
     @Throws(CommandSyntaxException::class)
     private fun executeListRuns(context: CommandContext<FabricClientCommandSource>): Int {
-        val files = DojoRunManager.listRunFiles()
+        val files = DojoChallengeRunManager.listRunFiles()
         if (files.isNotEmpty()) {
             context.source.sendFeedback(Text.translatable(RUNS_LIST_KEY, files.joinToString(transform = File::nameWithoutExtension, prefix = "- ", separator = "\n- ")).setStyle(FEEDBACK_STYLE))
         } else {
@@ -84,7 +85,7 @@ object ParkourWarriorDojoCommand {
     }
 
     private fun executeReloadRuns(context: CommandContext<FabricClientCommandSource>): Int {
-        val count = DojoRunManager.reloadRunTimelines()
+        val count = DojoChallengeRunManager.reload()
         context.source.sendFeedback(Text.translatable(RELOADED_RUNS_KEY, count).setStyle(FEEDBACK_STYLE))
         return 1
     }
@@ -95,11 +96,12 @@ object ParkourWarriorDojoCommand {
         }
 
         val id = StringArgumentType.getString(context, ID_KEY)
-        val timeline = DojoRunManager[id] ?: throw NO_RUN_FOUND_EXCEPTION.create()
-        if (GhostPlayerManager.remove(timeline)) {
+        val challengeRun = DojoChallengeRunManager[id] ?: throw NO_RUN_FOUND_EXCEPTION.create()
+        val positionTimeline = IdentifiablePositionTimeline(id, challengeRun.positionTimeline)
+        if (GhostPlayerManager.remove(positionTimeline)) {
             context.source.sendFeedback(Text.translatable(REMOVED_GHOST_KEY, id).setStyle(GHOST_FEEDBACK_STYLE))
         } else {
-            GhostPlayerManager.add(timeline, repeat)
+            GhostPlayerManager.add(positionTimeline, repeat)
             context.source.sendFeedback(Text.translatable(ADDED_GHOST_KEY, id).setStyle(GHOST_FEEDBACK_STYLE))
         }
 
