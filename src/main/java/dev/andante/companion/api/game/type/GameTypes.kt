@@ -2,7 +2,7 @@ package dev.andante.companion.api.game.type
 
 import dev.andante.companion.api.game.instance.battle_box.BattleBoxInstance
 import dev.andante.companion.api.game.instance.hitw.HoleInTheWallInstance
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.ParkourWarriorDojoInstance
+import dev.andante.companion.api.game.instance.parkour_warrior.ParkourWarriorInstance
 import dev.andante.companion.api.game.instance.sky_battle.SkyBattleInstance
 import dev.andante.companion.api.game.instance.tgttos.ToGetToTheOtherSideInstance
 import dev.andante.companion.api.registry.BasicRegistry
@@ -47,10 +47,10 @@ object GameTypes : BasicRegistry<GameType<*>>() {
     )))
 
     /**
-     * Represents the game 'Parkour Warrior Dojo'.
+     * Represents the game 'Parkour Warrior'.
      */
-    val PARKOUR_WARRIOR_DOJO = register("parkour_warrior_dojo", GameType(::ParkourWarriorDojoInstance, GameTypeSettings(
+    val PARKOUR_WARRIOR = register("parkour_warrior", GameType(::ParkourWarriorInstance, GameTypeSettings(
         "PARKOUR WARRIOR", CompanionSounds.MUSIC_GAME_PARKOUR_WARRIOR_LOOP,
-        { false }, { MetricsSettings.INSTANCE.parkourWarriorDojoMetrics }
+        { false }, { MetricsSettings.INSTANCE.parkourWarriorMetrics }
     )))
 }

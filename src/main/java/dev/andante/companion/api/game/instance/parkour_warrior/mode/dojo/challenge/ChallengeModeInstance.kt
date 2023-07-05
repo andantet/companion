@@ -1,13 +1,11 @@
-package dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode
+package dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge
 
 import com.google.gson.GsonBuilder
 import com.mojang.serialization.JsonOps
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoChallengeRunManager
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoDifficulty
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoSection
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.ParkourWarriorDojoInstance
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.challenge.DojoChallengeRun
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.challenge.DojoCompletionType
+import dev.andante.companion.api.game.instance.parkour_warrior.ParkourWarriorInstance
+import dev.andante.companion.api.game.instance.parkour_warrior.ParkourWarriorSection
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.DojoDifficulty
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.DojoModeInstance
 import dev.andante.companion.api.player.PlayerReference
 import dev.andante.companion.api.player.position.serializer.PositionRecorderManager
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
@@ -28,7 +26,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
     /**
      * The file of this mode's run.
      */
-    private val file = DojoChallengeRunManager.GAME_TYPE_FOLDER.resolve("$uuid.json")
+    private val file = DojoChallengeRunManager.RUNS_DIRECTORY.resolve("$uuid.json")
 
     /**
      * The time that the run started at.
@@ -43,7 +41,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
     /**
      * This run's completed sections.
      */
-    private val completedSections = mutableListOf<DojoSection>()
+    private val completedSections = mutableListOf<ParkourWarriorSection>()
 
     /**
      * The duration of the run as provided by a string.
@@ -70,7 +68,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
      */
     private val positionRecorder = PositionRecorderManager.create(world)
 
-    override fun onSectionUpdate(section: DojoSection?, previousSection: DojoSection?, medals: Int) {
+    override fun onSectionUpdate(section: ParkourWarriorSection?, previousSection: ParkourWarriorSection?, medals: Int) {
         if (section == null && previousSection != null) {
             completedSections.add(previousSection)
         }
@@ -88,7 +86,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
         currentSection?.let(completedSections::add)
 
         // flush to json
-        if (MetricsSettings.INSTANCE.parkourWarriorDojoMetrics) {
+        if (MetricsSettings.INSTANCE.parkourWarriorMetrics) {
             val positionTimeline = PositionRecorderManager.removeAndCompile(positionRecorder)
             flushToJson(positionTimeline)
         } else {
@@ -101,7 +99,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
         completionType = DojoCompletionType.INCOMPLETE
 
         // flush to json
-        if (MetricsSettings.INSTANCE.parkourWarriorDojoMetrics) {
+        if (MetricsSettings.INSTANCE.parkourWarriorMetrics) {
             val positionTimeline = PositionRecorderManager.removeAndCompile(positionRecorder)
             flushToJson(positionTimeline)
         } else {
@@ -118,7 +116,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
     }
 
     private fun flushToJson(positionTimeline: PositionTimeline) {
-        ParkourWarriorDojoInstance.LOGGER.info("Flushing challenge instance to JSON: ${file.path}")
+        ParkourWarriorInstance.LOGGER.info("Flushing challenge instance to JSON: ${file.path}")
 
         val profile = MinecraftClient.getInstance().session.profile
         val reference = Optional.of(PlayerReference(profile.id, profile.name))

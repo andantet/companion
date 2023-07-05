@@ -1,7 +1,7 @@
 package dev.andante.companion
 
 import dev.andante.companion.api.game.GameTracker
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoChallengeRunManager
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge.DojoChallengeRunManager
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.item.CustomItemManager
 import dev.andante.companion.api.player.PlayerReference

@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import dev.andante.companion.Companion
 import dev.andante.companion.api.game.GameTracker
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoChallengeRunManager
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge.DojoChallengeRunManager
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.player.position.serializer.IdentifiablePositionTimeline
@@ -91,7 +91,7 @@ object ParkourWarriorDojoCommand {
     }
 
     private fun executeGhost(context: CommandContext<FabricClientCommandSource>, repeat: Boolean): Int {
-        if (GameTracker.gameType != GameTypes.PARKOUR_WARRIOR_DOJO) {
+        if (GameTracker.gameType != GameTypes.PARKOUR_WARRIOR) {
             throw NOT_IN_PARKOUR_WARRIOR_DOJO_EXCEPTION.create()
         }
 

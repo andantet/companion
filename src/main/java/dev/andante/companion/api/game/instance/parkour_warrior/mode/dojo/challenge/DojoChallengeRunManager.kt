@@ -1,11 +1,10 @@
-package dev.andante.companion.api.game.instance.parkour_warrior_dojo
+package dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge
 
 import com.google.gson.JsonParser
 import com.mojang.brigadier.suggestion.Suggestions
 import com.mojang.brigadier.suggestion.SuggestionsBuilder
 import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.JsonOps
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.challenge.DojoChallengeRun
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper.companionFile
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
@@ -16,12 +15,12 @@ import java.io.FileFilter
 import java.util.concurrent.CompletableFuture
 
 object DojoChallengeRunManager {
-    private val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion / Parkour Warrior Dojo] Challenge Run Manager")
+    private val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion / Parkour Warrior: Dojo] Challenge Run Manager")
 
     /**
      * The folder where runs are stored.
      */
-    val GAME_TYPE_FOLDER = companionFile("game_instances/${GameTypes.PARKOUR_WARRIOR_DOJO.id}")
+    val RUNS_DIRECTORY = companionFile("game_instances/${GameTypes.PARKOUR_WARRIOR.id}/dojo_runs")
 
     /**
      * Loaded challenge runs.
@@ -32,7 +31,7 @@ object DojoChallengeRunManager {
      * Lists all run files stored in the runs folder.
      */
     fun listRunFiles(): List<File> {
-        return GAME_TYPE_FOLDER.listFiles(FileFilter { it.extension == "json" })?.toList() ?: emptyList()
+        return RUNS_DIRECTORY.listFiles(FileFilter { it.extension == "json" })?.toList() ?: emptyList()
     }
 
     /**

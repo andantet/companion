@@ -1,4 +1,4 @@
-package dev.andante.companion.api.game.instance.parkour_warrior_dojo
+package dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo
 
 import com.mojang.serialization.Codec
 import dev.andante.companion.api.helper.AssociationHelper

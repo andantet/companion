@@ -30,7 +30,7 @@ data class MetricsSettings(
     /**
      * Whether to save Parkour Warrior: Dojo metrics.
      */
-    val parkourWarriorDojoMetrics: Boolean
+    val parkourWarriorMetrics: Boolean
 ) {
     companion object {
         /**
@@ -41,7 +41,7 @@ data class MetricsSettings(
             toGetToTheOtherSideMetrics = true,
             skyBattleMetrics = true,
             battleBoxMetrics = true,
-            parkourWarriorDojoMetrics = true
+            parkourWarriorMetrics = true
         )
 
         /**
@@ -61,9 +61,9 @@ data class MetricsSettings(
                 Codec.BOOL.fieldOf("battle_box_metrics")
                     .orElse(DEFAULT.battleBoxMetrics)
                     .forGetter(MetricsSettings::battleBoxMetrics),
-                Codec.BOOL.fieldOf("parkour_warrior_dojo_metrics")
-                    .orElse(DEFAULT.parkourWarriorDojoMetrics)
-                    .forGetter(MetricsSettings::parkourWarriorDojoMetrics)
+                Codec.BOOL.fieldOf("parkour_warrior_metrics")
+                    .orElse(DEFAULT.parkourWarriorMetrics)
+                    .forGetter(MetricsSettings::parkourWarriorMetrics)
             ).apply(instance, ::MetricsSettings)
         }
 

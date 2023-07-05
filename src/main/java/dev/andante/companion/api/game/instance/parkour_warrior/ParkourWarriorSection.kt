@@ -1,4 +1,4 @@
-package dev.andante.companion.api.game.instance.parkour_warrior_dojo
+package dev.andante.companion.api.game.instance.parkour_warrior
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
@@ -8,7 +8,7 @@ import net.minecraft.util.StringIdentifiable
 /**
  * A store of section information.
  */
-data class DojoSection(
+data class ParkourWarriorSection(
     /**
      * The section's branch.
      */
@@ -38,7 +38,8 @@ data class DojoSection(
         val titleAbbreviation: String
     ) : StringIdentifiable {
         MAIN("main", "M"),
-        BONUS("bonus", "B");
+        BONUS("bonus", "B"),
+        SECTION("section", "S");
 
         override fun asString(): String {
             return id
@@ -61,13 +62,13 @@ data class DojoSection(
         /**
          * The codec of this class.
          */
-        val CODEC: Codec<DojoSection> = RecordCodecBuilder.create { instance ->
+        val CODEC: Codec<ParkourWarriorSection> = RecordCodecBuilder.create { instance ->
             instance.group(
-                Branch.CODEC.fieldOf("branch").forGetter(DojoSection::branch),
-                Codec.INT.fieldOf("brach_number").forGetter(DojoSection::branchNumber),
-                Codec.INT.fieldOf("section_number").forGetter(DojoSection::sectionNumber),
-                Codec.STRING.fieldOf("section_name").forGetter(DojoSection::sectionName),
-            ).apply(instance, ::DojoSection)
+                Branch.CODEC.fieldOf("branch").forGetter(ParkourWarriorSection::branch),
+                Codec.INT.fieldOf("brach_number").forGetter(ParkourWarriorSection::branchNumber),
+                Codec.INT.fieldOf("section_number").forGetter(ParkourWarriorSection::sectionNumber),
+                Codec.STRING.fieldOf("section_name").forGetter(ParkourWarriorSection::sectionName),
+            ).apply(instance, ::ParkourWarriorSection)
         }
     }
 }

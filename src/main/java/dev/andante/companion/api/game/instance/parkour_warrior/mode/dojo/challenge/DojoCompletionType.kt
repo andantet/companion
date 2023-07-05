@@ -1,4 +1,4 @@
-package dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.challenge
+package dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge
 
 import com.mojang.serialization.Codec
 import net.minecraft.util.StringIdentifiable

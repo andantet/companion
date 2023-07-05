@@ -27,7 +27,7 @@ object RegexKeys {
     /**
      * A regex that matches the title sent when the player enters a section.
      */
-    const val PARKOUR_WARRIOR_DOJO_SECTION_TITLE = "parkour_warrior_dojo_section_title"
+    const val PARKOUR_WARRIOR_SECTION_TITLE = "parkour_warrior_section_title"
 
     /**
      * A regex that matches the title sent when the player gains a medal.
@@ -38,6 +38,11 @@ object RegexKeys {
      * A regex that matches the subtitle sent when the player completes a run.
      */
     const val PARKOUR_WARRIOR_DOJO_RUN_COMPLETE_TITLE = "parkour_warrior_dojo_run_complete_title"
+
+    /**
+     * The message sent when a game is about to begin.
+     */
+    const val GAME_STANDBY = "game_standby"
 
     /**
      * The message sent when the player finishes in TGTTOS.
@@ -63,6 +68,11 @@ object RegexKeys {
      * A regex that matches the course text displayed on the sidebar.
      */
     const val PARKOUR_WARRIOR_DOJO_COURSE_SIDEBAR = "parkour_warrior_dojo_course_sidebar"
+
+    /**
+     * A regex that matches the leap text displayed on the sidebar.
+     */
+    const val PARKOUR_WARRIOR_SURVIVOR_LEAP_SIDEBAR = "parkour_warrior_survivor_leap_sidebar"
 
     /**
      * A regex that matches the tooltip displayed to equip items.

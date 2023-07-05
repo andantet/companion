@@ -1,9 +1,9 @@
-package dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.challenge
+package dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoDifficulty
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.DojoSection
+import dev.andante.companion.api.game.instance.parkour_warrior.ParkourWarriorSection
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.DojoDifficulty
 import dev.andante.companion.api.player.PlayerReference
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import net.minecraft.util.Uuids
@@ -62,7 +62,7 @@ data class DojoChallengeRun(
     /**
      * A list of the sections completed throughout the run.
      */
-    val completedSections: List<DojoSection>,
+    val completedSections: List<ParkourWarriorSection>,
 
     /**
      * A timeline of the runner's position throughout the run.
@@ -84,7 +84,7 @@ data class DojoChallengeRun(
                 Codec.INT.fieldOf("medals_gained").forGetter(DojoChallengeRun::medalsGained),
                 DojoCompletionType.CODEC.fieldOf("completion_type").forGetter(DojoChallengeRun::completionType),
                 DojoDifficulty.CODEC.optionalFieldOf("ending_difficulty").forGetter(DojoChallengeRun::endingDifficulty),
-                DojoSection.CODEC.listOf().fieldOf("completed_sections").forGetter(DojoChallengeRun::completedSections),
+                ParkourWarriorSection.CODEC.listOf().fieldOf("completed_sections").forGetter(DojoChallengeRun::completedSections),
                 PositionTimeline.CODEC.fieldOf("position_timeline").forGetter(DojoChallengeRun::positionTimeline),
             ).apply(instance, ::DojoChallengeRun)
         }

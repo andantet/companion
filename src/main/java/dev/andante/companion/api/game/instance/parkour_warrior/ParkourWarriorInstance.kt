@@ -1,14 +1,16 @@
-package dev.andante.companion.api.game.instance.parkour_warrior_dojo
+package dev.andante.companion.api.game.instance.parkour_warrior
 
 import dev.andante.companion.api.game.instance.GameInstance
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.ChallengeModeInstance
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.DojoModeInstance
-import dev.andante.companion.api.game.instance.parkour_warrior_dojo.mode.PracticeModeInstance
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.ParkourWarriorModeInstance
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.SurvivorModeInstance
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.PracticeModeInstance
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge.ChallengeModeInstance
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.helper.AssociationHelper
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
+import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
@@ -17,20 +19,33 @@ import org.slf4j.LoggerFactory
 import java.util.UUID
 
 /**
- * An instance of Parkour Warrior Dojo.
+ * An instance of Parkour Warrior.
  */
-class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uuid: UUID) : GameInstance<ParkourWarriorDojoInstance>(type, uuid) {
+class ParkourWarriorInstance(type: GameType<ParkourWarriorInstance>, uuid: UUID) : GameInstance<ParkourWarriorInstance>(type, uuid) {
     /**
      * The active mode.
      */
     private var mode = Mode.CHALLENGE
+        set(value) {
+            if (value != field) {
+                clearInstance()
+                onModeUpdate(value, field)
+                field = value
+            }
+        }
 
     /**
      * The active mode instance.
      */
-    private var modeInstance: DojoModeInstance? = null
+    private var modeInstance: ParkourWarriorModeInstance? = null
 
     override fun tick(client: MinecraftClient) {
+        // check for survivor
+        val firstRowString = ScoreboardAccessor.getSidebarRow(0)
+        if (RegexManager.matches(RegexKeys.PARKOUR_WARRIOR_SURVIVOR_LEAP_SIDEBAR, firstRowString)) {
+            mode = Mode.SURVIVOR
+        }
+
         modeInstance?.tick(client)
 
         if (modeInstance != null) {
@@ -46,22 +61,15 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
         if (modeMatchResult != null) {
             val modeString = modeMatchResult.groupValues[1]
             Mode.chatStringAssociation(modeString)?.let { matchedMode ->
-                if (matchedMode != mode) {
-                    clearInstance()
-                    onModeUpdate(matchedMode, mode)
-                    mode = matchedMode
-                }
+                mode = matchedMode
             }
 
             return
         }
 
-        // check for course restart
-        if (RegexManager.matches(RegexKeys.PARKOUR_WARRIOR_DOJO_COURSE_RESTARTED, string)) {
-            if (modeInstance?.onCourseRestart() == true) {
-                clearInstance()
-                return
-            }
+        if (modeInstance?.onGameMessage(text, overlay) == true) {
+            clearInstance()
+            return
         }
     }
 
@@ -69,8 +77,10 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
      * Called when the mode is updated.
      */
     private fun onModeUpdate(mode: Mode, oldMode: Mode) {
-        if (mode == Mode.PRACTICE) {
-            setInstance(PracticeModeInstance())
+        when (mode) {
+            Mode.PRACTICE -> setInstance(PracticeModeInstance())
+            Mode.SURVIVOR -> setInstance(SurvivorModeInstance())
+            else -> {}
         }
     }
 
@@ -99,16 +109,16 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
     /**
      * Sets the active game instance.
      */
-    private fun setInstance(instance: DojoModeInstance?) {
+    private fun setInstance(instance: ParkourWarriorModeInstance?) {
         modeInstance?.let {
-            LOGGER.info("Removing Parkour Warrior: Dojo mode instance ${it.uuid}")
+            LOGGER.info("Removing Parkour Warrior mode instance ${it.uuid}")
             it.onRemove()
         }
 
         modeInstance = instance
 
         instance?.let {
-            LOGGER.info("Initializing Parkour Warrior: Dojo mode instance ${it.uuid}")
+            LOGGER.info("Initializing Parkour Warrior mode instance ${it.uuid}")
             it.onInitialize()
         }
     }
@@ -121,11 +131,11 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
     }
 
     companion object {
-        val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion] Parkour Warrior Dojo Instance")
+        val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion] Parkour Warrior")
     }
 
     /**
-     * The active mode of the Parkour Warrior Dojo instance.
+     * The active mode of the Parkour Warrior instance.
      */
     enum class Mode(
         /**
@@ -141,7 +151,12 @@ class ParkourWarriorDojoInstance(type: GameType<ParkourWarriorDojoInstance>, uui
         /**
          * The practice mode.
          */
-        PRACTICE("Practice");
+        PRACTICE("Practice"),
+
+        /**
+         * The survivor mode.
+         */
+        SURVIVOR("Survivor");
 
         companion object {
             /**
