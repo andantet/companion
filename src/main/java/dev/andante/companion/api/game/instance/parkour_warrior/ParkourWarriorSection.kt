@@ -39,7 +39,8 @@ data class ParkourWarriorSection(
     ) : StringIdentifiable {
         MAIN("main", "M"),
         BONUS("bonus", "B"),
-        SECTION("section", "S");
+        SECTION("section", "S"),
+        FINAL("final", "F");
 
         override fun asString(): String {
             return id
