@@ -3,22 +3,10 @@
 
 ---
 
-* Fixed certain round status updates not being detected due to a change in Noxcrew's message capitalisation
-    * This fixes any music issues!
-    * The fix involves a long-term solution so this shouldn't cause as bad of a problem in the future
-
-- **Added Ghosts to Parkour Warrior: Dojo!**
-  - Currently accessed via a command
-    - `/companion:parkour_warrior_dojo`
-        - `ghosts clear`: clears all ghosts from the world
-        - `ghosts toggle <fileName> [repeat]`: toggles a ghost in the world
-          - `<fileName>`: the name of the run file
-          - `[repeat]`: whether to send the ghost back to the beginning of the course when it finishes
-        - `runs list`: lists all loaded runs
-        - `runs reload`: reloads all runs from disk
-  - Runs are stored in your Minecraft folder at `/companion/game_instances/parkour_warrior_dojo/runs/`
-    - These files can be renamed to whatever you please and shared to run against other players' ghosts!
-  - An interface will be added in the future! I just wanted to get this release out for the music fix!
+* Converted Parkour Warrior: Dojo challenge runs to a new format
+  * This update has been released mainly to get you all on the new format as quick as possible! Apologies for the lack of Parkour Warrior: Survivor support, though that is in progress!
+  * The game now saves and loads entire challenge runs (instead of just their timelines before), which will allow for more functionality in the future
+  * The game now also saves information about the runner to the challenge run file (the player's name and unique identifier)
 
 
-- Added back 'Close Beta Test Warning' under HUD settings
+* Added support for 'Section' and 'Final' branch types from Parkour Warrior: Survivor
