@@ -29,6 +29,5 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
         textRendererConsumer(Text.literal("$currentLeap/$maxLeaps"))
-        textRendererConsumer(Text.literal("$currentSection"))
     }
 }
