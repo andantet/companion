@@ -43,7 +43,7 @@ data class PositionRecorder(
 
     fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
         previousPosition?.run {
-            textRendererConsumer(Text.literal("pos: ${pos.floorAlongAxes(EnumSet.allOf(Axis::class.java))}, time: $time"))
+            textRendererConsumer(Text.literal("pos: ${pos.floorAlongAxes(EnumSet.allOf(Axis::class.java))}, time: $time (${time / 20}s)"))
         }
 
         textRendererConsumer(Text.literal("Positions size: ${positions.size}"))
