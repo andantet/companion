@@ -2,8 +2,10 @@ package dev.andante.companion.api.game.instance.parkour_warrior
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge.CompletedSection
 import dev.andante.companion.api.helper.AssociationHelper
 import net.minecraft.util.StringIdentifiable
+import net.minecraft.util.Util
 
 /**
  * A store of section information.
@@ -29,6 +31,13 @@ data class ParkourWarriorSection(
      */
     val sectionName: String
 ) {
+    /**
+     * @return this section as a [CompletedSection]
+     */
+    fun toCompleted(startedAt: Long): CompletedSection {
+        return CompletedSection(Util.getMeasuringTimeMs() - startedAt, this)
+    }
+
     enum class Branch (
         val id: String,
 

@@ -40,7 +40,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
     /**
      * This run's completed sections.
      */
-    private val completedSections = mutableListOf<ParkourWarriorSection>()
+    private val completedSections = mutableListOf<CompletedSection>()
 
     /**
      * The duration of the run as provided by a string.
@@ -74,7 +74,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
 
     override fun onSectionUpdate(section: ParkourWarriorSection?, previousSection: ParkourWarriorSection?, medals: Int) {
         if (section == null && previousSection != null) {
-            completedSections.add(previousSection)
+            completedSections.add(previousSection.toCompleted(startedAt))
         }
 
         medalsGained += medals
@@ -87,7 +87,7 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
         this.completionType = completionType
 
         // add last section
-        currentSection?.let(completedSections::add)
+        currentSection?.let { section -> completedSections.add(section.toCompleted(startedAt)) }
 
         // flush to json
         if (MetricsSettings.INSTANCE.parkourWarriorMetrics) {

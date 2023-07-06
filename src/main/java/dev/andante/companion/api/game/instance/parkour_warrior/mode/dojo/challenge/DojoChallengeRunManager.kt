@@ -16,7 +16,7 @@ import java.io.FileFilter
 import java.util.concurrent.CompletableFuture
 
 object DojoChallengeRunManager {
-    private val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion / Parkour Warrior: Dojo] Challenge Run Manager")
+    private val LOGGER: Logger = LoggerFactory.getLogger("[MCCI: Companion] Parkour Warrior: Dojo Challenge Run Manager")
 
     /**
      * The folder where runs are stored.
@@ -60,7 +60,7 @@ object DojoChallengeRunManager {
                 count++
             } catch (exception: Exception) {
                 if (FabricLoader.getInstance().isDevelopmentEnvironment) {
-                    LOGGER.error("Could not parse run file", exception)
+                    LOGGER.error("DEV ONLY: Could not parse run file", exception)
                 }
 
                 // ignore file if it cannot be parsed
