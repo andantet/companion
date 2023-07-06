@@ -2,6 +2,8 @@ package dev.andante.companion.api.game.round
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.mojang.serialization.Codec
+import dev.andante.companion.api.event.RoundStateChangeCallback
 import dev.andante.companion.api.game.instance.RoundBasedGameInstance
 import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
@@ -10,6 +12,7 @@ import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
+import net.minecraft.util.StringIdentifiable
 
 open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     /**
@@ -26,6 +29,13 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
      * The current state of the round manager.
      */
     private var state: State = State.GAME_NOT_STARTED
+        set(value) {
+            try {
+                RoundStateChangeCallback.EVENT.invoker().onRoundState(value, field, gameInstance, round, currentRound)
+            } catch (_: Throwable) { }
+
+            field = value
+        }
 
     /**
      * The current round number.
@@ -85,9 +95,6 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
             return
         }
 
-        // set state
-        state = State.INITIALIZED
-
         // increment current round
         currentRound++
 
@@ -96,6 +103,9 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
 
         // call game instance listener
         gameInstance.onRoundInitialize(round, currentRound == 0)
+
+        // set state
+        state = State.INITIALIZED
     }
 
     /**
@@ -106,9 +116,6 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
             return
         }
 
-        // set state
-        state = State.IN_PROGRESS
-
         val isFirstRound = currentRound == 0
 
         if (isFirstRound) {
@@ -118,6 +125,9 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
 
         // call game instance listener
         gameInstance.onRoundStart(round, isFirstRound)
+
+        // set state
+        state = State.IN_PROGRESS
     }
 
     /**
@@ -128,14 +138,14 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
             return
         }
 
-        // set state
-        state = State.FINISHED
-
         // call game instance listener
         gameInstance.onRoundFinish(round)
 
         // add that round to storage
         allRounds.add(round)
+
+        // set state
+        state = State.FINISHED
     }
 
     /**
@@ -146,11 +156,11 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
             return
         }
 
-        // set state
-        state = State.GAME_ENDED
-
         // call game instance listener
         gameInstance.onGameEnd(round)
+
+        // set state
+        state = State.GAME_ENDED
     }
 
     fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
@@ -171,12 +181,23 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     /**
      * The current state of the round manager.
      */
-    enum class State {
-        GAME_NOT_STARTED,
-        INITIALIZED,
-        IN_PROGRESS,
-        FINISHED,
-        GAME_ENDED
+    enum class State(val id: String) : StringIdentifiable {
+        GAME_NOT_STARTED("game_not_started"),
+        INITIALIZED("initialized"),
+        IN_PROGRESS("in_progress"),
+        FINISHED("finished"),
+        GAME_ENDED("game_ended");
+
+        override fun asString(): String {
+            return id
+        }
+
+        companion object {
+            /**
+             * The codec for this class.
+             */
+            val CODEC: Codec<State> = StringIdentifiable.createCodec(State::values)
+        }
     }
 
     companion object {

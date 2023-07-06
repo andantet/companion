@@ -28,7 +28,7 @@ data class MetricsSettings(
     val battleBoxMetrics: Boolean,
 
     /**
-     * Whether to save Parkour Warrior: Dojo metrics.
+     * Whether to save Parkour Warrior metrics.
      */
     val parkourWarriorMetrics: Boolean
 ) {

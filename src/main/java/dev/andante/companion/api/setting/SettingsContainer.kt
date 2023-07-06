@@ -19,7 +19,8 @@ open class SettingsContainer<T>(id: String, codec: Codec<T>, default: T) : Seria
         val ALL_CONTAINERS = setOf(
             MusicSettings.CONTAINER,
             MetricsSettings.CONTAINER,
-            HudSettings.CONTAINER
+            HudSettings.CONTAINER,
+            AutoSettings.CONTAINER,
         )
     }
 }

@@ -13,6 +13,7 @@ import dev.andante.companion.api.sound.CompanionSounds
 /**
  * All registered game types.
  */
+@Suppress("unused")
 object GameTypes : BasicRegistry<GameType<*>>() {
     /**
      * Represents the game 'Hole in the Wall'.

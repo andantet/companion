@@ -12,6 +12,7 @@ import dev.andante.companion.api.server.ServerTracker
 import dev.andante.companion.api.setting.SettingsContainer
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
+import dev.andante.companion.api.tracker.AutomaticsTracker
 import dev.andante.companion.command.FetchCommand
 import dev.andante.companion.command.ParkourWarriorDojoCommand
 import dev.andante.companion.command.SettingsCommand
@@ -52,6 +53,7 @@ object Companion : ClientModInitializer {
         // trackers
         ServerTracker
         GameTracker
+        AutomaticsTracker
 
         // settings
         SettingsContainer.ALL_CONTAINERS.forEach(SettingsContainer<*>::load)
