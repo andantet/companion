@@ -1,6 +1,7 @@
 package dev.andante.companion.api.game.round
 
-import com.google.gson.JsonObject
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 
@@ -22,8 +23,19 @@ open class Round(
     open fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
     }
 
-    /**
-     * Writes this game instance to JSON.
-     */
-    open fun toJson(json: JsonObject) {}
+    open fun <R : Round> getCodec(): Codec<in R> {
+        return CODEC
+    }
+
+    companion object {
+        /**
+         * The codec of this class.
+         */
+        val CODEC: Codec<Round> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                Codec.INT.fieldOf("round_number")
+                    .forGetter(Round::roundNumber)
+            ).apply(instance, ::Round)
+        }
+    }
 }

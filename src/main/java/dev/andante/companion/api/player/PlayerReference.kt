@@ -1,15 +1,14 @@
 package dev.andante.companion.api.player
 
-import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
-import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.andante.companion.api.event.WorldJoinCallback
+import dev.andante.companion.api.extension.functionally
+import dev.andante.companion.api.extension.nullableFieldOf
 import dev.andante.companion.api.server.ServerTracker
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.MinecraftClient
 import net.minecraft.util.Uuids
-import java.util.Optional
 import java.util.UUID
 
 data class PlayerReference(
@@ -41,34 +40,16 @@ data class PlayerReference(
         return uuid.hashCode()
     }
 
-    fun toJson(): JsonObject {
-        return CODEC.encodeStart(JsonOps.INSTANCE, this)
-            .result()
-            .filter { it is JsonObject }
-            .map { it as JsonObject }
-            .orElseGet(::JsonObject)
-    }
-
     companion object {
         /**
          * The codec of this class.
          */
         val CODEC: Codec<PlayerReference> = RecordCodecBuilder.create { instance ->
             instance.group(
-                Uuids.CODEC.optionalFieldOf("uuid")
-                    .xmap(
-                        { it.orElse(null) },
-                        { uuid -> Optional.ofNullable(uuid) }
-                    )
+                Uuids.CODEC.nullableFieldOf("uuid")
                     .forGetter(PlayerReference::uuid),
-                Codec.STRING.optionalFieldOf("username")
-                    .xmap(
-                        {
-                        val value = it.orElse(null)
-                        return@xmap { value }
-                        },
-                        { Optional.ofNullable(it()) }
-                    )
+                Codec.STRING.nullableFieldOf("username")
+                    .functionally()
                     .forGetter(PlayerReference::username),
             ).apply(instance, ::PlayerReference)
         }

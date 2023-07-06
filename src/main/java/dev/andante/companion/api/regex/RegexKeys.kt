@@ -40,11 +40,6 @@ object RegexKeys {
     const val PARKOUR_WARRIOR_DOJO_RUN_COMPLETE_TITLE = "parkour_warrior_dojo_run_complete_title"
 
     /**
-     * The message sent when a game is about to begin.
-     */
-    const val GAME_STANDBY = "game_standby"
-
-    /**
      * The message sent when the player finishes in TGTTOS.
      */
     const val PLAYER_FINISHED = "player_finished"
@@ -68,6 +63,11 @@ object RegexKeys {
      * A regex that matches the course text displayed on the sidebar.
      */
     const val PARKOUR_WARRIOR_DOJO_COURSE_SIDEBAR = "parkour_warrior_dojo_course_sidebar"
+
+    /**
+     * A regex that matches the daily challenge course text displayed on the sidebar.
+     */
+    const val PARKOUR_WARRIOR_DOJO_COURSE_SIDEBAR_DAILY_CHALLENGE = "parkour_warrior_dojo_course_sidebar_daily_challenge"
 
     /**
      * A regex that matches the leap text displayed on the sidebar.

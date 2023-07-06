@@ -15,7 +15,6 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.text.Text
 import net.minecraft.util.Util
-import java.util.Optional
 
 /**
  * An instance of Parkour Warrior Dojo challenge mode.
@@ -61,7 +60,12 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
     /**
      * The difficulty of the ending section taken.
      */
-    private val endingDifficulty: DojoDifficulty? get() = DojoDifficulty.endingMedalsAssociation(medalsGained - completedSections.size + 1)
+    private val endingDifficulty: DojoDifficulty? get() =
+        if (completionType == DojoCompletionType.INCOMPLETE) {
+            null
+        } else {
+            DojoDifficulty.endingMedalsAssociation(medalsGained - completedSections.size + 1)
+        }
 
     /**
      * The position recorder for this instance.
@@ -112,6 +116,11 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
         textRendererConsumer(Text.literal("Run: $uuid"))
+
+        if (dailyChallenge) {
+            textRendererConsumer(Text.literal("Daily Challenge"))
+        }
+
         positionRecorder.renderDebugHud(textRendererConsumer)
     }
 
@@ -119,17 +128,18 @@ class ChallengeModeInstance(world: ClientWorld) : DojoModeInstance(
         ParkourWarriorInstance.LOGGER.info("Flushing challenge instance to JSON: ${file.path}")
 
         val profile = MinecraftClient.getInstance().session.profile
-        val reference = Optional.of(PlayerReference(profile.id, profile.name))
+        val reference = PlayerReference(profile.id, profile.name)
         val run = DojoChallengeRun(
             uuid,
             reference,
             courseNumber,
+            dailyChallenge,
             System.currentTimeMillis(),
             durationMs,
-            Optional.ofNullable(durationString),
+            durationString,
             medalsGained,
             completionType,
-            Optional.ofNullable(endingDifficulty),
+            endingDifficulty,
             completedSections,
             positionTimeline
         )

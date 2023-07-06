@@ -19,6 +19,7 @@ import net.minecraft.text.Text
 
 open class DojoModeInstance(musicSettingSupplier: () -> Boolean) : ParkourWarriorModeInstance(musicSettingSupplier) {
     protected var courseNumber: Int = -1
+    protected var dailyChallenge: Boolean = false
 
     override fun onInitialize() {
         if (musicSettingSupplier()) {
@@ -29,8 +30,9 @@ open class DojoModeInstance(musicSettingSupplier: () -> Boolean) : ParkourWarrio
 
     override fun tick(client: MinecraftClient) {
         try {
-            // check for course
             val firstRowString = ScoreboardAccessor.getSidebarRow(0)
+
+            // check for course
             val courseMatchResult = RegexManager[RegexKeys.PARKOUR_WARRIOR_DOJO_COURSE_SIDEBAR]?.find(firstRowString)
             if (courseMatchResult != null) {
                 val groupValues = courseMatchResult.groupValues
@@ -39,6 +41,11 @@ open class DojoModeInstance(musicSettingSupplier: () -> Boolean) : ParkourWarrio
                 val course = courseString.toInt()
 
                 courseNumber = course
+            }
+
+            // check for daily challenge
+            if (!dailyChallenge && RegexManager.matches(RegexKeys.PARKOUR_WARRIOR_DOJO_COURSE_SIDEBAR_DAILY_CHALLENGE, firstRowString)) {
+                dailyChallenge = true
             }
         } catch (_: Throwable) {
         }

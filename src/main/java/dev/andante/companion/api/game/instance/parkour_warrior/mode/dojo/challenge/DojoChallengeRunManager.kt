@@ -8,6 +8,7 @@ import com.mojang.serialization.JsonOps
 import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper.companionFile
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
+import net.fabricmc.loader.api.FabricLoader
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File
@@ -58,7 +59,11 @@ object DojoChallengeRunManager {
                 challengeRuns[fileName] = run
                 count++
             } catch (exception: Exception) {
-                LOGGER.error("Could not parse run file: $file", exception)
+                if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+                    LOGGER.error("Could not parse run file", exception)
+                }
+
+                // ignore file if it cannot be parsed
             }
         }
 

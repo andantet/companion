@@ -2,12 +2,12 @@ package dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challe
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import dev.andante.companion.api.extension.nullableFieldOf
 import dev.andante.companion.api.game.instance.parkour_warrior.ParkourWarriorSection
 import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.DojoDifficulty
 import dev.andante.companion.api.player.PlayerReference
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
 import net.minecraft.util.Uuids
-import java.util.Optional
 import java.util.UUID
 
 /**
@@ -22,12 +22,17 @@ data class DojoChallengeRun(
     /**
      * A reference to the player who ran this challenge run.
      */
-    val runner: Optional<PlayerReference>,
+    val runner: PlayerReference?,
 
     /**
      * The number of the course that this challenge run was on.
      */
     val courseNumber: Int,
+
+    /**
+     * Whether the course ran was a daily challenge.
+     */
+    val dailyChallenge: Boolean,
 
     /**
      * The timestamp that this challenge run ended at.
@@ -42,7 +47,7 @@ data class DojoChallengeRun(
     /**
      * The duration string as provided by MCC: Island.
      */
-    val durationString: Optional<String>,
+    val durationString: String?,
 
     /**
      * The number of medals gained throughout the run.
@@ -57,7 +62,7 @@ data class DojoChallengeRun(
     /**
      * The difficulty chosen at the last section of the run.
      */
-    val endingDifficulty: Optional<DojoDifficulty>,
+    val endingDifficulty: DojoDifficulty?,
 
     /**
      * A list of the sections completed throughout the run.
@@ -76,14 +81,15 @@ data class DojoChallengeRun(
         val CODEC: Codec<DojoChallengeRun> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Uuids.CODEC.fieldOf("uuid").forGetter(DojoChallengeRun::uuid),
-                PlayerReference.CODEC.optionalFieldOf("runner").forGetter(DojoChallengeRun::runner),
+                PlayerReference.CODEC.nullableFieldOf("runner").forGetter(DojoChallengeRun::runner),
                 Codec.INT.fieldOf("course_number").forGetter(DojoChallengeRun::courseNumber),
+                Codec.BOOL.fieldOf("daily_challenge").orElse(false).forGetter(DojoChallengeRun::dailyChallenge),
                 Codec.LONG.fieldOf("timestamp_ms").forGetter(DojoChallengeRun::timestampMs),
                 Codec.LONG.fieldOf("duration_ms").forGetter(DojoChallengeRun::durationMs),
-                Codec.STRING.optionalFieldOf("duration").forGetter(DojoChallengeRun::durationString),
+                Codec.STRING.nullableFieldOf("duration").forGetter(DojoChallengeRun::durationString),
                 Codec.INT.fieldOf("medals_gained").forGetter(DojoChallengeRun::medalsGained),
                 DojoCompletionType.CODEC.fieldOf("completion_type").forGetter(DojoChallengeRun::completionType),
-                DojoDifficulty.CODEC.optionalFieldOf("ending_difficulty").forGetter(DojoChallengeRun::endingDifficulty),
+                DojoDifficulty.CODEC.nullableFieldOf("ending_difficulty").forGetter(DojoChallengeRun::endingDifficulty),
                 ParkourWarriorSection.CODEC.listOf().fieldOf("completed_sections").forGetter(DojoChallengeRun::completedSections),
                 PositionTimeline.CODEC.fieldOf("position_timeline").forGetter(DojoChallengeRun::positionTimeline),
             ).apply(instance, ::DojoChallengeRun)

@@ -15,9 +15,9 @@ class ToGetToTheOtherSideInstance(type: GameType<ToGetToTheOtherSideInstance>, u
         if (round is ToGetToTheOtherSideRound) {
             val data = round.data
             if (settings.musicSettingSupplier()) {
-                if (data.map == ToGetToTheOtherSideRound.GameMap.TO_THE_DOME && MusicSettings.INSTANCE.toGetToTheOtherSideMapToTheDomeMusic) {
+                if (data.map == ToGetToTheOtherSideRound.RoundMap.TO_THE_DOME && MusicSettings.INSTANCE.toGetToTheOtherSideMapToTheDomeMusic) {
                     CompanionSoundManager.playMusic(CompanionSounds.MUSIC_GAME_TO_GET_TO_THE_OTHER_SIDE_LOOP_MAP_TO_THE_DOME)
-                } else if (data.modifier == ToGetToTheOtherSideRound.Modifier.DOUBLE_TIME && MusicSettings.INSTANCE.toGetToTheOtherSideModifierDoubleTimeMusic) {
+                } else if (data.modifier == ToGetToTheOtherSideRound.RoundModifier.DOUBLE_TIME && MusicSettings.INSTANCE.toGetToTheOtherSideModifierDoubleTimeMusic) {
                     CompanionSoundManager.playMusic(CompanionSounds.MUSIC_GAME_TO_GET_TO_THE_OTHER_SIDE_LOOP_MODIFIER_DOUBLE_TIME)
                 } else {
                     super.onRoundStart(round, firstRound)

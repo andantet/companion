@@ -1,9 +1,9 @@
 package dev.andante.companion.api.game.instance.tgttos
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import com.mojang.serialization.JsonOps
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.andante.companion.api.extension.captureGroup
+import dev.andante.companion.api.extension.nullableFieldOf
 import dev.andante.companion.api.game.round.Round
 import dev.andante.companion.api.helper.AssociationHelper
 import dev.andante.companion.api.player.PlayerReference
@@ -12,54 +12,63 @@ import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
+import net.minecraft.util.StringIdentifiable
 
-class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
+class ToGetToTheOtherSideRound(
+    roundNumber: Int,
+
     /**
      * The finished players of the round.
      */
-    private val finishedPlayers = mutableListOf<PlayerReference>()
+    private val finishedPlayers: MutableList<PlayerReference> = mutableListOf(),
 
     /**
      * The score earned from the round.
      * Set when the player finishes.
      */
-    private var scoreEarned: Int = 0
+    private var scoreEarned: Int = 0,
 
     /**
      * The player's placement.
      * Set when the player finishes.
      */
-    private var placement: Int = -1
+    private var placement: Int = -1,
 
     /**
      * The map of the round.
      */
-    private var map: GameMap? = null
+    private var map: RoundMap? = null,
 
     /**
      * The modifier of the round.
      */
-    private var modifier: Modifier = Modifier.INACTIVE
+    private var modifier: RoundModifier = RoundModifier.INACTIVE
+) : Round(roundNumber) {
 
     /**
      * An exposed reference to an object representing all game data for the round.
      */
     val data get() = Data(finishedPlayers.toList(), scoreEarned, placement, map, modifier)
 
+    @Suppress("UNCHECKED_CAST")
+    override fun <R : Round> getCodec(): Codec<in R> {
+        return CODEC as Codec<in R>
+    }
+
     override fun tick(client: MinecraftClient) {
         // check for map
         if (map == null) {
             val firstRowString = ScoreboardAccessor.getSidebarRow(0)
             RegexManager[RegexKeys.MAP_SIDEBAR]?.captureGroup(firstRowString)?.let { mapString ->
-                map = GameMap.sidebarNameAssocation(mapString)
+                map = RoundMap.sidebarNameAssocation(mapString)
             }
         }
 
         // check for modifier
-        if (modifier == Modifier.INACTIVE) {
+        if (modifier == RoundModifier.INACTIVE) {
             val fourthRowString = ScoreboardAccessor.getSidebarRow(3)
             RegexManager[RegexKeys.MODIFIER_SIDEBAR]?.captureGroup(fourthRowString)?.let { modifierString ->
-                modifier = Modifier.sidebarNameAssocation(modifierString) ?: Modifier.INACTIVE
+                modifier = RoundModifier.sidebarNameAssocation(modifierString) ?: RoundModifier.INACTIVE
             }
         }
     }
@@ -67,23 +76,32 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
     override fun onGameMessage(text: Text) {
         val string = text.string
 
+        // check for score
+        val scoreMatchResult = RegexManager[RegexKeys.PLAYER_FINISHED]?.find(string)
+        if (scoreMatchResult != null) {
+            val placementString = scoreMatchResult.groupValues[1]
+            val scoreString = scoreMatchResult.groupValues[2]
+
+            val placement = placementString.toInt()
+            val score = scoreString.toInt()
+
+            this.placement = placement
+            scoreEarned = score
+
+            val profile = MinecraftClient.getInstance().session.profile
+            val reference = PlayerReference(profile.id, profile.name)
+            finishedPlayers.add(reference)
+
+            return
+        }
+
         // check for finishes
         val finishedMatchResult = RegexManager[RegexKeys.OTHER_PLAYER_FINISHED]?.find(string) ?: RegexManager[RegexKeys.PLAYER_FINISHED]?.find(string)
         if (finishedMatchResult != null) {
             val playerNameString = finishedMatchResult.groupValues[1]
             val playerReference = PlayerReference.fromUsername(playerNameString)
             finishedPlayers.add(playerReference)
-        }
-
-        // check for score
-        val scoreMatchResult = RegexManager[RegexKeys.PLAYER_FINISHED]?.find(string)
-        if (scoreMatchResult != null) {
-            val placementString = scoreMatchResult.groupValues[1]
-            val scoreString = scoreMatchResult.groupValues[2]
-            val placement = placementString.toInt()
-            val score = scoreString.toInt()
-            this.placement = placement
-            scoreEarned = score
+            return
         }
     }
 
@@ -95,99 +113,94 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
         textRendererConsumer(Text.literal("Finished players: ${finishedPlayers.size}"))
     }
 
-    override fun toJson(json: JsonObject) {
-        // round number
-        json.addProperty("round", roundNumber)
+    enum class RoundMap(
+        val id: String,
 
-        // map
-        map?.let { json.addProperty("map", it.name) }
-
-        // modifier
-        json.addProperty("modifier", modifier.name)
-
-        // placement
-        json.addProperty("placement", placement)
-
-        // earned score
-        json.addProperty("score_earned", scoreEarned)
-
-        // finished players
-        val finishedPlayersJson = PlayerReference.CODEC.listOf()
-            .encodeStart(JsonOps.INSTANCE, finishedPlayers)
-            .result()
-            .orElse(JsonArray())
-        json.add("finished_players", finishedPlayersJson)
-    }
-
-    enum class GameMap(
         /**
          * The name of this map as displayed on the side bar.
          */
         val sidebarName: String
-    ) {
-        BADLANDS("BADLANDS"),
-        BASINS("BASINS"),
-        BEEHIVE("BEEHIVE"),
-        BOATS("BOATS"),
-        BREAKDOWN("BREAKDOWN"),
-        CLIFF("CLIFF"),
-        DOORS("DOORS"),
-        GLIDE("GLIDE"),
-        INDUSTRY("INDUSTRY"),
-        LAUNCHER("LAUNCHER"),
-        PASSING("PASSING"),
-        TRAIN_PASSING("TRAIN PASSING"),
-        POLAR_PASSING("POLAR PASSING"),
-        PIT("PIT"),
-        PITS("PITS"),
-        SHALLOW_LAVA("SHALLOW LAVA"),
-        SKYDIVE("SKYDIVE"),
-        SKYSCRAPER("SKYSCRAPER"),
-        SIEGE("SIEGE"),
-        SPIRAL_CLIMB("SPIRAL_CLIMB"),
-        SPIRAL("SPIRAL"),
-        TERRA_SWOOP_FORCE("TERRA SWOOP FORCE"),
-        TO_THE_DOME("TO THE DOME!"),
-        TRAIN("TRAIN"),
-        AIR_TRAIN("AIR TRAIN"),
-        SANTAS_TRAIN("SANTA'S TRAIN"),
-        WALLS("WALLS"),
-        TREETOP("TREETOP"),
-        WATER_PARK("WATER PARK");
+    ) : StringIdentifiable {
+        BADLANDS("badlands", "BADLANDS"),
+        BASINS("basins", "BASINS"),
+        BEEHIVE("beehive", "BEEHIVE"),
+        BOATS("boats", "BOATS"),
+        BREAKDOWN("breakdown", "BREAKDOWN"),
+        CLIFF("cliff", "CLIFF"),
+        DOORS("doors", "DOORS"),
+        GLIDE("glide", "GLIDE"),
+        INDUSTRY("industry", "INDUSTRY"),
+        LAUNCHER("launcher", "LAUNCHER"),
+        PASSING("passing", "PASSING"),
+        TRAIN_PASSING("train_passing", "TRAIN PASSING"),
+        POLAR_PASSING("polar_passing", "POLAR PASSING"),
+        PIT("pit", "PIT"),
+        PITS("pits", "PITS"),
+        SHALLOW_LAVA("shallow_lava", "SHALLOW LAVA"),
+        SKYDIVE("skydive", "SKYDIVE"),
+        SKYSCRAPER("skyscraper", "SKYSCRAPER"),
+        SIEGE("siege", "SIEGE"),
+        SPIRAL_CLIMB("spiral_climb", "SPIRAL_CLIMB"),
+        SPIRAL("spiral", "SPIRAL"),
+        TERRA_SWOOP_FORCE("terra_swoop_force", "TERRA SWOOP FORCE"),
+        TO_THE_DOME("to_the_dome", "TO THE DOME!"),
+        TRAIN("train", "TRAIN"),
+        AIR_TRAIN("air_train", "AIR TRAIN"),
+        SANTAS_TRAIN("santas_train", "SANTA'S TRAIN"),
+        WALLS("walls", "WALLS"),
+        TREETOP("treetop", "TREETOP"),
+        WATER_PARK("water_park", "WATER PARK");
+
+        override fun asString(): String {
+            return id
+        }
 
         companion object {
             /**
+             * The codec of this class.
+             */
+            val CODEC: Codec<RoundMap> = StringIdentifiable.createCodec(RoundMap::values)
+
+            /**
              * @return the map of the given sidebar name
              */
-            val sidebarNameAssocation = AssociationHelper.createAssociationFunction(GameMap.values(), GameMap::sidebarName)
+            val sidebarNameAssocation = AssociationHelper.createAssociationFunction(RoundMap.values(), RoundMap::sidebarName)
         }
     }
 
     /**
      * A To Get to the Other Side modifier.
      */
-    enum class Modifier(
+    enum class RoundModifier(
+        val id: String,
+
         /**
          * The name of this modifier as displayed on the side bar.
          */
         val sidebarName: String
-    ) {
-        RED_LIGHT_GREEN_LIGHT("RED LIGHT, GREEN LIGHT"),
-        ONE_LIFE("ONE LIFE"),
-        HOT_POTATO("HOT POTATO"),
-        TNT_TIME("TNT TIME"),
-        CRUMBLING_BLOCKS("CRUMBLING_BLOCKS"),
-        EARLY_BIRDS("EARLY BIRDS"),
-        SLAP_STICK("SLAP STICK"),
-        CRACK_SHOT("CRACK SHOT"),
-        DOUBLE_TIME("DOUBLE TIME"),
-        INACTIVE("INACTIVE");
+    ) : StringIdentifiable {
+        RED_LIGHT_GREEN_LIGHT("red_light_green_light", "RED LIGHT, GREEN LIGHT"),
+        ONE_LIFE("one_life", "ONE LIFE"),
+        HOT_POTATO("hot_potato", "HOT POTATO"),
+        TNT_TIME("tnt_time", "TNT TIME"),
+        CRUMBLING_BLOCKS("crumbling_blocks", "CRUMBLING_BLOCKS"),
+        EARLY_BIRDS("early_birds", "EARLY BIRDS"),
+        SLAP_STICK("slap_stick", "SLAP STICK"),
+        CRACK_SHOT("crack_shot", "CRACK SHOT"),
+        DOUBLE_TIME("double_time", "DOUBLE TIME"),
+        INACTIVE("inactive", "INACTIVE");
+
+        override fun asString(): String {
+            return id
+        }
 
         companion object {
+            val CODEC: Codec<RoundModifier> = StringIdentifiable.createCodec(RoundModifier::values)
+
             /**
              * @return the modifier of the given sidebar name
              */
-            val sidebarNameAssocation = AssociationHelper.createAssociationFunction(Modifier.values(), Modifier::sidebarName)
+            val sidebarNameAssocation = AssociationHelper.createAssociationFunction(RoundModifier.values(), RoundModifier::sidebarName)
         }
     }
 
@@ -213,11 +226,33 @@ class ToGetToTheOtherSideRound(roundNumber: Int) : Round(roundNumber) {
         /**
          * The map of a round.
          */
-        val map: GameMap?,
+        val map: RoundMap?,
 
         /**
          * The modifier of a round.
          */
-        val modifier: Modifier
+        val modifier: RoundModifier
     )
+
+    companion object {
+        /**
+         * The codec of this round.
+         */
+        val CODEC: Codec<ToGetToTheOtherSideRound> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                Codec.INT.fieldOf("round_number")
+                    .forGetter(ToGetToTheOtherSideRound::roundNumber),
+                PlayerReference.CODEC.listOf().fieldOf("finished_players")
+                    .forGetter(ToGetToTheOtherSideRound::finishedPlayers),
+                Codec.INT.fieldOf("score_earned")
+                    .forGetter(ToGetToTheOtherSideRound::scoreEarned),
+                Codec.INT.fieldOf("placement")
+                    .forGetter(ToGetToTheOtherSideRound::placement),
+                RoundMap.CODEC.nullableFieldOf("map")
+                    .forGetter(ToGetToTheOtherSideRound::map),
+                RoundModifier.CODEC.fieldOf("modifier")
+                    .forGetter(ToGetToTheOtherSideRound::modifier)
+            ).apply(instance, ::ToGetToTheOtherSideRound)
+        }
+    }
 }

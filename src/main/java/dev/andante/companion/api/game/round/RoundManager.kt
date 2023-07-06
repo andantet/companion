@@ -3,6 +3,7 @@ package dev.andante.companion.api.game.round
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
+import com.mojang.serialization.JsonOps
 import dev.andante.companion.api.event.RoundStateChangeCallback
 import dev.andante.companion.api.game.instance.RoundBasedGameInstance
 import dev.andante.companion.api.regex.RegexKeys
@@ -169,13 +170,20 @@ open class RoundManager<R : Round, T : RoundBasedGameInstance<out R, T>>(
     }
 
     fun toJson(): JsonArray {
-        val roundsJson = JsonArray()
-        allRounds.forEach { round ->
-            val roundJson = JsonObject()
-            round.toJson(roundJson)
-            roundsJson.add(roundJson)
+        return try {
+            val json = JsonArray()
+            allRounds.forEach { round ->
+                val roundJson = round.getCodec<Round>()
+                    .encodeStart(JsonOps.INSTANCE, round)
+                    .result()
+                    .orElseGet(::JsonObject)
+                json.add(roundJson)
+            }
+
+            json
+        } catch (exception: Exception) {
+            JsonArray()
         }
-        return roundsJson
     }
 
     /**
