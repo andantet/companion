@@ -5,9 +5,9 @@ import com.google.gson.JsonObject
 import dev.andante.companion.api.game.instance.RoundBasedGameInstance
 import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
+import dev.andante.companion.api.setting.MusicSettings
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
-import dev.andante.companion.setting.MusicSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 

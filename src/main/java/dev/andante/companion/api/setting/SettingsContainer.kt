@@ -1,4 +1,4 @@
-package dev.andante.companion.setting
+package dev.andante.companion.api.setting
 
 import com.mojang.serialization.Codec
 import dev.andante.companion.api.helper.FileHelper.companionFile

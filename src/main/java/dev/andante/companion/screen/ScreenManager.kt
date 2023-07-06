@@ -3,7 +3,7 @@ package dev.andante.companion.screen
 import dev.andante.companion.api.event.ScreenClosedCallback
 import dev.andante.companion.api.icon.IconKeys
 import dev.andante.companion.api.icon.IconManager
-import dev.andante.companion.setting.HudSettings
+import dev.andante.companion.api.setting.HudSettings
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.gui.screen.ingame.HandledScreen

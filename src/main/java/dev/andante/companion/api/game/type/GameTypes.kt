@@ -6,9 +6,9 @@ import dev.andante.companion.api.game.instance.parkour_warrior.ParkourWarriorIns
 import dev.andante.companion.api.game.instance.sky_battle.SkyBattleInstance
 import dev.andante.companion.api.game.instance.tgttos.ToGetToTheOtherSideInstance
 import dev.andante.companion.api.registry.BasicRegistry
+import dev.andante.companion.api.setting.MetricsSettings
+import dev.andante.companion.api.setting.MusicSettings
 import dev.andante.companion.api.sound.CompanionSounds
-import dev.andante.companion.setting.MetricsSettings
-import dev.andante.companion.setting.MusicSettings
 
 /**
  * All registered game types.

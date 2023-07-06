@@ -3,9 +3,9 @@ package dev.andante.companion.api.game.instance.tgttos
 import dev.andante.companion.api.game.instance.RoundBasedGameInstance
 import dev.andante.companion.api.game.round.Round
 import dev.andante.companion.api.game.type.GameType
+import dev.andante.companion.api.setting.MusicSettings
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
-import dev.andante.companion.setting.MusicSettings
 import java.util.UUID
 
 class ToGetToTheOtherSideInstance(type: GameType<ToGetToTheOtherSideInstance>, uuid: UUID)

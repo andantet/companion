@@ -3,7 +3,7 @@ package dev.andante.companion.api.game.instance.parkour_warrior.mode
 import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
-import dev.andante.companion.setting.MusicSettings
+import dev.andante.companion.api.setting.MusicSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.text.Text
 

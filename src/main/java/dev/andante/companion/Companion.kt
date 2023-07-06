@@ -9,13 +9,13 @@ import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.player.position.serializer.PositionRecorderManager
 import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.server.ServerTracker
+import dev.andante.companion.api.setting.SettingsContainer
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
 import dev.andante.companion.command.FetchCommand
 import dev.andante.companion.command.ParkourWarriorDojoCommand
 import dev.andante.companion.command.SettingsCommand
 import dev.andante.companion.screen.ScreenManager
-import dev.andante.companion.setting.SettingsContainer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import org.slf4j.Logger

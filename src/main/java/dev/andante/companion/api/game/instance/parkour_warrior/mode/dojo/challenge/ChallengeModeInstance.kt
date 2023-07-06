@@ -9,8 +9,8 @@ import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.DojoMod
 import dev.andante.companion.api.player.PlayerReference
 import dev.andante.companion.api.player.position.serializer.PositionRecorderManager
 import dev.andante.companion.api.player.position.serializer.PositionTimeline
-import dev.andante.companion.setting.MetricsSettings
-import dev.andante.companion.setting.MusicSettings
+import dev.andante.companion.api.setting.MetricsSettings
+import dev.andante.companion.api.setting.MusicSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.text.Text

@@ -8,9 +8,9 @@ import dev.andante.companion.api.player.ghost.GhostPlayerManager
 import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
+import dev.andante.companion.api.setting.MusicSettings
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
-import dev.andante.companion.setting.MusicSettings
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

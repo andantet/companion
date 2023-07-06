@@ -2,8 +2,8 @@ package dev.andante.companion.api.sound
 
 import dev.andante.companion.api.event.OnStopAllSoundsCallback
 import dev.andante.companion.api.event.SoundPlayCallback
+import dev.andante.companion.api.setting.MusicSettings
 import dev.andante.companion.api.sound.instance.SimpleSoundInstance
-import dev.andante.companion.setting.MusicSettings
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.sound.SoundInstance
 import net.minecraft.sound.SoundCategory
