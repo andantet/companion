@@ -1,12 +1,39 @@
 package dev.andante.companion.api.regex
 
 object RegexKeys {
+    /**
+     * A regex that matches the title displayed to establish a round.
+     */
     const val ROUND_NUMBER_TITLE = "round_number_title"
+
+    /**
+     * A regex that matches the message sent to start a game.
+     */
     const val GAME_STARTED = "game_started"
+
+    /**
+     * A regex that matches the message sent to start a round.
+     */
     const val ROUND_STARTED = "round_started"
+
+    /**
+     * A regex that matches the message sent to end a round.
+     */
     const val ROUND_OVER = "round_over"
+
+    /**
+     * A regex that matches the message sent when the player finishes a game.
+     */
     const val GAME_FINISHED = "game_finished"
+
+    /**
+     * A regex that matches the message sent to end a game.
+     */
     const val GAME_OVER = "game_over"
+
+    /**
+     * A regex that matches the message sent when the player is facing another team.
+     */
     const val FACING_TEAM = "facing_team"
 
     /**
@@ -83,4 +110,40 @@ object RegexKeys {
      * A regex that matches the tooltip displayed to unequip items.
      */
     const val ITEM_UNEQUIP = "item_unequip"
+
+    /**
+     * A regex that matches the leap started message.
+     */
+    const val LEAP_STARTED = "leap_started"
+
+    /**
+     * A regex that matches the leap section complete message.
+     */
+    const val LEAP_SECTION_COMPLETE = "leap_section_complete"
+
+    /**
+     * A regex that matches the leap complete message.
+     */
+    const val LEAP_COMPLETE = "leap_complete"
+
+    /**
+     * A regex that matches the leap ended message.
+     */
+    const val LEAP_ENDED = "leap_ended"
+
+    /**
+     * A regex that matches the title displayed to establish a leap.
+     */
+    const val LEAP_NUMBER_TITLE = "leap_number_title"
+
+    /**
+     * A regex that matches the message sent when the player wins the showdown.
+     * (Parkour Warrior: Survivor)
+     */
+    const val PLAYER_WON_SHOWDOWN = "player_won_showdown"
+
+    /**
+     * A regex that matches the message sent when the player is eliminated with a placement.
+     */
+    const val PLAYER_ELIMINATED_PLACEMENT = "player_eliminated_placement"
 }

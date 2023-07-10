@@ -51,7 +51,7 @@ open class ParkourWarriorModeInstance(
     open fun onRemove() {
     }
 
-    open fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
+    open fun onTitle(text: Text) {
     }
 
     /**
@@ -107,5 +107,8 @@ open class ParkourWarriorModeInstance(
 
     open fun onGameMessage(text: Text, overlay: Boolean): Boolean {
         return false
+    }
+
+    open fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
     }
 }

@@ -2,9 +2,9 @@ package dev.andante.companion.api.game.instance.parkour_warrior
 
 import dev.andante.companion.api.game.instance.GameInstance
 import dev.andante.companion.api.game.instance.parkour_warrior.mode.ParkourWarriorModeInstance
-import dev.andante.companion.api.game.instance.parkour_warrior.mode.SurvivorModeInstance
 import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.PracticeModeInstance
 import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge.ChallengeModeInstance
+import dev.andante.companion.api.game.instance.parkour_warrior.mode.survivor.SurvivorModeInstance
 import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.helper.AssociationHelper
 import dev.andante.companion.api.player.ghost.GhostPlayerManager
@@ -88,6 +88,8 @@ class ParkourWarriorInstance(type: GameType<ParkourWarriorInstance>, uuid: UUID)
         // detect challenge run start
         if (RegexManager.matches(RegexKeys.PARKOUR_WARRIOR_DOJO_COURSE_STARTED, text.string)) {
             setInstance(ChallengeModeInstance(MinecraftClient.getInstance().world!!))
+        } else {
+            modeInstance?.onTitle(text)
         }
     }
 
