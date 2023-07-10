@@ -15,7 +15,7 @@ import net.minecraft.util.Formatting
 object FetchCommand {
     private const val FETCHING_ICONS_KEY = "command.${Companion.MOD_ID}.fetch.fetching"
     private const val FETCHED_ICONS_KEY = "command.${Companion.MOD_ID}.fetch.fetched"
-    private val SOMETHING_WENT_WRONG_TEXT = Text.literal("command.${Companion.MOD_ID}.something_went_wrong").formatted(Formatting.RED)
+    private val SOMETHING_WENT_WRONG_TEXT = Text.translatable("command.${Companion.MOD_ID}.something_went_wrong").formatted(Formatting.RED)
 
     fun register(dispatcher: CommandDispatcher<FabricClientCommandSource>) {
         dispatcher.register(
