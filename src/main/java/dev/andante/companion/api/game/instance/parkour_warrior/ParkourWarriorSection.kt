@@ -62,7 +62,7 @@ data class ParkourWarriorSection(
             val CODEC: Codec<Branch> = StringIdentifiable.createCodec(Branch::values)
 
             /**
-             * @return the mode of the given chat string
+             * @return the branch of the given chat string
              */
             val titleAbbreviationAssocation = AssociationHelper.createAssociationFunction(values(), Branch::titleAbbreviation)
         }
@@ -75,7 +75,7 @@ data class ParkourWarriorSection(
         val CODEC: Codec<ParkourWarriorSection> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Branch.CODEC.fieldOf("branch").forGetter(ParkourWarriorSection::branch),
-                Codec.INT.fieldOf("brach_number").forGetter(ParkourWarriorSection::branchNumber),
+                Codec.INT.fieldOf("branch_number").orElse(-1).forGetter(ParkourWarriorSection::branchNumber),
                 Codec.INT.fieldOf("section_number").forGetter(ParkourWarriorSection::sectionNumber),
                 Codec.STRING.fieldOf("section_name").forGetter(ParkourWarriorSection::sectionName),
             ).apply(instance, ::ParkourWarriorSection)
