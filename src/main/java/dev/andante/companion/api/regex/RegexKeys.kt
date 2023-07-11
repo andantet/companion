@@ -146,4 +146,9 @@ object RegexKeys {
      * A regex that matches the message sent when the player is eliminated with a placement.
      */
     const val PLAYER_ELIMINATED_PLACEMENT = "player_eliminated_placement"
+
+    /**
+     * A regex that matches the placements text displayed on the sidebar.
+     */
+    const val PARKOUR_WARRIOR_SURVIVOR_PLACEMENTS_SIDEBAR = "parkour_warrior_survivor_placements_sidebar"
 }

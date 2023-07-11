@@ -79,7 +79,7 @@ data class Leap(
         textRendererConsumer(Text.literal("Completed sections: ${completedSections.size}"))
 
         if (enteredOvertime) {
-            textRendererConsumer(Text.literal("Overtime"))
+            textRendererConsumer(Text.literal("Last leap entered overtime"))
         }
     }
 

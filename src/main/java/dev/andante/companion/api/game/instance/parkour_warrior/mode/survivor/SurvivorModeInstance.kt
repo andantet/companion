@@ -12,9 +12,11 @@ import dev.andante.companion.api.game.type.GameTypes
 import dev.andante.companion.api.helper.FileHelper.companionFile
 import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
+import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import dev.andante.companion.api.setting.MusicSettings
 import dev.andante.companion.api.sound.CompanionSoundManager
 import dev.andante.companion.api.sound.CompanionSounds
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.sound.SoundInstance
 import net.minecraft.text.Text
 import net.minecraft.util.StringIdentifiable
@@ -46,9 +48,29 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
     private var placement: Int = -1
 
     /**
+     * The individual placements for each leap.
+     */
+    private var leapPlacements: Array<String> = arrayOf()
+
+    /**
      * Stored previous leaps.
      */
     private val allLeaps: MutableList<Leap> = mutableListOf()
+
+    override fun tick(client: MinecraftClient) {
+        try {
+            val firstRowString = ScoreboardAccessor.getSidebarRow(1)
+
+            // check for placements
+            val placementsResult = RegexManager[RegexKeys.PARKOUR_WARRIOR_SURVIVOR_PLACEMENTS_SIDEBAR]?.find(firstRowString)
+            if (placementsResult != null) {
+                val groupValues = placementsResult.groupValues
+                val placementStrings = groupValues.subList(1, leapPlacements.size + 1)
+                leapPlacements = placementStrings.toTypedArray()
+            }
+        } catch (_: Throwable) {
+        }
+    }
 
     override fun onTitle(text: Text) {
         val string = text.string
@@ -192,6 +214,11 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
             return
         }
 
+        // play music
+        if (musicSettingSupplier()) {
+            CompanionSoundManager.playMusic(GameTypes.PARKOUR_WARRIOR.settings.musicLoopSoundEvent, true)
+        }
+
         // set state
         state = State.LEAP_COMPLETED
     }
@@ -219,6 +246,9 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
             return
         }
 
+        // stop music
+        CompanionSoundManager.stopMusic()
+
         // set state
         state = State.GAME_ENDED
 
@@ -232,6 +262,12 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
         val json = JsonObject()
 
         placement?.let { json.addProperty("placement", it) }
+
+        val leapPlacementsJson = Codec.STRING.listOf()
+            .encodeStart(JsonOps.INSTANCE, leapPlacements.toList())
+            .result()
+            .orElseGet(::JsonArray)
+        json.add("leap_placements", leapPlacementsJson)
 
         val leapsJson = Leap.CODEC.listOf()
             .encodeStart(JsonOps.INSTANCE, allLeaps)
@@ -247,6 +283,7 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
         textRendererConsumer(Text.literal("State: $state, Leap: $currentLeapNumber"))
+        textRendererConsumer(Text.literal("Placements: ${leapPlacements.joinToString()}"))
         currentLeap.renderDebugHud(textRendererConsumer)
     }
 
