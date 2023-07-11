@@ -1,10 +1,10 @@
 package dev.andante.companion.screen
 
-import dev.andante.companion.api.helper.lore
-import dev.andante.companion.api.item.CustomItemKeys
-import dev.andante.companion.api.item.CustomItemManager
-import dev.andante.companion.api.regex.RegexKeys
-import dev.andante.companion.api.regex.RegexManager
+import dev.andante.companion.helper.lore
+import dev.andante.companion.item.CustomItemKeys
+import dev.andante.companion.item.CustomItemManager
+import dev.andante.companion.regex.RegexKeys
+import dev.andante.companion.regex.RegexManager
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.ingame.HandledScreen

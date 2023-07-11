@@ -1,7 +1,7 @@
 package dev.andante.companion.mixin;
 
-import dev.andante.companion.api.event.PacketEvents;
-import dev.andante.companion.api.event.TitleEvents;
+import dev.andante.companion.event.PacketEvents;
+import dev.andante.companion.event.TitleEvents;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;

@@ -1,7 +1,7 @@
 package dev.andante.companion.test
 
-import dev.andante.companion.api.game.GameTracker
-import dev.andante.companion.api.server.ServerTracker
+import dev.andante.companion.game.GameTracker
+import dev.andante.companion.server.ServerTracker
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.loader.api.FabricLoader

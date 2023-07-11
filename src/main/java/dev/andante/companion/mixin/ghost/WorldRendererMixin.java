@@ -1,6 +1,6 @@
 package dev.andante.companion.mixin.ghost;
 
-import dev.andante.companion.api.player.ghost.GhostPlayerManager;
+import dev.andante.companion.player.ghost.GhostPlayerManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.*;

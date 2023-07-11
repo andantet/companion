@@ -3,10 +3,10 @@ package dev.andante.companion.command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.context.CommandContext
 import dev.andante.companion.Companion
-import dev.andante.companion.api.icon.IconManager
-import dev.andante.companion.api.item.CustomItemManager
-import dev.andante.companion.api.regex.RegexManager
-import dev.andante.companion.api.serialization.CachedFetchedJsonMap
+import dev.andante.companion.icon.IconManager
+import dev.andante.companion.item.CustomItemManager
+import dev.andante.companion.regex.RegexManager
+import dev.andante.companion.serialization.CachedFetchedJsonMap
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.text.Text

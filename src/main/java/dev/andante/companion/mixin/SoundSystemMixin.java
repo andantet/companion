@@ -1,7 +1,7 @@
 package dev.andante.companion.mixin;
 
-import dev.andante.companion.api.event.OnStopAllSoundsCallback;
-import dev.andante.companion.api.event.SoundPlayCallback;
+import dev.andante.companion.event.OnStopAllSoundsCallback;
+import dev.andante.companion.event.SoundPlayCallback;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.sound.SoundSystem;
 import org.spongepowered.asm.mixin.Mixin;

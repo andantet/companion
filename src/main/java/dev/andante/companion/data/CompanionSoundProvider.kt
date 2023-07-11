@@ -1,8 +1,8 @@
 package dev.andante.companion.data
 
-import dev.andante.companion.api.sound.CompanionSounds
 import dev.andante.companion.data.sound.SoundBuilder
 import dev.andante.companion.data.sound.SoundProvider
+import dev.andante.companion.sound.CompanionSounds
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 
 class CompanionSoundProvider(dataOutput: FabricDataOutput) : SoundProvider(dataOutput) {

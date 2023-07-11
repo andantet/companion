@@ -6,11 +6,11 @@ import com.mojang.brigadier.context.CommandContext
 import com.mojang.brigadier.exceptions.CommandSyntaxException
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import dev.andante.companion.Companion
-import dev.andante.companion.api.game.GameTracker
-import dev.andante.companion.api.game.instance.parkour_warrior.mode.dojo.challenge.DojoChallengeRunManager
-import dev.andante.companion.api.game.type.GameTypes
-import dev.andante.companion.api.player.ghost.GhostPlayerManager
-import dev.andante.companion.api.player.position.serializer.IdentifiablePositionTimeline
+import dev.andante.companion.game.GameTracker
+import dev.andante.companion.game.instance.parkour_warrior.mode.dojo.challenge.DojoChallengeRunManager
+import dev.andante.companion.game.type.GameTypes
+import dev.andante.companion.player.ghost.GhostPlayerManager
+import dev.andante.companion.player.position.serializer.IdentifiablePositionTimeline
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource

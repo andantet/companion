@@ -1,7 +1,7 @@
 package dev.andante.companion.mixin;
 
-import dev.andante.companion.api.event.ScreenClosedCallback;
-import dev.andante.companion.api.event.WorldJoinCallback;
+import dev.andante.companion.event.ScreenClosedCallback;
+import dev.andante.companion.event.WorldJoinCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.world.ClientWorld;

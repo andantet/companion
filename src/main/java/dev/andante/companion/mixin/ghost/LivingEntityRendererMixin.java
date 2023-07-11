@@ -1,6 +1,6 @@
 package dev.andante.companion.mixin.ghost;
 
-import dev.andante.companion.api.player.ghost.GhostPlayerEntity;
+import dev.andante.companion.player.ghost.GhostPlayerEntity;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
