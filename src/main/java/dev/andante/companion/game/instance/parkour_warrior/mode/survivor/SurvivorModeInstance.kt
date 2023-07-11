@@ -50,7 +50,7 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
     /**
      * The individual placements for each leap.
      */
-    private var leapPlacements: Array<String> = arrayOf()
+    private var leapPlacements: List<String> = List(8) { "/" }
 
     /**
      * Stored previous leaps.
@@ -65,8 +65,10 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
             val placementsResult = RegexManager[RegexKeys.PARKOUR_WARRIOR_SURVIVOR_PLACEMENTS_SIDEBAR]?.find(firstRowString)
             if (placementsResult != null) {
                 val groupValues = placementsResult.groupValues
-                val placementStrings = groupValues.subList(1, leapPlacements.size + 1)
-                leapPlacements = placementStrings.toTypedArray()
+                if (groupValues.size - 1 == leapPlacements.size) {
+                    val placementStrings = groupValues.subList(1, leapPlacements.size + 1)
+                    leapPlacements = placementStrings
+                }
             }
         } catch (_: Throwable) {
         }
@@ -264,7 +266,7 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
         placement?.let { json.addProperty("placement", it) }
 
         val leapPlacementsJson = Codec.STRING.listOf()
-            .encodeStart(JsonOps.INSTANCE, leapPlacements.toList())
+            .encodeStart(JsonOps.INSTANCE, leapPlacements)
             .result()
             .orElseGet(::JsonArray)
         json.add("leap_placements", leapPlacementsJson)
@@ -283,7 +285,7 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
 
     override fun renderDebugHud(textRendererConsumer: (Text) -> Unit) {
         textRendererConsumer(Text.literal("State: $state, Leap: $currentLeapNumber"))
-        textRendererConsumer(Text.literal("Placements: ${leapPlacements.joinToString()}"))
+        textRendererConsumer(Text.literal("Placements: ${leapPlacements.joinToString(separator = "] [", prefix = "[", postfix = "]")}"))
         currentLeap.renderDebugHud(textRendererConsumer)
     }
 
