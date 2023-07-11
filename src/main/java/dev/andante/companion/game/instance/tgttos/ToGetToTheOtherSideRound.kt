@@ -200,7 +200,7 @@ class ToGetToTheOtherSideRound(
             /**
              * @return the modifier of the given sidebar name
              */
-            val sidebarNameAssocation = AssociationHelper.createAssociationFunction(RoundModifier.values(), RoundModifier::sidebarName)
+            val sidebarNameAssocation = AssociationHelper.createAssociationFunction(entries, RoundModifier::sidebarName)
         }
     }
 

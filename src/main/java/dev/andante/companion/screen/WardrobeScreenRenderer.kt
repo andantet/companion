@@ -114,7 +114,7 @@ object WardrobeScreenRenderer {
             /**
              * A map of the cosmetic menus to functions that return their custom model data key.
              */
-            val CUSTOM_ITEM_MAP = values().associateWith { menu -> { CustomItemManager[menu.customItemKey] ?: 999999 } }
+            val CUSTOM_ITEM_MAP = entries.associateWith { menu -> { CustomItemManager[menu.customItemKey] ?: 999999 } }
 
             /**
              * A map of the cosmetic menus to their custom model data key.

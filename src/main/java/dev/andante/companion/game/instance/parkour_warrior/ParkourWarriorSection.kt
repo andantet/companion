@@ -64,7 +64,7 @@ data class ParkourWarriorSection(
             /**
              * @return the branch of the given chat string
              */
-            val titleAbbreviationAssocation = AssociationHelper.createAssociationFunction(values(), Branch::titleAbbreviation)
+            val titleAbbreviationAssocation = AssociationHelper.createAssociationFunction(entries, Branch::titleAbbreviation)
         }
     }
 

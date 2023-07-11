@@ -1,8 +1,6 @@
 package dev.andante.companion.player.position.serializer
 
-import com.google.gson.JsonObject
 import com.mojang.serialization.Codec
-import com.mojang.serialization.JsonOps
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import dev.andante.companion.player.position.TemporalPosition
 
@@ -25,15 +23,6 @@ class PositionTimeline(
      */
     fun isFinished(time: Long): Boolean {
         return time > mappedPositions.keys.last()
-    }
-
-    /**
-     * Converts this timeline to a json object.
-     */
-    fun toJson(): JsonObject {
-        return CODEC.encodeStart(JsonOps.INSTANCE, this)
-            .result()
-            .orElseThrow() as JsonObject
     }
 
     companion object {

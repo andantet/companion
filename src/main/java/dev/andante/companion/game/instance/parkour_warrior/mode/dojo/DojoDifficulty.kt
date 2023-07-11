@@ -25,6 +25,6 @@ enum class DojoDifficulty(val id: String, val endingMedals: Int) : StringIdentif
         /**
          * @return the difficulty of the given ending medals
          */
-        val endingMedalsAssociation = AssociationHelper.createAssociationFunction(values(), DojoDifficulty::endingMedals)
+        val endingMedalsAssociation = AssociationHelper.createAssociationFunction(entries, DojoDifficulty::endingMedals)
     }
 }
