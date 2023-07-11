@@ -13,6 +13,9 @@ import dev.andante.companion.api.helper.FileHelper.companionFile
 import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.setting.MusicSettings
+import dev.andante.companion.api.sound.CompanionSoundManager
+import dev.andante.companion.api.sound.CompanionSounds
+import net.minecraft.client.sound.SoundInstance
 import net.minecraft.text.Text
 import net.minecraft.util.StringIdentifiable
 
@@ -38,6 +41,11 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
     private var currentLeap: Leap = Leap(-1)
 
     /**
+     * The runner's placement.
+     */
+    private var placement: Int = -1
+
+    /**
      * Stored previous leaps.
      */
     private val allLeaps: MutableList<Leap> = mutableListOf()
@@ -49,10 +57,18 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
         }
     }
 
+    override fun onPlaySound(soundInstance: SoundInstance) {
+        // detect and set overtime
+        if (soundInstance.sound.identifier == CompanionSounds.MUSIC_OVERTIME_INTRO) {
+            currentLeap.enteredOvertime = true
+        }
+    }
+
     override fun onGameMessage(text: Text, overlay: Boolean): Boolean {
         val string = text.string
         if (RegexManager.matches(RegexKeys.LEAP_STARTED, string)) {
             startLeap()
+            return false
         } else {
             try {
                 // check for leap completion
@@ -66,6 +82,8 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
                     // process captures
                     currentLeap.duration = durationString
                     completeLeap()
+
+                    return false
                 }
 
                 // check for leap end
@@ -81,11 +99,16 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
 
                     currentLeap.endReason = endReason
                     finishLeap()
+
+                    return false
                 }
 
                 // check for game end
                 if (RegexManager.matches(RegexKeys.PLAYER_WON_SHOWDOWN, string)) {
-                    endGame(1)
+                    placement = 1
+                    endGame()
+
+                    return false
                 }
 
                 val playerEliminatedResult = RegexManager[RegexKeys.PLAYER_ELIMINATED_PLACEMENT]?.find(string)
@@ -96,8 +119,16 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
                     val placementString = groupValues[1]
 
                     // process captures
-                    val placement = placementString.toInt()
-                    endGame(placement)
+                    placement = placementString.toInt()
+                    endGame()
+
+                    return false
+                }
+
+                // check for game over
+                if (RegexManager.matches(RegexKeys.GAME_OVER, string)) {
+                    endGame()
+                    return false
                 }
             } catch (_: Throwable) {
             }
@@ -144,6 +175,11 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
             return
         }
 
+        // play music
+        if (musicSettingSupplier()) {
+            CompanionSoundManager.playMusic(GameTypes.PARKOUR_WARRIOR.settings.musicLoopSoundEvent, true)
+        }
+
         // set state
         state = State.LEAP_IN_PROGRESS
     }
@@ -178,7 +214,7 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
     /**
      * Ends the game at the final leap.
      */
-    private fun endGame(placement: Int) {
+    private fun endGame() {
         if (state == State.GAME_ENDED) {
             return
         }

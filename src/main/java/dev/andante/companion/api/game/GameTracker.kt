@@ -1,6 +1,7 @@
 package dev.andante.companion.api.game
 
 import com.google.gson.GsonBuilder
+import dev.andante.companion.api.event.SoundPlayCallback
 import dev.andante.companion.api.event.TitleEvents
 import dev.andante.companion.api.event.WorldJoinCallback
 import dev.andante.companion.api.game.instance.GameInstance
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.sound.SoundInstance
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -47,6 +49,13 @@ object GameTracker {
 
         // register render events
         WorldRenderEvents.AFTER_ENTITIES.register { context -> gameInstance?.afterRenderEntities(context) }
+
+        // register sound play event
+        SoundPlayCallback.EVENT.register(::onPlaySound)
+    }
+
+    private fun onPlaySound(soundInstance: SoundInstance) {
+        gameInstance?.onPlaySound(soundInstance)
     }
 
     private fun tick(client: MinecraftClient) {

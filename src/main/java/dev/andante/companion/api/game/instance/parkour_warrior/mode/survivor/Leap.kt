@@ -56,6 +56,7 @@ data class Leap(
         // check for leap section completion
         if (RegexManager.matches(RegexKeys.LEAP_SECTION_COMPLETE, string)) {
             completeSection()
+            return
         }
     }
 
@@ -106,7 +107,7 @@ data class Leap(
             /**
              * @return the reason of the given chat string
              */
-            val messageAssocation = AssociationHelper.createAssociationFunction(values(), EndReason::message)
+            val messageAssocation = AssociationHelper.createAssociationFunction(entries, EndReason::message)
         }
     }
 

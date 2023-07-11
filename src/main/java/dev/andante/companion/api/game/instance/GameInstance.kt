@@ -5,6 +5,7 @@ import dev.andante.companion.api.game.type.GameType
 import dev.andante.companion.api.game.type.GameTypeSettings
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.sound.SoundInstance
 import net.minecraft.text.Text
 import java.util.UUID
 
@@ -49,6 +50,12 @@ open class GameInstance<T : GameInstance<T>>(
      * Called when a client receives a subtitle packet.
      */
     open fun onSubtitle(text: Text) {
+    }
+
+    /**
+     * Called when a sound instance is played on the client.
+     */
+    open fun onPlaySound(soundInstance: SoundInstance) {
     }
 
     /*

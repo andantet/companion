@@ -13,6 +13,7 @@ import dev.andante.companion.api.regex.RegexManager
 import dev.andante.companion.api.scoreboard.ScoreboardAccessor
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.sound.SoundInstance
 import net.minecraft.text.Text
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -51,6 +52,10 @@ class ParkourWarriorInstance(type: GameType<ParkourWarriorInstance>, uuid: UUID)
         if (modeInstance != null) {
             GhostPlayerManager.tickTimeline(client)
         }
+    }
+
+    override fun onPlaySound(soundInstance: SoundInstance) {
+        modeInstance?.onPlaySound(soundInstance)
     }
 
     override fun onGameMessage(text: Text, overlay: Boolean) {
@@ -164,7 +169,7 @@ class ParkourWarriorInstance(type: GameType<ParkourWarriorInstance>, uuid: UUID)
             /**
              * @return the mode of the given chat string
              */
-            val chatStringAssociation = AssociationHelper.createAssociationFunction(Mode.values(), Mode::chatString)
+            val chatStringAssociation = AssociationHelper.createAssociationFunction(entries, Mode::chatString)
         }
     }
 }

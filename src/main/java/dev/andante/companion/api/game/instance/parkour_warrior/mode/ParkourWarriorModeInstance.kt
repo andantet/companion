@@ -5,6 +5,7 @@ import dev.andante.companion.api.regex.RegexKeys
 import dev.andante.companion.api.regex.RegexManager
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.sound.SoundInstance
 import net.minecraft.text.Text
 import java.util.UUID
 
@@ -103,6 +104,9 @@ open class ParkourWarriorModeInstance(
         }
 
         return false
+    }
+
+    open fun onPlaySound(soundInstance: SoundInstance) {
     }
 
     open fun onGameMessage(text: Text, overlay: Boolean): Boolean {
