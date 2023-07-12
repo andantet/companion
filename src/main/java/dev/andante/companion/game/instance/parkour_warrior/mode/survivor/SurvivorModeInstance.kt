@@ -45,7 +45,7 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
     /**
      * The runner's placement.
      */
-    private var placement: Int = -1
+    private var placement: Int? = null
 
     /**
      * The individual placements for each leap.
@@ -144,7 +144,7 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
 
                     // process captures
                     placement = placementString.toInt()
-                    endGame()
+                    endGame(State.ELIMINATED)
 
                     return false
                 }
@@ -168,9 +168,7 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
     }
 
     override fun onRemove() {
-        if (state != State.GAME_ENDED) {
-            flushToJson(null)
-        }
+        flushToJson()
     }
 
     /**
@@ -195,6 +193,22 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
      * Starts the current leap.
      */
     private fun startLeap() {
+        // play music
+        if (musicSettingSupplier()) {
+            CompanionSoundManager.playMusic(GameTypes.PARKOUR_WARRIOR.settings.musicLoopSoundEvent, true)
+        }
+
+        // set state
+        state = State.LEAP_IN_PROGRESS
+
+        // flush to json
+        flushToJson()
+    }
+
+    /**
+     * Completes the current leap.
+     */
+    private fun completeLeap() {
         if (state == State.LEAP_IN_PROGRESS) {
             return
         }
@@ -205,24 +219,10 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
         }
 
         // set state
-        state = State.LEAP_IN_PROGRESS
-    }
-
-    /**
-     * Completes the current leap.
-     */
-    private fun completeLeap() {
-        if (state != State.LEAP_IN_PROGRESS) {
-            return
-        }
-
-        // play music
-        if (musicSettingSupplier()) {
-            CompanionSoundManager.playMusic(GameTypes.PARKOUR_WARRIOR.settings.musicLoopSoundEvent, true)
-        }
-
-        // set state
         state = State.LEAP_COMPLETED
+
+        // flush to json
+        flushToJson()
     }
 
     /**
@@ -238,13 +238,16 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
 
         // set state
         state = State.FINISHED
+
+        // flush to json
+        flushToJson()
     }
 
     /**
      * Ends the game at the final leap.
      */
-    private fun endGame() {
-        if (state == State.GAME_ENDED) {
+    private fun endGame(newState: State = State.GAME_ENDED) {
+        if (state == newState || !(state == State.ELIMINATED || state == State.LEAP_IN_PROGRESS)) {
             return
         }
 
@@ -252,13 +255,13 @@ class SurvivorModeInstance : ParkourWarriorModeInstance({ MusicSettings.INSTANCE
         CompanionSoundManager.stopMusic()
 
         // set state
-        state = State.GAME_ENDED
+        state = newState
 
         // flush to json
-        flushToJson(placement)
+        flushToJson()
     }
 
-    private fun flushToJson(placement: Int?) {
+    private fun flushToJson() {
         ParkourWarriorInstance.LOGGER.info("Flushing survivor instance to JSON: ${file.path}")
 
         val json = JsonObject()
