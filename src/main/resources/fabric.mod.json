@@ -1,0 +1,47 @@
+{
+	"schemaVersion": 1,
+	"id": "companion",
+	"version": "${version}",
+	"name": "MCCI Companion",
+	"description": "An MCC: Island companion mod.",
+	"authors": [
+		"Andante"
+	],
+	"contact": {
+        "homepage": "https://github.com/andantet/companion",
+		"sources": "https://github.com/andantet/companion",
+		"issues": "https://github.com/andantet/companion/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/companion/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			{
+				"value": "dev.andante.companion.Companion",
+				"adapter": "kotlin"
+			}
+		],
+		"client": [
+			{
+				"value": "dev.andante.companion.CompanionClient",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"mixins": [
+		"companion.mixins.json",
+		{
+			"config": "companion.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.24",
+		"minecraft": "~1.20.2",
+		"java": ">=17",
+		"fabric-api": ">=0.90",
+		"fabric-language-kotlin": ">=1.9.20",
+        "noxesium": "*"
+	}
+}
